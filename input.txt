@@ -1,0 +1,4 @@
+Given our unbalanced equation: 4 Fe + 3 O2 -> 2Fe2O3	   
+
+This equation states that 1 iron (Fe) atom will react with two oxygen (O) atoms to yield 2 iron atoms and 3 oxygen atoms. (The subscript number, such as the two in O2 describe how many atoms of an element are in a molecule.) This unbalanced reaction can't possibly represent a real reaction because it describes a reaction in which one Fe atom magically becomes two Fe atoms.
+Therefore, we must balance the equation by placing coefficients before the various molecules and atoms to ensure that the number of atoms on the left side of the arrow corresponds exactly to the number of elements on the right.

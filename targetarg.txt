@@ -1,0 +1,1 @@
+{'Others might argue': [1, 1], 'Conversely': [1, 2], 'However': [1, 2], 'however': [1, 2],'Although': [1, 1], 'On (the other|another|other) hand': [1, 1], 'Whereas': [1, 2], 'Nevertheless': [1, 2], 'Nonetheless': [1, 2], 'Yet': [1, 1], 'On the contrary': [1, 2], 'But': [1, 1], 'but': [1, 1], 'unless': [2, 1], 'instead of':[2,1]}

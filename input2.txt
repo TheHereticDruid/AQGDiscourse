@@ -1,0 +1,362 @@
+So far in these lectures, we have discussed the concepts of Object OrientedProgramming.0
+We have also discussed programs having constants, variables,simple input / output, assignment, expressions.0
+We have dwelt in detail about thedifferent aspects of operators like precedence, association and rank.0
+We have also made some simple classes with attributes(fields) andbehaviour(methods or functions).0
+We have also mentioned the special function toinitialize an object - called its constructor.0
+We make a class to represent an entity or a thing or an idea.0
+A class is like a userdefined type.0
+A class contains a number of attributes.0
+We normally put a group ofrelated classes into a file.0
+Why should we segregate our classes into differentfiles?Let us consider a simple analogy.0
+Would people at McDonalds make burgers andeat those themselves – (they may also eat a few – not sure though).0
+Customers ofMcDonalds and people of McDonalds enjoy their own lives – but interact at thecounter.0
+We would like to clearly distinguish between the creator of the class – he givesservice and the user of the class(client) – he uses the service the creator provides.0
+McDonald can cater to number of different types of customers.0
+Customers mayalso choose a different joint if they do not like McDonald.0
+Let us look at some examples.0
+In these discussions, we will use a simple exampleof a class - Rect – which abstracts a rectangle.0
+My rectangle has two attributeslength called l and breadth called b.0
+Both are of type int.0
+I am sure your rectanglecould be different.0
+We know that everything changes in this world.0
+How do we manage change? Thedeveloper of the class Rect should tell the client that he would not change thosethat the client can use and he may change those which the client cannot use.0
+He should hide the implementation and expose the interface.0
+In this example, the client accesses the interface of Rect.0
+Changes toimplementation of Rect will not affect the client.0
+In this example, can the Client find the area of a rectangle within which a smallrectangle is cut out? The answer is a NO as the client can only display the areaand cannot get the area.0
+This implementation of findArea is flawed.0
+It should return the area back to theclient.0
+The client can then decide what to do with it.0
+So far we have been telling you the truth, but not the whole truth.0
+The operator new allocates memory for the fields of Rect andthen calls a special method called the constructor.0
+This constructor is used toinitialize an object.0
+It does not create an object.0
+Constructor can have parameters.0
+Compiler provides a constructor which has noparameters.0
+This is called a default constructor.0
+This will vanish when we makeout own constructor.0
+The client may want to use our class to initialize objects indifferent ways.0
+You may order pizza with different toppings and with or withoutcoke.0
+We may have overloaded constructors to support what the client wants.0
+Giving a value or set of values to a variable or an object at the point of creation iscalled initialization.0
+Local variables are not initialized by default.0
+Object is created by using the operator new.0
+It allocates memory and calls theconstructor.0
+Our rectangle has changed with an additional field to indicate whether therectangle is a square.0
+It has methods to get the values of the attributes for theclient.0
+These are called getters.0
+We may have methods to change the values ofthe attributes of an object.0
+These are called setters.0
+Observe that isSquare depends on the other fields – we say it is a computed field.0
+This is given a value in the constructors.0
+Constructors are overloaded to make the client life easier.0
+Default constructor initializes the fields to some default (not reasonable in thisexample – could not think of a default rectangle!).0
+We have a constructor which creates a square – takes only one argument.0
+We have also a constructor which takes two arguments.0
+If a constructor does everything tht another constructor does and then somethingmore, we can make one call the other.0
+We want to make Dosa and Dosa-with-Ghee in our eatery.0
+If the latter doeseverything of the former, then we can have one cook, make Dosa and thenanother cook(I can fit in here), add ghee to it.0
+Something for you to experiment.0
+In java, we use final to state that something isa constant – that it will not change once given a value.0
+Your usn will not changeduring your stay in our college.0
+Your pan numbers (assuming that you are payingincome tax) will not change.0
+Your passport number will not change even though itis not the same for your friend.0
+A variable is given a location as the control enters the body of the method.0
+Whenthe control leaves the method, the memory given to the variable is taken back.0
+So we say that the variable has life – has existence – in that block.0
+An object gets life when the new operator is called.0
+At the end of the block thereference holding reference to the object is removed – dies.0
+But the objectremains but we have no way of accessing it.0
+So, we have a location – in this case –an object – which has no access.0
+Such a thing is called garbage.0
+Creation ofgarbage decreases the memory available.0
+When memory becomes low, Javaclears all these locations and make them useful again.0
+This concept is calledgarbage collection.0
+This concept is similar to what happens in our canteens.0
+You all consume coffeand/or tea.0
+After sometime there will be no cups available.0
+Then the manager callsout for the boy to clean these cups and make them useful again.0
+We may want to change the sides of a rectangle – modify by a factor.0
+We maywant to change the length and the breadth by different factors.0
+So, we require twomethods.0
+Should we call by different names or same name? Giving the samename makes the life of the client easier.0
+He has to remember just one name.0
+Wemay observe that the operator + stands for addition of all numeric types.0
+Theoperations carried internally are different.0
+This concept of giving the same namefor a group of methods logically similar is called overloading.0
+Your friend has a key to her locker in the bank – has something very valuable forher (look at this.0
+Suddenly the keyboard changed the gender!).0
+Let us say youhave made a copy of your friend's key.0
+If you file(mechanical filing – not file onyour computer), your friend's key will not change.0
+reference.0
+If you change the object using the parameter, whatever theargument refers to would be changed.0
+Your friend has a key to her locker in the bank – has something very valuable forher.0
+Let us say you have made a copy of your friend's key.0
+If you access the lockerthrough your key(copy of your friend's key) – you are a nice person – so you mayput something in the locker – not a snake of course), then your friend's locker haschanged.0
+The next time your friend opens the locker, she will get the shock of herlife.0
+Let us make another class – a triangle – to represent a Triangle of geometry.0
+Wewill specify the three sides and we will assume that the triangle is formed.0
+Can weclassify the triangle as equilateral, isosceles or scalene? I am a bit sloppy andproviding some computed members as interfaces – equi, iso and scalene.0
+Pleasedo not change them in the client code.0
+If you do, then you may end up with atriangle which is all of them simultaneously.0
+You may change this class and makeit better by providing methods to check whether the triangle is equilateral,isosceles or scalene.0
+Some homework for you.0
+We are using selection (if statement) to choose between the alternatives.0
+We are using boolean fields to hold the result of these comparisons.0
+Observe bydefault, all these boolean fields become false because of default initializationbased on type.0
+In this example, we have if within if, Such a construct is called nested ifstatement.0
+If the first operand of && operator is false, then the whole expression is false.0
+There is no necessity to evaluate the second operand.0
+If the first operand of || operator is true, then the whole expression is true.0
+Thereis no necessity to evaluate the second operand.0
+We can stop as soon as the truth or falsehood is found out.0
+That what happens inJava.0
+This is called short circuit evaluation.0
+We count the number of times a pair of sides match.0
+It can be 3 or 1 or 0.0
+Think:why it is never 2? Based on that we can classify a triangle.0
+Here, we have tocompare a single integer variable with number of constants for equality.0
+In suchcases, we prefer the switch statement.0
+The value of the expression of switchdecides the point of entry into the switch clauses (and not exit.0
+Thats why we usebreak to take the control out of the block!).0
+We can have a 'catch all' clause – thatis called default.0
+This is somewhat similar to BODMAS rule that we learn in arithmetic, but morecomplicated as there are lots of operators in these programming languages.0
+Theorder of evaluation of operators depends on the precedence.0
+Operators withhigher precedence will be evaluated first.0
+What if more than one operator in an expression has the same precedence? Inthat case, we evaluate left to right or right to left depending on the operator.0
+Thisconcept is called association.0
+The number of operands required for an operator is called arity.0
+Some operatorsare unary(one operand) – some are binary(two operands) and one of them isternary(three operands).0
+In this example, operators of division and multiplication have the same level ofprecedence and are evaluated left to right – left associative.0
+An expression has a value – of a particular type.0
+This is decided by the language.0
+Division of integers in many languages results in an integer.0
+So 1 / 2 becomes 0and now you can figure out why we get zero.0
+The above program finds the area of a triangle of base 10 and height 20.0
+What if Iwant to find area of triangle with different bases and heights.0
+You may rememberthat in the school days, we learnt arithmetic and then algebra.0
+In algebra, welearnt the concept of variables.0
+Variables could take different values.0
+How do weuse the same idea in programming.0
+To take input from the keyboard, we have to refer to it in the program.0
+It is calledSystem.0
+in.0
+System.0
+out refers to output and System.0
+in refers to input.0
+Readingfrom the keyboard is complicated as we may decide to input a number or a stringor special characters.0
+To handle this, we use a type(class) called Scanner that Javaprovides.0
+We make a variable of that type, bind it to the keyboard and then we willask it to get us the next integer.0
+To take input from the keyboard, we have to refer to it in the program.0
+It is calledSystem.0
+in.0
+System.0
+out refers to output and System.0
+in refers to input.0
+Readingfrom the keyboard is complicated as we may decide to input a number or a stringor special characters.0
+To handle this, we use a type(class) called Scanner that Javaprovides.0
+We make a variable of that type, bind it to the keyboard and then we willask it to get us the next integer.0
+This list is not complete.0
+We will discuss more of them later.0
+In this example, b is a variable of type int.0
+This statement causes allocation ofmemory of 4 bytes.0
+Java supports 8 types – called primitive types – byte, char,short, int, long, boolean, float and double.0
+Unlike 'C', size of each type is fixed inJava.0
+Can you find the size of each of these types.0
+Thats a bad idea.0
+What if I had a polygon with n sides (n > 3)? We may have tospecify n sides and a few more elements to define the figure uniquely.0
+In stead ofcarrying books separately, you may want to carry them in a bag.0
+Then we can talkabout the book in Rama's bag or the book in Krishna's bag.0
+Each of these classes can be in their own files.0
+A program in Java can consist ofnumber of files – each file having one or more classes.0
+A file can have only onepublic class and in that case, the file name should match the class name.0
+Why should we develop programs in multiple files? This would allow developmentby different people, therefore would make the development faster.0
+This alsoallows for reuse.0
+The class developed can be used by others.0
+This concept iscalled a library in programming parlour.0
+You may remember that our city name changed recently from Bangalore toBengaluru.0
+Your course CS2 is not called CS2 : Theme : Object OrientedProgramming in Java.0
+What is constant in this world is change.0
+What wouldhappen if we change the field names of the class Triangle from b to base and h toheight.0
+We want to make our field names more meaningful.0
+So far in these lectures, we have discussed the concepts of Object OrientedProgramming.0
+We have also discussed programs having constants, variables,simple input / output, assignment, expressions.0
+We have dwelt in detail about thedifferent aspects of operators like precedence, association and rank.0
+We have also made some simple classes with attributes(fields) andbehaviour(methods or functions).0
+We have also mentioned the special function toinitialize an object - called its constructor.0
+We make a class to represent an entity or a thing or an idea.0
+A class is like a userdefined type.0
+A class contains a number of attributes.0
+We normally put a group ofrelated classes into a file.0
+Why should we segregate our classes into differentfiles?Let us consider a simple analogy.0
+Would people at McDonalds make burgers andeat those themselves – (they may also eat a few – not sure though).0
+Customers ofMcDonalds and people of McDonalds enjoy their own lives – but interact at thecounter.0
+We would like to clearly distinguish between the creator of the class – he givesservice and the user of the class(client) – he uses the service the creator provides.0
+McDonald can cater to number of different types of customers.0
+Customers mayalso choose a different joint if they do not like McDonald.0
+Let us look at some examples.0
+In these discussions, we will use a simple exampleof a class - Rect – which abstracts a rectangle.0
+My rectangle has two attributeslength called l and breadth called b.0
+Both are of type int.0
+I am sure your rectanglecould be different.0
+We know that everything changes in this world.0
+How do we manage change? Thedeveloper of the class Rect should tell the client that he would not change thosethat the client can use and he may change those which the client cannot use.0
+He should hide the implementation and expose the interface.0
+In this example, the client accesses the interface of Rect.0
+Changes toimplementation of Rect will not affect the client.0
+In this example, can the Client find the area of a rectangle within which a smallrectangle is cut out? The answer is a NO as the client can only display the areaand cannot get the area.0
+This implementation of findArea is flawed.0
+It should return the area back to theclient.0
+The client can then decide what to do with it.0
+So far we have been telling you the truth, but not the whole truth.0
+The operator new allocates memory for the fields of Rect andthen calls a special method called the constructor.0
+This constructor is used toinitialize an object.0
+It does not create an object.0
+Constructor can have parameters.0
+Compiler provides a constructor which has noparameters.0
+This is called a default constructor.0
+This will vanish when we makeout own constructor.0
+The client may want to use our class to initialize objects indifferent ways.0
+You may order pizza with different toppings and with or withoutcoke.0
+We may have overloaded constructors to support what the client wants.0
+Giving a value or set of values to a variable or an object at the point of creation iscalled initialization.0
+Local variables are not initialized by default.0
+Object is created by using the operator new.0
+It allocates memory and calls theconstructor.0
+Our rectangle has changed with an additional field to indicate whether therectangle is a square.0
+It has methods to get the values of the attributes for theclient.0
+These are called getters.0
+We may have methods to change the values ofthe attributes of an object.0
+These are called setters.0
+Observe that isSquare depends on the other fields – we say it is a computed field.0
+This is given a value in the constructors.0
+Constructors are overloaded to make the client life easier.0
+Default constructor initializes the fields to some default (not reasonable in thisexample – could not think of a default rectangle!).0
+We have a constructor which creates a square – takes only one argument.0
+We have also a constructor which takes two arguments.0
+If a constructor does everything tht another constructor does and then somethingmore, we can make one call the other.0
+We want to make Dosa and Dosa-with-Ghee in our eatery.0
+If the latter doeseverything of the former, then we can have one cook, make Dosa and thenanother cook(I can fit in here), add ghee to it.0
+Something for you to experiment.0
+In java, we use final to state that something isa constant – that it will not change once given a value.0
+Your usn will not changeduring your stay in our college.0
+Your pan numbers (assuming that you are payingincome tax) will not change.0
+Your passport number will not change even though itis not the same for your friend.0
+A variable is given a location as the control enters the body of the method.0
+Whenthe control leaves the method, the memory given to the variable is taken back.0
+So we say that the variable has life – has existence – in that block.0
+An object gets life when the new operator is called.0
+At the end of the block thereference holding reference to the object is removed – dies.0
+But the objectremains but we have no way of accessing it.0
+So, we have a location – in this case –an object – which has no access.0
+Such a thing is called garbage.0
+Creation ofgarbage decreases the memory available.0
+When memory becomes low, Javaclears all these locations and make them useful again.0
+This concept is calledgarbage collection.0
+This concept is similar to what happens in our canteens.0
+You all consume coffeand/or tea.0
+After sometime there will be no cups available.0
+Then the manager callsout for the boy to clean these cups and make them useful again.0
+We may want to change the sides of a rectangle – modify by a factor.0
+We maywant to change the length and the breadth by different factors.0
+So, we require twomethods.0
+Should we call by different names or same name? Giving the samename makes the life of the client easier.0
+He has to remember just one name.0
+Wemay observe that the operator + stands for addition of all numeric types.0
+Theoperations carried internally are different.0
+This concept of giving the same namefor a group of methods logically similar is called overloading.0
+Your friend has a key to her locker in the bank – has something very valuable forher (look at this.0
+Suddenly the keyboard changed the gender!).0
+Let us say youhave made a copy of your friend's key.0
+If you file(mechanical filing – not file onyour computer), your friend's key will not change.0
+reference.0
+If you change the object using the parameter, whatever theargument refers to would be changed.0
+Your friend has a key to her locker in the bank – has something very valuable forher.0
+Let us say you have made a copy of your friend's key.0
+If you access the lockerthrough your key(copy of your friend's key) – you are a nice person – so you mayput something in the locker – not a snake of course), then your friend's locker haschanged.0
+The next time your friend opens the locker, she will get the shock of herlife.0
+Let us make another class – a triangle – to represent a Triangle of geometry.0
+Wewill specify the three sides and we will assume that the triangle is formed.0
+Can weclassify the triangle as equilateral, isosceles or scalene? I am a bit sloppy andproviding some computed members as interfaces – equi, iso and scalene.0
+Pleasedo not change them in the client code.0
+If you do, then you may end up with atriangle which is all of them simultaneously.0
+You may change this class and makeit better by providing methods to check whether the triangle is equilateral,isosceles or scalene.0
+Some homework for you.0
+We are using selection (if statement) to choose between the alternatives.0
+We are using boolean fields to hold the result of these comparisons.0
+Observe bydefault, all these boolean fields become false because of default initializationbased on type.0
+In this example, we have if within if, Such a construct is called nested ifstatement.0
+If the first operand of && operator is false, then the whole expression is false.0
+There is no necessity to evaluate the second operand.0
+If the first operand of || operator is true, then the whole expression is true.0
+Thereis no necessity to evaluate the second operand.0
+We can stop as soon as the truth or falsehood is found out.0
+That what happens inJava.0
+This is called short circuit evaluation.0
+We count the number of times a pair of sides match.0
+It can be 3 or 1 or 0.0
+Think:why it is never 2? Based on that we can classify a triangle.0
+Here, we have tocompare a single integer variable with number of constants for equality.0
+In suchcases, we prefer the switch statement.0
+The value of the expression of switchdecides the point of entry into the switch clauses (and not exit.0
+Thats why we usebreak to take the control out of the block!).0
+We can have a 'catch all' clause – thatis called default.0
+This is somewhat similar to BODMAS rule that we learn in arithmetic, but morecomplicated as there are lots of operators in these programming languages.0
+Theorder of evaluation of operators depends on the precedence.0
+Operators withhigher precedence will be evaluated first.0
+What if more than one operator in an expression has the same precedence? Inthat case, we evaluate left to right or right to left depending on the operator.0
+Thisconcept is called association.0
+The number of operands required for an operator is called arity.0
+Some operatorsare unary(one operand) – some are binary(two operands) and one of them isternary(three operands).0
+In this example, operators of division and multiplication have the same level ofprecedence and are evaluated left to right – left associative.0
+An expression has a value – of a particular type.0
+This is decided by the language.0
+Division of integers in many languages results in an integer.0
+So 1 / 2 becomes 0and now you can figure out why we get zero.0
+The above program finds the area of a triangle of base 10 and height 20.0
+What if Iwant to find area of triangle with different bases and heights.0
+You may rememberthat in the school days, we learnt arithmetic and then algebra.0
+In algebra, welearnt the concept of variables.0
+Variables could take different values.0
+How do weuse the same idea in programming.0
+To take input from the keyboard, we have to refer to it in the program.0
+It is calledSystem.0
+in.0
+System.0
+out refers to output and System.0
+in refers to input.0
+Readingfrom the keyboard is complicated as we may decide to input a number or a stringor special characters.0
+To handle this, we use a type(class) called Scanner that Javaprovides.0
+We make a variable of that type, bind it to the keyboard and then we willask it to get us the next integer.0
+To take input from the keyboard, we have to refer to it in the program.0
+It is calledSystem.0
+in.0
+System.0
+out refers to output and System.0
+in refers to input.0
+Readingfrom the keyboard is complicated as we may decide to input a number or a stringor special characters.0
+To handle this, we use a type(class) called Scanner that Javaprovides.0
+We make a variable of that type, bind it to the keyboard and then we willask it to get us the next integer.0
+This list is not complete.0
+We will discuss more of them later.0
+In this example, b is a variable of type int.0
+This statement causes allocation ofmemory of 4 bytes.0
+Java supports 8 types – called primitive types – byte, char,short, int, long, boolean, float and double.0
+Unlike 'C', size of each type is fixed inJava.0
+Can you find the size of each of these types.0
+Thats a bad idea.0
+What if I had a polygon with n sides (n > 3)? We may have tospecify n sides and a few more elements to define the figure uniquely.0
+In stead ofcarrying books separately, you may want to carry them in a bag.0
+Then we can talkabout the book in Rama's bag or the book in Krishna's bag.0
+Each of these classes can be in their own files.0
+A program in Java can consist ofnumber of files – each file having one or more classes.0
+A file can have only onepublic class and in that case, the file name should match the class name.0
+Why should we develop programs in multiple files? This would allow developmentby different people, therefore would make the development faster.0
+This alsoallows for reuse.0
+The class developed can be used by others.0
+This concept iscalled a library in programming parlour.0
+You may remember that our city name changed recently from Bangalore toBengaluru.0
+Your course CS2 is not called CS2 : Theme : Object OrientedProgramming in Java.0
+What is constant in this world is change.0
+What wouldhappen if we change the field names of the class Triangle from b to base and h toheight.0
+We want to make our field names more meaningful.0
