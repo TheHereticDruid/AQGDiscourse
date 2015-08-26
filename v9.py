@@ -836,8 +836,11 @@ def add_context():
 
 		if contextWord!= [] and contextWord!= "":
 			kN=all_questions[eq][0][-1]
-			all_questions[eq][0]=all_questions[eq][0][:-1]
-			all_questions[eq][0]+=", in case of "+contextWord+ kN	#Forming The Question
+			if re.search("[.?!;:]",kN):
+				all_questions[eq][0]=all_questions[eq][0][:-1]
+				all_questions[eq][0]+=", in case of "+contextWord+ kN	#Forming The Question
+			else:
+				all_questions[eq][0]+=", in case of "+contextWord
 
 
 def idf(s):	#Actually Only Document Frequency
@@ -1971,6 +1974,9 @@ def remExtras():
 					break
 				else:
 					all_questions[it][0]=all_questions[it][0][:-1]
+		for it in range(len(all_questions)):
+			if all_questions[it][1]<8:
+				all_questions[it][0]=all_questions[it][0].capitalize()
 
 genRegex()
 sentensify()
