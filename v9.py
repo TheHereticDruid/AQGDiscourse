@@ -45,14 +45,14 @@ from features import *
 
 #Setting stanford environment variables
 
-os.environ['STANFORD_PARSER'] = '/home/druidicheretic/jars'
-os.environ['STANFORD_MODELS'] = '/home/druidicheretic/jars'
+os.environ['STANFORD_PARSER'] = '/home/anirudh/jars'
+os.environ['STANFORD_MODELS'] = '/home/anirudh/jars'
 
 
 ############################################# Class initializations ############################################################
 
 stemmer = SnowballStemmer("english")
-parser = stanford.StanfordParser(model_path="/home/druidicheretic/notJars/englishPCFG.ser.gz")
+parser = stanford.StanfordParser(model_path="/home/anirudh/englishPCFG.ser.gz")
 
 class StanfordNLP:
     def __init__(self):
@@ -62,7 +62,7 @@ class StanfordNLP:
     def parse(self, text):
         return json.loads(self.server.parse(text))
 
-
+obj=Features()
 # brown_tagged_sents = brown.tagged_sents(categories='news')
 # brown_sents = brown.sents(categories='news')
 # unigram_tagger = nltk.UnigramTagger(brown_tagged_sents)
@@ -101,6 +101,7 @@ program_sentences= []
 others= []
 
 prev= []
+prev2= []
 
 qterms= []
 
@@ -121,6 +122,8 @@ thres=0.5
 nounphrase= 0
 
 comm= ["/*", "//"]
+
+sentence_gapfill= {}
 
 allnouns= []
 rem= []
@@ -155,7 +158,6 @@ def decisionTree():
 	fp=open("args.pickle","r")
 	start=fp.read().strip().split("\n")
 	dt= Decision(tree= tree, start=[float(i) for i in start])	#Also Set Start Here
-	obj=Features()
 	b= []
 	for i in rem:
 		#All Features
@@ -196,7 +198,7 @@ def chain(braces):
 	i= 1
 	while(i < len(tmp)):
 		print resSentences[tmp[i][0]]
-		if(indent(resSentences[tmp[i][0]])):
+		if(obj.indent(resSentences[tmp[i][0]])):
 			tmp[i-1][1]=tmp[i][1]
 			del tmp[i]
 		else:
@@ -273,6 +275,7 @@ def remComments(lst):
 #Function To Generate Program Questions
 def genProgramQuestions(c, lst):
 
+	flag= 0
 	keywords= ["WAP", "Write a program", "program to", "program that"]
 	q= []
 	for i in c:
@@ -282,14 +285,20 @@ def genProgramQuestions(c, lst):
 			tmp.append(sentences[j])	#Retrieve Sentences, Including Code
 			tmp2.append(j)
 		tmp.append("What does the above program do? If any, what is the output?")	#First Possible Type Of Question
-		sentnumb_map[12].append(tmp2)
+			
 		tmp=remComments(tmp)
-		all_questions.append(["\n".join(tmp), 12, 4, tmp2[0]])
+		tmp= [j for j in tmp if j!= ""]
+		if(len(tmp) > 1):
+			sentnumb_map[12].append(tmp2)
+			all_questions.append(["\n".join(tmp), 12, 4, tmp2[0]])
 
 	for i in c:
+		flag= 0
 		for k in keywords:
 			res= re.search(k, sentences[i[0]-1], re.I)
+			res2= re.search(k, sentences[i[0]-2], re.I)
 			if(res):
+				flag= 1
 				if(res.group()== "WAP" or res.group()== "Write a program"):	#If WAP Exists In The Question Statement
 					sentnumb_map[12].append([i[0]-1])
 					all_questions.append([sentences[i[0]-1], 12, 5, i[0]-1])
@@ -298,6 +307,18 @@ def genProgramQuestions(c, lst):
 					sentnumb_map[12].append([i[0]-1])
 					all_questions.append(["Write a "+ sentences[i[0]-1][index:], 12, 4, i[0]-1])
 				break
+			
+			elif(res2 and flag== 0):
+				flag= 1
+				if(res2.group()== "WAP" or res2.group()== "Write a program"):	#If WAP Exists In The Question Statement
+					sentnumb_map[12].append([i[0]-2])
+					all_questions.append([sentences[i[0]-1], 12, 5, i[0]-2])
+				else:
+					index= sentences[i[0]-1].index("program")	#Search For Program Keyword, And Append WAP To The Following Statement Part
+					sentnumb_map[12].append([i[0]-2])
+					all_questions.append(["Write a "+ sentences[i[0]-2][index:], 12, 4, i[0]-2])
+				break
+
 	
 #Function To Get The Question Defining Statement(Basis) Of The Question, Per Programming Block
 #Gets Either From The First Comment Line, Or The Line Previous, Along With The Whole Program, For Each Block
@@ -482,6 +503,7 @@ def genGapFill():
 	# 		print s
 
 	global prev
+	global prev2
 
 	v= 0
 	lst= []
@@ -494,25 +516,34 @@ def genGapFill():
 		tmp= tmp[1:]
 		tmp.reverse()
 		tmp= [' '.join(i.leaves()) for i in tmp]	#NN Terms
+		prev2= [i[0] for i in prev2]
+		prev2= list(set(prev2))
+		if(prev2!= []):
+			tmp= prev2
 
 		flag3= 0
-		replacement= ""
+		replacement= []
+
+		for i in prev2:
+			if(i not in newFreq):
+				newFreq.append(i)
+
 		for i in tmp:
 			for j in i.split():
 				if(j in newFreq):
-					flag3= 1
-					replacement= i	#NN Term To Be Taken Out
-					break
+					replacement.append(i)	#NN Term To Be Taken Out
 
-			if(flag3):
-				break
+		replacement= list(set(replacement))
+		replacement= [i for i in replacement if len(i)>4]
+		replacement= random.choice(replacement)
 
-		if(replacement!= ""):
-			s= s.replace(replacement, "_____________")	#NN Term Is Replaced By Blank
+		print "replacement= ", replacement
 
-			all_questions.append([s+"\nFill In The Blanks.", 9, 1, sentnumb_map[9][v][0]])
-			lst.append(sentnumb_map[9][v])
-
+		
+		t= s.replace(replacement, "_____________")	#NN Term Is Replaced By Blank
+		sentence_gapfill[replacement]= v
+		all_questions.append([t+"\nFill In The Blanks.", 9, 1, sentnumb_map[9][v][0]])
+		lst.append(sentnumb_map[9][v])
 		
 		v+= 1
 
@@ -805,11 +836,8 @@ def add_context():
 
 		if contextWord!= [] and contextWord!= "":
 			kN=all_questions[eq][0][-1]
-			if re.search("[.?!;:]",kN):
-				all_questions[eq][0]=all_questions[eq][0][:-1]
-				all_questions[eq][0]+=", in case of "+contextWord+ kN	#Forming The Question
-			else:
-				all_questions[eq][0]+=", in case of "+contextWord
+			all_questions[eq][0]=all_questions[eq][0][:-1]
+			all_questions[eq][0]+=", in case of "+contextWord+ kN	#Forming The Question
 
 
 def idf(s):	#Actually Only Document Frequency
@@ -842,6 +870,7 @@ def simplify(s):
 		return ""
 
 
+
 ################################################# recurse #######################################################################
 # Function used to recursively traverse the tree and get the last NP node
 ##################################################################################################################################
@@ -849,10 +878,14 @@ def simplify(s):
 
 def recurse(parent):
 
+	global prev
+	global prev2
 	for node in parent:
 		if(type(node) is nltk.tree.Tree):
 			if(node.label()== 'NP'):
 				prev.append(node)
+			if(node.label()== "JJ"):
+				prev2.append(node)
 			recurse(node)
 
 	if(prev!= []):
@@ -949,10 +982,10 @@ def sentensify():
 	print "\nAfter Adding Programming Questions, The List Of Questions Becomes\n", "\n".join([aQ[0] for aQ in all_questions])
 	othersNumb()
 	genGapFill()
-	print "\nFinal Question Bank Is\n", "\n".join([aQ[0] for aQ in all_questions])
 	titling()
 	reduce_sentence()
-	# pronoun_resolution()
+	pronoun_resolution()
+	print "\nFinal Question Bank Is\n", "\n".join([aQ[0] for aQ in all_questions])
 
 def setRem():	#Get Sentences Not Already Turned Into Questions
 	global rem
@@ -1188,7 +1221,7 @@ def pronoun_resolution():
 
 				#For words like this, these
 				res= re.search("DT", only_tags[ot])
-				if(res and (tags[ot][0].lower()== "these" or tags[ot][0].lower()== "this" or tags[ot][0].lower()== "those" or tags[ot][0].lower()== "that")):
+				if(res and (tags[ot][0].lower()== "these" or tags[ot][0].lower()== "this" or tags[ot][0].lower()== "those")):
 					flag3= 1
 
 
@@ -1350,6 +1383,7 @@ def genWhenQuestions():
 		tags= nltk.pos_tag(nltk.word_tokenize(s))
 
 		flag= 0
+		flag8= 0
 		for word, tag in tags:
 			for j in aux_list:
 				if(word== j):
@@ -1360,6 +1394,15 @@ def genWhenQuestions():
 				break
 
 		if(flag==0):
+
+			for word, tag in tags:
+
+				res= re.search("VB.*", tag)
+				if(res and flag8== 0):
+					flag8= 1
+					s= s.replace(word, en.verb.present(word))
+
+			tags= nltk.pos_tag(nltk.word_tokenize(s))		
 			flag1= 0
 			flag2= 0
 			s= ""
@@ -1377,8 +1420,11 @@ def genWhenQuestions():
 				if(not re.search("RB.*", tag)):	#Ignore Adverbs
 					s+= word+ " "
 			if kW:
-				question= "When"+kW+s+"?"
-				all_questions.append([question, 6, 2, sentnumb_map[6][i][0]])
+
+				if(s!= ""):
+					question= "When"+kW+s+"?"
+
+					all_questions.append([question, 6, 2, sentnumb_map[6][i][0]])
 			else:
 				s=""
 				for word, tag in tags:
@@ -1389,16 +1435,18 @@ def genWhenQuestions():
 							flag2= 1
 							kW=" do "
 							tmp= word
-							s= "do "+ s 	#Auxiliary Is "do"
+							s= " do "+ s 	#Auxiliary Is "do"
 						else:
 							flag2= 1
 							kW=" does "
 							tmp= word
-							s= "does "+ s	#Auxiliary Is "does"
+							s= " does "+ s	#Auxiliary Is "does"
 					if(not re.search("RB.*", tag)):	#Ignore Adverbs
 						s+= word+ " "
-				question= "When"+ kW+ s+ "?"	#Add "Why" And "?"
-				all_questions.append([question, 6, 2, sentnumb_map[6][i][0]])	#Add To Questions
+
+				if(s!= ""):
+					question= "When"+ s+ "?"	#Add "Why" And "?"
+					all_questions.append([question, 6, 2, sentnumb_map[6][i][0]])	#Add To Questions
 
 
 		elif(flag==1):
@@ -1423,7 +1471,8 @@ def genWhenQuestions():
 
 			s= s[:-2]
 
-		all_questions.append(["When "+s+ "?", 6, 2, sentnumb_map[6][i][0]])	#Add "When" And "?" As Needed To Form The Question
+			if s!= "":
+				all_questions.append(["When "+s+ "?", 6, 2, sentnumb_map[6][i][0]])	#Add "When" And "?" As Needed To Form The Question
 
 
 ################################################# genIllustrativeQuestions #######################################################
@@ -1514,8 +1563,10 @@ def genIllustrativeQuestions():
 							s+= word+ " "
 				if(s!= "" and s[-2]!= "."):
 					s= s[:-2]+ "."
-				if(s!= ""):		
+				if(s!= "" and len(s.split())<= 15):		
 					all_questions.append(["Give an illustration for "+ s, 4, 2, sentnumb_map[4][i][0]])	#Make The Question Similarly
+				elif(s!= ""):		
+					all_questions.append([s[0].upper()+ s[1:]+ " Give an illustration.", 4, 2, sentnumb_map[4][i][0]])	#Make The Question Similarly
 
 
 
@@ -1663,7 +1714,7 @@ def genConcludingQuestions():
 				break
 
 		if(q!= "" and flag):
-			all_questions.append([qphrase+ q[1]+ "?", 2, 2, sentnumb_map[2][i][0]])
+			all_questions.append([qphrase+ q+ "?", 2, 2, sentnumb_map[2][i][0]])
 		else:
 			del sentnumb_map[2][i]
 
@@ -1692,7 +1743,7 @@ def tokenize(s):
 
 def genContQuestion():
 
-	qphrase= "What contradicts "
+	qphrase= " What opposing view has been provided in the passage?"
 
 	i= 0
 	for qt in qterms:
@@ -1724,13 +1775,10 @@ def genContQuestion():
 
 
 			if(re.search("VB.*", tag) and flag==0):
-				try:
-					temp= en.verb.present_participle(word)+ " "
-					flag= 1
-				except KeyError as k:
-					flag= 0
+				flag= 1
+				temp= word+ " "
 			
-		all_questions.append([qphrase+ np+" " +temp+"?", 0, 2, sentnumb_map[0][i][0]])
+		all_questions.append([np+" " +temp[:-1]+ "."+ qphrase, 0, 2, sentnumb_map[0][i][0]])
 
 		i+= 1
 
@@ -1923,19 +1971,6 @@ def remExtras():
 					break
 				else:
 					all_questions[it][0]=all_questions[it][0][:-1]
-		for it in range(len(all_questions)):
-			if all_questions[it][1]<8:
-				all_questions[it][0]=all_questions[it][0].capitalize()
-		# 	sents=nltk.sent_tokenize(all_questions[it][0])
-		# 	for jt in range(len(sents)):
-		# 		words=nltk.word_tokenize(sents[jt])
-		# 		for kt in range(len(words)):
-		# 			if words[kt][0]>="A" and words[kt][0]<="Z":
-		# 				tag=nltk.pos_tag([words[kt]])
-		# 				if(re.search("NNP.?",tag[0][1])!=[]):
-		# 					words[kt]=words[kt].lower()
-		# 		sents[jt]=" ".join(words)
-		# 	all_questions[it][0]=" ".join(sents)
 
 genRegex()
 sentensify()
