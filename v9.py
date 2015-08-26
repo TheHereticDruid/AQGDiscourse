@@ -1924,7 +1924,8 @@ def remExtras():
 				else:
 					all_questions[it][0]=all_questions[it][0][:-1]
 		for it in range(len(all_questions)):
-			all_questions[it][0]=all_questions[it][0].capitalize()
+			if all_questions[it][1]<8:
+				all_questions[it][0]=all_questions[it][0].capitalize()
 		# 	sents=nltk.sent_tokenize(all_questions[it][0])
 		# 	for jt in range(len(sents)):
 		# 		words=nltk.word_tokenize(sents[jt])
