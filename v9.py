@@ -16,7 +16,6 @@ Instructions:
 	4. Some nltk packages from nltk.download()
 - Usage: python v2.py
 '''
-
 ############################################ Imports #############################################################################
 
 import nltk
