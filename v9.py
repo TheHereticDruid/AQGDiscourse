@@ -45,14 +45,14 @@ from features import *
 
 #Setting stanford environment variables
 
-os.environ['STANFORD_PARSER'] = '/home/anirudh/jars'
-os.environ['STANFORD_MODELS'] = '/home/anirudh/jars'
+os.environ['STANFORD_PARSER'] = '/home/druidicheretic/jars'
+os.environ['STANFORD_MODELS'] = '/home/druidicheretic/jars'
 
 
 ############################################# Class initializations ############################################################
 
 stemmer = SnowballStemmer("english")
-parser = stanford.StanfordParser(model_path="/home/anirudh/englishPCFG.ser.gz")
+parser = stanford.StanfordParser(model_path="/home/druidicheretic/notJars/englishPCFG.ser.gz")
 
 class StanfordNLP:
     def __init__(self):
@@ -199,8 +199,18 @@ def chain(braces):
 	while(i < len(tmp)):
 		print resSentences[tmp[i][0]]
 		if(obj.indent(resSentences[tmp[i][0]])):
+			iV=tmp[i-1][1]
+			jV=tmp[i][0]
+			delLst=[]
+			for itr in range(len(all_questions)):
+				if all_questions[itr][3]>iV and all_questions[itr][3]<jV:
+					delLst.append(itr)
 			tmp[i-1][1]=tmp[i][1]
 			del tmp[i]
+			delLst.sort()
+			delLst.reverse()
+			for itr in delLst:
+				del all_questions[itr]
 		else:
 			i+=1
 
@@ -208,8 +218,18 @@ def chain(braces):
 	i= 0
 	while(i < len(tmp)-1):
 		if(braces[tmp[i][1]]==1.0):
+			iV=tmp[i][1]
+			jV=tmp[i+1][0]
+			delLst=[]
+			for itr in range(len(all_questions)):
+				if all_questions[itr][3]>iV and all_questions[itr][3]<jV:
+					delLst.append(itr)
 			tmp[i][1]=tmp[i+1][1]
 			del tmp[i+1]
+			delLst.sort()
+			delLst.reverse()
+			for itr in delLst:
+				del all_questions[itr]
 		else:
 			i+=1
 
@@ -454,8 +474,9 @@ def genGapFill():
 	for i in rem:
 		f1= 0 
 		f2= 0
-		nn= nnouns(resSentences[i])
-		l= length(resSentences[i])
+		tmpSent=remBrackets(resSentences[i])
+		nn= nnouns(tmpSent)
+		l= length(tmpSent)
 
 		if(l > 10 and l < 35):
 			f1= 1
@@ -467,7 +488,7 @@ def genGapFill():
 
 		if(score != 0):
 
-			tags= nltk.pos_tag(nltk.word_tokenize(resSentences[i]))
+			tags= nltk.pos_tag(nltk.word_tokenize(tmpSent))
 
 			flag= 0
 			for w, t in tags:
@@ -476,7 +497,7 @@ def genGapFill():
 					break
 
 			if(flag== 0):
-				gapfill_Sentences.append(resSentences[i])
+				gapfill_Sentences.append(tmpSent)
 
 				sentnumb_map[9].append([i])
 
@@ -532,20 +553,17 @@ def genGapFill():
 			for j in i.split():
 				if(j in newFreq):
 					replacement.append(i)	#NN Term To Be Taken Out
-
 		replacement= list(set(replacement))
 		replacement= [i for i in replacement if len(i)>4]
-		replacement= random.choice(replacement)
-
-		print "replacement= ", replacement
-
+		if replacement:
+			replacement= random.choice(replacement)
+			
+			t= s.replace(replacement, "_____________")	#NN Term Is Replaced By Blank
+			sentence_gapfill[replacement]= v
+			all_questions.append([t+"\nFill In The Blanks.", 9, 1, sentnumb_map[9][v][0]])
+			lst.append(sentnumb_map[9][v])
 		
-		t= s.replace(replacement, "_____________")	#NN Term Is Replaced By Blank
-		sentence_gapfill[replacement]= v
-		all_questions.append([t+"\nFill In The Blanks.", 9, 1, sentnumb_map[9][v][0]])
-		lst.append(sentnumb_map[9][v])
-		
-		v+= 1
+			v+= 1
 
 	sentnumb_map[9]= copy.deepcopy(lst)
 
@@ -696,15 +714,12 @@ def genTrueFalse(num):
 					just=" Justify Your Answer In A Sentence."
 					eM=1
 				rand= random.randint(0, 1)
+				tfSentences.append(remBrackets(resSentences[i]))
+				sentnumb_map[8].append([i])
 				if(rand== 0):
-					tfSentences.append(resSentences[i])
-					sentnumb_map[8].append([i])
-					negate(resSentences[i], i, just, eM)
-
+					negate(tfSentences[-1], i, just, eM)
 				else:	
-					tfSentences.append(resSentences[i])
-					sentnumb_map[8].append([i])				
-					all_questions.append([resSentences[i]+ " True/False?"+just, 8, 1+eM, i+eM])	#Direct True False
+					all_questions.append([tfSentences[-1]+ " True/False?"+just, 8, 1+eM, i+eM])	#Direct True False
 					j+= 1
 
 	
@@ -1339,7 +1354,7 @@ def cluster(sentences):
 	# print "when_sentences= ", when_sentences ,"\n\n"
 	# print "discuss_sentences= ", discuss_sentences, "\n\n"
 	# print "others= ", others ,"\n\n"
-
+	remBrackets()
 	genContQuestionTerms()
 	genContQuestion()
 	genConcludingQuestions()
@@ -1642,7 +1657,7 @@ def genwhyQuestions():
 				for itr in range(len(allw)): 
 					if(allw[itr] in aux_list):
 						fl=1
-						s= allw[itr]+" " +' '.join(allw[:itr])+ " " +' '.join(allw[itr+1:])	#Push Auxiliary To Front
+						s= allw[itr] + " " +' '.join(allw[:itr])+ " " +' '.join(allw[itr+1:])	#Push Auxiliary To Front
 						question= qphrase+" "+ s+ "?"	#Add "Why" And "?"
 						all_questions.append([question, 5, 2, sentnumb_map[5][i][0]])	#Add To Questions
 						break
@@ -1683,7 +1698,7 @@ def genwhyQuestions():
 									tmp= word 	#Auxiliary Is "does"
 							if(not re.search("RB.*", tag)):	#Ignore Adverbs
 								s+= word+ " "
-						question= qphrase+ kW+ s+ "?"	#Add "Why" And "?"
+						question= qphrase+ kW+s+ "?"	#Add "Why" And "?"
 						all_questions.append([question, 5, 2, sentnumb_map[5][i][0]])	#Add To Questions
 		i+= 1
 
@@ -1717,7 +1732,7 @@ def genConcludingQuestions():
 				break
 
 		if(q!= "" and flag):
-			all_questions.append([qphrase+ q+ "?", 2, 2, sentnumb_map[2][i][0]])
+			all_questions.append([qphrase+ " ".join(q)+ "?", 2, 2, sentnumb_map[2][i][0]])
 		else:
 			del sentnumb_map[2][i]
 
@@ -1964,6 +1979,39 @@ def recursive(n2, dm):
 
 		qterms.append(curr)
 
+def remQsns():
+	remLst=[]
+	for it in range(len(all_questions)):
+		if all_questions[it][1]<8:
+			sent=nltk.sent_tokenize(all_questions[it][0])[0]
+			if len(nltk.word_tokenize(sent))<=4 or genPreSentence(sent)=="":
+				remLst.append(it)
+				break
+	if remLst:
+		remLst.sort()
+		remLst.reverse()
+	for it in remLst:
+		del all_questions[it]
+
+def remBrackets(argStr=""):
+	if argStr:
+		if argStr[0]=="(":
+			argStr=argStr[1:]
+		if argStr[-1]==")":
+			argStr=argStr[:-1]
+		argStr=re.sub("\(.*?\)","",argStr)
+		return argStr
+	else:
+		for k in sentences_map.keys():
+			if k<8:
+				for ln in range(len(sentences_map[k])):
+					for sn in range(len(sentences_map[k][ln])):
+						if sentences_map[k][ln][sn][0]=="(":
+							sentences_map[k][ln][sn]=sentences_map[k][ln][sn][1:]
+						if sentences_map[k][ln][sn][-1]==")":
+							sentences_map[k][ln][sn]=sentences_map[k][ln][sn][:-1]
+						sentences_map[k][ln][sn]=re.sub("\(.*?\)","",sentences_map[k][ln][sn])
+
 def remExtras():
 	for it in range(len(all_questions)):
 		k=all_questions[it][0][-1]
@@ -1974,10 +2022,12 @@ def remExtras():
 					break
 				else:
 					all_questions[it][0]=all_questions[it][0][:-1]
+		all_questions[it][0]=re.sub("  +", " ", all_questions[it][0])
 		for it in range(len(all_questions)):
 			if all_questions[it][1]<8:
 				all_questions[it][0]=all_questions[it][0].capitalize()
 
 genRegex()
 sentensify()
+remQsns()
 qSet()
