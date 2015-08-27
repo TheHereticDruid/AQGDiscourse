@@ -15,7 +15,6 @@ Instructions:
 		Start the server using python corenlp.py before running this code.
 	4. Some nltk packages from nltk.download()
 - Usage: python v2.py
-
 '''
 
 ############################################ Imports #############################################################################
