@@ -306,7 +306,15 @@ def genProgramQuestions(c, lst):
 		tmp= [j for j in tmp if j!= ""]
 		if(len(tmp) > 1):
 			sentnumb_map[12].append(tmp2)
-			all_questions.append(["\n".join(tmp), 12, 4, tmp2[0]])
+			tmpLst=quoteBreak(tmp)
+			tmpStr=""
+			for it in range(len(tmp)):
+				tmpStr+=tmp[it]
+				if it in tmpLst:
+					tmpStr+=" "
+				else:
+					tmpStr+="\n"
+			all_questions.append([tmpStr, 12, 4, tmp2[0]])
 
 	for i in c:
 		flag= 0
@@ -846,13 +854,7 @@ def add_context():
 		contextWord=maxidf2	#Context Word With Highest Frequency In Document
 
 		if contextWord!= [] and contextWord!= "":
-			kN=all_questions[eq][0][-1]
-			if re.search("[.?!;:]",kN):
-				all_questions[eq][0]=all_questions[eq][0][:-1]
-				all_questions[eq][0]+=", in case of "+contextWord+ kN	#Forming The Question
-			else:
-				all_questions[eq][0]+=", in case of "+contextWord
-
+			all_questions[eq][0]+="\nKeyword: "+contextWord	#Forming The Question
 
 def idf(s):	#Actually Only Document Frequency
 
@@ -2022,6 +2024,21 @@ def remExtras():
 		for it in range(len(all_questions)):
 			if all_questions[it][1]<8:
 				all_questions[it][0]=all_questions[it][0].capitalize()
+
+
+def quoteBreak(lst):
+	flag=""
+	ret=[]
+	for it in range(len(lst)):
+		itr=re.findall(r"[^\\](\"|\')",lst[it])
+		for jt in itr:
+			if flag=="":
+				flag=jt
+			elif flag==jt:
+				flag=""
+		if flag:
+			ret.append(it)
+	return ret
 
 genRegex()
 sentensify()
