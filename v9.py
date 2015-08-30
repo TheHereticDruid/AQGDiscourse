@@ -1607,7 +1607,7 @@ def removeDM(s):
 
 def genwhyQuestions():
 	global all_questions
-	qphrase= "Why"
+	qphrase= " Why"
 	i= 0
 	for line in why_sentences:
 
@@ -1707,7 +1707,7 @@ def genwhyQuestions():
 
 def genConcludingQuestions():
 
-	qphrase= "How was it concluded that"
+	qphrase= " How was it concluded that "
 	i= 0
 	flag=1
 	for line in concluding_sentences:
@@ -2021,11 +2021,9 @@ def remExtras():
 				else:
 					all_questions[it][0]=all_questions[it][0][:-1]
 		all_questions[it][0]=re.sub("  +", " ", all_questions[it][0])
-		for it in range(len(all_questions)):
-			if all_questions[it][1]<8:
-				all_questions[it][0]=all_questions[it][0].capitalize()
-
-
+	for it in range(len(all_questions)):
+		if all_questions[it][1]<8:
+			all_questions[it][0]=reCase(all_questions[it][0]).strip()
 def quoteBreak(lst):
 	flag=""
 	ret=[]
@@ -2039,6 +2037,43 @@ def quoteBreak(lst):
 		if flag:
 			ret.append(it)
 	return ret
+
+def reCase(s):
+	sents=nltk.sent_tokenize(s)
+	totalSent=""
+	for it in range(len(sents)):
+		words=nltk.word_tokenize(sents[it])
+		if words[0][0]>="a" and words[0][0]<="z":
+			words[0]=shiftCase(words[0],"U")
+		tags= nltk.pos_tag(words)
+		newSent=words[0]
+		for word, tag in tags[1:]:
+			if not re.search("\.|\,", tag):
+				newSent+=" "
+			if not re.search("NNP.?", tag) and word[0]>="A" and word[0]<="Z":
+				newSent+=shiftCase(word,"l")
+			elif re.search("NNP.?", tag) and word[0]>="a" and word[0]<="z":
+				newSent+=shiftCase(word,"U")
+			else:
+				newSent+=word
+		totalSent+=newSent+" "
+	return totalSent.strip()
+
+def shiftCase(w,c):
+	retWord=""
+	if c=="l":
+		for i in w:
+			if retWord=="":
+				retWord+=i.lower()
+			else:
+				retWord+=i
+	elif c=="U":
+		for i in w:
+			if retWord=="":
+				retWord+=i.upper()
+			else:
+				retWord+=i
+	return retWord
 
 genRegex()
 sentensify()
