@@ -740,7 +740,7 @@ def qSet():
 	addedList=[]
 	remExtras()
 	add_context()
-	order={7: 10, 10: 10, 12: 10, 0: 10, 4: 10, 6: 10, 11: 10, 8: 10, 5: 10, 9:10}	 #Set To List Of Numbers Representing Question Types, In Order Of Highest Mark Prob To Lowest, With Type As Key, And Percentage In Decimal As Value
+	order={7: 10, 10: 10, 2: 10, 0: 10, 4: 10, 6: 10, 11: 10, 8: 10, 5: 10, 9:10}	 #Set To List Of Numbers Representing Question Types, In Order Of Highest Mark Prob To Lowest, With Type As Key, And Percentage In Decimal As Value
 	for o, p in order.items():
 		totalPMarks=int(totalMarks*p+carryOver)	#Total Marks For Current Part
 		if totalPMarks+curMarks>totalMarks:
@@ -1738,9 +1738,8 @@ def genConcludingQuestions():
 						else:
 							break
 				break
-
 		if(q!= "" and flag):
-			all_questions.append([qphrase+ " ".join(q)+ "?", 2, 2, sentnumb_map[2][i][0], " ".join(sentences[sentnumb_map[2][i][0]: sentnumb_map[2][i][-1]+1])])
+			all_questions.append([qphrase+ q[1]+ "?", 2, 2, sentnumb_map[2][i][0], " ".join(sentences[sentnumb_map[2][i][0]: sentnumb_map[2][i][-1]+1])])
 		else:
 			del sentnumb_map[2][i]
 
