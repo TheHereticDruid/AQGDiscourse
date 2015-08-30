@@ -41,14 +41,14 @@ from features import *
 
 #Setting stanford environment variables
 
-os.environ['STANFORD_PARSER'] = '/home/druidicheretic/jars'
-os.environ['STANFORD_MODELS'] = '/home/druidicheretic/jars'
+os.environ['STANFORD_PARSER'] = '/home/anirudh/jars'
+os.environ['STANFORD_MODELS'] = '/home/anirudh/jars'
 
 
 ############################################# Class initializations ############################################################
 
 stemmer = SnowballStemmer("english")
-parser = stanford.StanfordParser(model_path="/home/druidicheretic/notJars/englishPCFG.ser.gz")
+parser = stanford.StanfordParser(model_path="/home/anirudh/englishPCFG.ser.gz")
 
 class StanfordNLP:
     def __init__(self):
@@ -314,7 +314,7 @@ def genProgramQuestions(c, lst):
 					tmpStr+=" "
 				else:
 					tmpStr+="\n"
-			all_questions.append([tmpStr, 12, 4, tmp2[0]])
+			all_questions.append([tmpStr, 12, 4, tmp2[0], -1])
 
 	for i in c:
 		flag= 0
@@ -325,22 +325,22 @@ def genProgramQuestions(c, lst):
 				flag= 1
 				if(res.group()== "WAP" or res.group()== "Write a program"):	#If WAP Exists In The Question Statement
 					sentnumb_map[12].append([i[0]-1])
-					all_questions.append([sentences[i[0]-1], 12, 5, i[0]-1])
+					all_questions.append([sentences[i[0]-1], 12, 5, i[0]-1, -1])
 				else:
 					index= sentences[i[0]-1].index("program")	#Search For Program Keyword, And Append WAP To The Following Statement Part
 					sentnumb_map[12].append([i[0]-1])
-					all_questions.append(["Write a "+ sentences[i[0]-1][index:], 12, 4, i[0]-1])
+					all_questions.append(["Write a "+ sentences[i[0]-1][index:], 12, 4, i[0]-1, -1])
 				break
 			
 			elif(res2 and flag== 0):
 				flag= 1
 				if(res2.group()== "WAP" or res2.group()== "Write a program"):	#If WAP Exists In The Question Statement
 					sentnumb_map[12].append([i[0]-2])
-					all_questions.append([sentences[i[0]-1], 12, 5, i[0]-2])
+					all_questions.append([sentences[i[0]-1], 12, 5, i[0]-2, -1])
 				else:
 					index= sentences[i[0]-1].index("program")	#Search For Program Keyword, And Append WAP To The Following Statement Part
 					sentnumb_map[12].append([i[0]-2])
-					all_questions.append(["Write a "+ sentences[i[0]-2][index:], 12, 4, i[0]-2])
+					all_questions.append(["Write a "+ sentences[i[0]-2][index:], 12, 4, i[0]-2, -1])
 				break
 
 	
@@ -564,7 +564,7 @@ def genGapFill():
 			
 			t= s.replace(replacement, "_____________")	#NN Term Is Replaced By Blank
 			sentence_gapfill[replacement]= v
-			all_questions.append([t+"\nFill In The Blanks.", 9, 1, sentnumb_map[9][v][0]])
+			all_questions.append([t+"\nFill In The Blanks.", 9, 1, sentnumb_map[9][v][0], replacement])
 			lst.append(sentnumb_map[9][v])
 		
 			v+= 1
@@ -658,10 +658,10 @@ def negate(s, n, j, e, rn=-1):
 		if(aux!= ""):
 			temp= s.replace(aux, aux_negate[aux])	#Negate Auxiliary Verb
 			temp+= " True/False?"
-			all_questions.append([temp+j, 8, 1+e, n+e])
+			all_questions.append([temp+j, 8, 1+e, n+e, "False"])
 
 		else:
-			all_questions.append([s+"True/False?"+j, 8, 1+e, n+e])
+			all_questions.append([s+"True/False?"+j, 8, 1+e, n+e, "False"])
 
 	else:
 
@@ -677,7 +677,7 @@ def negate(s, n, j, e, rn=-1):
 			an= remNouns[rand]
 			tmp= s.replace(words[-1], an)	#Replace A NN With One Not In The Sentence, Randomly Chosen
 			tmp+= " True/False?"
-			all_questions.append([tmp, 8, 1, n])
+			all_questions.append([tmp, 8, 1, n, "False"])
 		else:
 			negate(s,n, j, e, rn=0)
 
@@ -723,7 +723,7 @@ def genTrueFalse(num):
 				if(rand== 0):
 					negate(tfSentences[-1], i, just, eM)
 				else:	
-					all_questions.append([tfSentences[-1]+ " True/False?"+just, 8, 1+eM, i+eM])	#Direct True False
+					all_questions.append([tfSentences[-1]+ " True/False?"+just, 8, 1+eM, i+eM, "True"])	#Direct True False
 					j+= 1
 
 	
@@ -1061,9 +1061,9 @@ def genEqnQsn():
 				else:
 					q+=spl2[it].strip()+"+"	#Replace One Component In Both LHS And RHS With Blank
 			q=q[:-1]
-			all_questions.append([q, 11, 2, sentnumb_map[11][eqnSent][0]])
+			all_questions.append([q, 11, 2, sentnumb_map[11][eqnSent][0], -1])
 			q="Provide Below The "+checkWord+" Reaction."	#Another Type, Definition
-			all_questions.append([q, 11, 2, sentnumb_map[11][eqnSent][0]])
+			all_questions.append([q, 11, 2, sentnumb_map[11][eqnSent][0], -1])
 		q="Balance the following equation:\n"	#Third, General Type Of Question, Balancing
 		it=0
 		while it<len(spl1):
@@ -1083,7 +1083,7 @@ def genEqnQsn():
 		for it in range(len(spl2)):
 			q+=spl2[it].strip()+"+"
 		q=q[:-1]
-		all_questions.append([q, 11, 2, sentnumb_map[11][eqnSent][0]])	#Adding Question Into The Final Set
+		all_questions.append([q, 11, 2, sentnumb_map[11][eqnSent][0], -1])	#Adding Question Into The Final Set
 
 
 
@@ -1381,7 +1381,7 @@ def genDiscussQuestions():
 		if(s!= "" and s[-2]!= "."):
 			s= s[:-1]+"."
 
-		all_questions.append(["Discuss about "+s, 7, 5, sentnumb_map[7][i][0]])	#Add To All Questions
+		all_questions.append(["Discuss about "+s, 7, 5, sentnumb_map[7][i][0], -1])	#Add To All Questions
 
 
 ################################################# genwhenQuestions ###############################################################
@@ -1440,7 +1440,7 @@ def genWhenQuestions():
 				if(s!= ""):
 					question= "When"+kW+s+"?"
 
-					all_questions.append([question, 6, 2, sentnumb_map[6][i][0]])
+					all_questions.append([question, 6, 2, sentnumb_map[6][i][0], " ".join(sentences[sentnumb_map[6][i][0]: sentnumb_map[6][i][-1]+1])])
 			else:
 				s=""
 				for word, tag in tags:
@@ -1462,7 +1462,7 @@ def genWhenQuestions():
 
 				if(s!= ""):
 					question= "When"+ s+ "?"	#Add "Why" And "?"
-					all_questions.append([question, 6, 2, sentnumb_map[6][i][0]])	#Add To Questions
+					all_questions.append([question, 6, 2, sentnumb_map[6][i][0], " ".join(sentences[sentnumb_map[6][i][0]: sentnumb_map[6][i][-1]+1])])	#Add To Questions
 
 
 		elif(flag==1):
@@ -1488,7 +1488,7 @@ def genWhenQuestions():
 			s= s[:-2]
 
 			if s!= "":
-				all_questions.append(["When "+s+ "?", 6, 2, sentnumb_map[6][i][0]])	#Add "When" And "?" As Needed To Form The Question
+				all_questions.append(["When "+s+ "?", 6, 2, sentnumb_map[6][i][0], " ".join(sentences[sentnumb_map[6][i][0]: sentnumb_map[6][i][-1]+1])])	#Add "When" And "?" As Needed To Form The Question
 
 
 ################################################# genIllustrativeQuestions #######################################################
@@ -1556,7 +1556,7 @@ def genIllustrativeQuestions():
 						if(s[-2]!= "."):
 							s= s[:-2]+ "."
 
-						all_questions.append(["Give an illustration for "+ s, 4, 2, sentnumb_map[4][i][0]])	#Make The Question
+						all_questions.append(["Give an illustration for "+ s, 4, 2, sentnumb_map[4][i][0], " ".join(sentences[sentnumb_map[4][i][0]: sentnumb_map[4][i][-1]+1])])	#Make The Question
 
 			else:	#Marker Is At The Start Of The Sentence
 
@@ -1580,9 +1580,9 @@ def genIllustrativeQuestions():
 				if(s!= "" and s[-2]!= "."):
 					s= s[:-2]+ "."
 				if(s!= "" and len(s.split())<= 15):		
-					all_questions.append(["Give an illustration for "+ s, 4, 2, sentnumb_map[4][i][0]])	#Make The Question Similarly
+					all_questions.append(["Give an illustration for "+ s, 4, 2, sentnumb_map[4][i][0], " ".join(sentences[sentnumb_map[4][i][0]: sentnumb_map[4][i][-1]+1])])	#Make The Question Similarly
 				elif(s!= ""):		
-					all_questions.append([s[0].upper()+ s[1:]+ " Give an illustration.", 4, 2, sentnumb_map[4][i][0]])	#Make The Question Similarly
+					all_questions.append([s[0].upper()+ s[1:]+ " Give an illustration.", 4, 2, sentnumb_map[4][i][0], " ".join(sentences[sentnumb_map[4][i][0]: sentnumb_map[4][i][-1]+1])])	#Make The Question Similarly
 
 
 
@@ -1657,7 +1657,7 @@ def genwhyQuestions():
 						fl=1
 						s= allw[itr] + " " +' '.join(allw[:itr])+ " " +' '.join(allw[itr+1:])	#Push Auxiliary To Front
 						question= qphrase+" "+ s+ "?"	#Add "Why" And "?"
-						all_questions.append([question, 5, 2, sentnumb_map[5][i][0]])	#Add To Questions
+						all_questions.append([question, 5, 2, sentnumb_map[5][i][0], " ".join(sentences[sentnumb_map[5][i][0]: sentnumb_map[5][i][-1]+1])])	#Add To Questions
 						break
 				if(fl==0):
 					tags= nltk.pos_tag(nltk.word_tokenize(s))
@@ -1679,7 +1679,7 @@ def genwhyQuestions():
 							s+= word+ " "
 					if kW:
 						question= qphrase+kW+s+"?"
-						all_questions.append([question, 5, 2, sentnumb_map[5][i][0]])
+						all_questions.append([question, 5, 2, sentnumb_map[5][i][0], " ".join(sentences[sentnumb_map[5][i][0]: sentnumb_map[5][i][-1]+1])])
 					else:
 						s=""
 						for word, tag in tags:
@@ -1697,7 +1697,7 @@ def genwhyQuestions():
 							if(not re.search("RB.*", tag)):	#Ignore Adverbs
 								s+= word+ " "
 						question= qphrase+ kW+s+ "?"	#Add "Why" And "?"
-						all_questions.append([question, 5, 2, sentnumb_map[5][i][0]])	#Add To Questions
+						all_questions.append([question, 5, 2, sentnumb_map[5][i][0], " ".join(sentences[sentnumb_map[5][i][0]: sentnumb_map[5][i][-1]+1])])	#Add To Questions
 		i+= 1
 
 ################################################# genConcludingQuestions #########################################################
@@ -1730,7 +1730,7 @@ def genConcludingQuestions():
 				break
 
 		if(q!= "" and flag):
-			all_questions.append([qphrase+ " ".join(q)+ "?", 2, 2, sentnumb_map[2][i][0]])
+			all_questions.append([qphrase+ " ".join(q)+ "?", 2, 2, sentnumb_map[2][i][0], " ".join(sentences[sentnumb_map[2][i][0]: sentnumb_map[2][i][-1]+1])])
 		else:
 			del sentnumb_map[2][i]
 
@@ -1794,7 +1794,7 @@ def genContQuestion():
 				flag= 1
 				temp= word+ " "
 			
-		all_questions.append([np+" " +temp[:-1]+ "."+ qphrase, 0, 2, sentnumb_map[0][i][0]])
+		all_questions.append([np+" " +temp[:-1]+ "."+ qphrase, 0, 2, sentnumb_map[0][i][0], " ".join(sentences[sentnumb_map[0][i][0]: sentnumb_map[0][i][-1]+1])])
 
 		i+= 1
 
@@ -2075,7 +2075,14 @@ def shiftCase(w,c):
 				retWord+=i
 	return retWord
 
+
+def printAnswers():
+
+	for it in range(len(all_questions)):
+		print it+1, ": ", all_questions[it][-1] 
+
 genRegex()
 sentensify()
 remQsns()
 qSet()
+printAnswers()
