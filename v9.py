@@ -41,14 +41,14 @@ from features import *
 
 #Setting stanford environment variables
 
-os.environ['STANFORD_PARSER'] = '/home/anirudh/jars'
-os.environ['STANFORD_MODELS'] = '/home/anirudh/jars'
+os.environ['STANFORD_PARSER'] = '/home/druidicheretic/jars'
+os.environ['STANFORD_MODELS'] = '/home/druidicheretic/jars'
 
 
 ############################################# Class initializations ############################################################
 
 stemmer = SnowballStemmer("english")
-parser = stanford.StanfordParser(model_path="/home/anirudh/englishPCFG.ser.gz")
+parser = stanford.StanfordParser(model_path="/home/druidicheretic/notJars/englishPCFG.ser.gz")
 
 class StanfordNLP:
     def __init__(self):
@@ -740,7 +740,7 @@ def qSet():
 	addedList=[]
 	remExtras()
 	add_context()
-	order={7: 10, 10: 10, 2: 10, 0: 10, 4: 10, 6: 10, 11: 10, 8: 10, 5: 10, 9:10}	 #Set To List Of Numbers Representing Question Types, In Order Of Highest Mark Prob To Lowest, With Type As Key, And Percentage In Decimal As Value
+	order={7: 10, 10: 10, 12: 10, 0: 10, 4: 10, 6: 10, 11: 10, 8: 10, 5: 10, 9:10}	 #Set To List Of Numbers Representing Question Types, In Order Of Highest Mark Prob To Lowest, With Type As Key, And Percentage In Decimal As Value
 	for o, p in order.items():
 		totalPMarks=int(totalMarks*p+carryOver)	#Total Marks For Current Part
 		if totalPMarks+curMarks>totalMarks:
@@ -750,7 +750,7 @@ def qSet():
 		cur_questions=[q for q in all_questions if q[1]==o and q[2]<=totalPMarks]	#All Questions Of The Type In Consideration
 		while curPMarks<totalPMarks and cur_questions!=[]:
 			rnd=random.randint(0, len(cur_questions)-1)
-			if len(cur_questions[rnd])==4:
+			if len(cur_questions[rnd])==5:
 				if cur_questions[rnd][3] in addedList:	#If Sentence Of Question Is Already Used, Remove From Consideration
 					del cur_questions[rnd]
 					continue
@@ -1538,6 +1538,7 @@ def genIllustrativeQuestions():
 				break
 
 		if(flag):
+			all_questions[tmpq][0]=remPunct(all_questions[tmpq][0])
 			all_questions[tmpq][0]+= " Give an illustration."
 			all_questions[tmpq][2]= 4
 			all_questions[tmpq][1]= 10
@@ -2005,7 +2006,7 @@ def remQsns():
 	for it in range(len(all_questions)):
 		if all_questions[it][1]<8:
 			sent=nltk.sent_tokenize(all_questions[it][0])[0]
-			if len(nltk.word_tokenize(sent))<=4:
+			if len(nltk.word_tokenize(sent))<=4 or genPreSentence(sent)=="":
 				remLst.append(it)
 				break
 	if remLst:
@@ -2047,6 +2048,7 @@ def remExtras():
 	for it in range(len(all_questions)):
 		if all_questions[it][1]<8:
 			all_questions[it][0]=reCase(all_questions[it][0]).strip()
+
 def quoteBreak(lst):
 	flag=""
 	ret=[]
@@ -2081,6 +2083,17 @@ def reCase(s):
 				newSent+=word
 		totalSent+=newSent+" "
 	return totalSent.strip()
+
+def remPunct(sent):
+	k=sent[-1]
+	if k=="?" or k==".":
+		while True:
+			if (sent[-1]>="a" and sent[-1]<="z") or (sent[-1]>="A" and sent[-1]<="Z") or (sent[-1]>="0" and sent[-1]<="9"):
+				sent+=k
+				break
+			else:
+				sent=sent[:-1]
+	return sent
 
 def shiftCase(w,c):
 	retWord=""
