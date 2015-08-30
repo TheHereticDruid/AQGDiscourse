@@ -41,14 +41,14 @@ from features import *
 
 #Setting stanford environment variables
 
-os.environ['STANFORD_PARSER'] = '/home/druidicheretic/jars'
-os.environ['STANFORD_MODELS'] = '/home/druidicheretic/jars'
+os.environ['STANFORD_PARSER'] = '/home/anirudh/jars'
+os.environ['STANFORD_MODELS'] = '/home/anirudh/jars'
 
 
 ############################################# Class initializations ############################################################
 
 stemmer = SnowballStemmer("english")
-parser = stanford.StanfordParser(model_path="/home/druidicheretic/notJars/englishPCFG.ser.gz")
+parser = stanford.StanfordParser(model_path="/home/anirudh/englishPCFG.ser.gz")
 
 class StanfordNLP:
     def __init__(self):
@@ -1386,7 +1386,7 @@ def genDiscussQuestions():
 
 	for i in range(len(discuss_sentences)):
 
-		pre= genPreSentence(sentnumb_map[7][i][0])
+		pre= genPreSentence(sentnumb_map[7][i][0]-1)
 
 		tags= nltk.pos_tag(nltk.word_tokenize(pre))
 
@@ -1582,7 +1582,7 @@ def genIllustrativeQuestions():
 
 			else:	#Marker Is At The Start Of The Sentence
 
-				s= genPreSentence(sentnumb_map[4][i][0])
+				s= genPreSentence(sentnumb_map[4][i][0]-1)
 				tags= nltk.pos_tag(nltk.word_tokenize(s))
 				s= ""
 				tmp= None
