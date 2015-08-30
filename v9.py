@@ -41,14 +41,14 @@ from features import *
 
 #Setting stanford environment variables
 
-os.environ['STANFORD_PARSER'] = '/home/anirudh/jars'
-os.environ['STANFORD_MODELS'] = '/home/anirudh/jars'
+os.environ['STANFORD_PARSER'] = '/home/druidicheretic/jars'
+os.environ['STANFORD_MODELS'] = '/home/druidicheretic/jars'
 
 
 ############################################# Class initializations ############################################################
 
 stemmer = SnowballStemmer("english")
-parser = stanford.StanfordParser(model_path="/home/anirudh/englishPCFG.ser.gz")
+parser = stanford.StanfordParser(model_path="/home/druidicheretic/notJars/englishPCFG.ser.gz")
 
 class StanfordNLP:
     def __init__(self):
@@ -71,12 +71,16 @@ obj=Features()
 
 #List of auxiliary verbs
 aux_list= ['am', 'are', 'is', 'was', 'were', 'can', 'could', 'does', 'do', 'did', 'has', 'had', 'may', 'might', 'must', 'need',
- 'ought', 'shall', 'should', 'will', 'would'] #Add some stuff to aux list
+ 'ought', 'shall', 'should', 'will', 'would', "aren't", "isn't", "wasn't", "weren't", "can't", "couldn't", "doesn't", "don't",
+ "didn't", "hasn't", "hadn't", "mightn't", "wouldn't", "won't", "shan't", "shouldn't", "mustn't", "needn't", "am not", "may not"] #Add some stuff to aux list
 
 
 aux_negate= {"am": "am not", "are": "aren't", "is": "isn't", "was": "wasn't", "were": "weren't", "can": "can't", 'could': "couldn't",
- 'does': "doesn't", 'do': "don't", "did": "didn't", 'has': "hasn't", 'had': "hadn't", 'may': "may not", 'might': "might not",
-  'must': "mustn't", 'need': "needn't", 'shall': "shall not", 'should': "shouldn't", 'will': "will not", 'would': "wouldn't"}
+ 'does': "doesn't", 'do': "don't", "did": "didn't", 'has': "hasn't", 'had': "hadn't", 'may': "may not", 'might': "mightn't",
+ 'must': "mustn't", 'need': "needn't", 'shall': "shan't", 'should': "shouldn't", 'will': "won't", 'would': "wouldn't", "am not": "am",
+ "aren't": "are", "isn't": "is", "wasn't": "was", "weren't": "were", "can't": "can", "couldn't": 'could', "doesn't": 'does', "don't": 'do',
+ "didn't": "did", "hasn't": 'has', "hadn't": 'had', "may not": 'may', "mightn't": 'might', "mustn't": 'must', "needn't": 'need', "shan't": 'shall',
+ "shouldn't": 'should', "won't": 'will', "wouldn't": 'would'}
 
 #List to hold all input sentences
 sentences= []
@@ -765,6 +769,12 @@ def qSet():
 	for i in range(len(finalQList)):
  		print i+1, ") ", finalQList[i][0], "\n"
 
+	print "\nThe Corresponding Answers Are"
+	for i in range(len(finalQList)):
+		if finalQList[i][-1]!=-1:
+ 			print i+1, ") ", finalQList[i][-1], "\n"
+		else:
+ 			print i+1, ") ", "**Not Currently Available**", "\n"
 
 def add_context():
 
@@ -1591,13 +1601,11 @@ def genIllustrativeQuestions():
 ##################################################################################################################################
 
 def removeDM(s):
-
 	for i in all_discourse:
 		for j in i:
 			res= j.search(s)
 			if(res):
 				s= s.replace(res.group(), "")
-
 	return s
 
 
@@ -2075,14 +2083,7 @@ def shiftCase(w,c):
 				retWord+=i
 	return retWord
 
-
-def printAnswers():
-
-	for it in range(len(all_questions)):
-		print it+1, ": ", all_questions[it][-1] 
-
 genRegex()
 sentensify()
 remQsns()
 qSet()
-printAnswers()
