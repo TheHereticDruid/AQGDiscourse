@@ -41,14 +41,14 @@ from features import *
 
 #Setting stanford environment variables
 
-os.environ['STANFORD_PARSER'] = '/home/druidicheretic/jars'
-os.environ['STANFORD_MODELS'] = '/home/druidicheretic/jars'
+os.environ['STANFORD_PARSER'] = '/home/anirudh/jars'
+os.environ['STANFORD_MODELS'] = '/home/anirudh/jars'
 
 
 ############################################# Class initializations ############################################################
 
 stemmer = SnowballStemmer("english")
-parser = stanford.StanfordParser(model_path="/home/druidicheretic/notJars/englishPCFG.ser.gz")
+parser = stanford.StanfordParser(model_path="/home/anirudh/englishPCFG.ser.gz")
 
 class StanfordNLP:
     def __init__(self):
@@ -1275,7 +1275,8 @@ def pronoun_resolution():
 					else:
 						sim= pronounres[1][0]
 
-					all_questions[i][0]= all_questions[i][0].replace(pronounres[0][0], sim)
+					if(sim not in all_questions[i][0]):
+						all_questions[i][0]= all_questions[i][0].replace(pronounres[0][0], sim)
 
 			c+= 1
 			i+= 1
@@ -1772,37 +1773,37 @@ def genContQuestion():
 	i= 0
 	for qt in qterms:
 		
-		qt= qt.replace(".", "")
-		temp= ""
+		# qt= qt.replace(".", "")
+		# temp= ""
 
-		if("|" in qt):
-			temporary= qt.split("|")
-			if(len(temporary)== 2):
-				np= temporary[0]
-				vp= temporary[1]
-			else:
-				np= temporary[0]
-				vp= ""
-		else:
-			np=""
-			vp= qt
+		# if("|" in qt):
+		# 	temporary= qt.split("|")
+		# 	if(len(temporary)== 2):
+		# 		np= temporary[0]
+		# 		vp= temporary[1]
+		# 	else:
+		# 		np= temporary[0]
+		# 		vp= ""
+		# else:
+		# 	np=""
+		# 	vp= qt
 
-		tags= tokenize(np+ " "+vp+ ".")
+		# tags= tokenize(np+ " "+vp+ ".")
 
-		flag= 0
-		flag2= 0
-		for word, tag in tags:
-
-
-			if(flag== 1 and tag not in "," and tag not in "."):
-				temp+= word+ " "
+		# flag= 0
+		# flag2= 0
+		# for word, tag in tags:
 
 
-			if(re.search("VB.*", tag) and flag==0):
-				flag= 1
-				temp= word+ " "
+		# 	if(flag== 1 and tag not in "," and tag not in "."):
+		# 		temp+= word+ " "
+
+
+		# 	if(re.search("VB.*", tag) and flag==0):
+		# 		flag= 1
+		# 		temp= word+ " "
 			
-		all_questions.append([np+" " +temp[:-1]+ "."+ qphrase, 0, 2, sentnumb_map[0][i][0], " ".join(sentences[sentnumb_map[0][i][0]: sentnumb_map[0][i][-1]+1])])
+		all_questions.append([qt+ qphrase, 0, 2, sentnumb_map[0][i][0], " ".join(sentences[sentnumb_map[0][i][0]: sentnumb_map[0][i][-1]+1])])
 
 		i+= 1
 
@@ -1842,13 +1843,14 @@ def genContQuestionTerms():
 		if(sen[-1] != "."):
 			sen= sen+ "."
 
-		sen= parser.raw_parse_sents((sen, ""))
+		qterms.append(sen)
+		# sen= parser.raw_parse_sents((sen, ""))
 
-		tree= Tree("root", sen)
-		curr= ""
+		# tree= Tree("root", sen)
+		# curr= ""
 
 
-		treegen(tree[0], details[1])
+		# treegen(tree[0], details[1])
 
 
 ################################################# treegen ########################################################################
