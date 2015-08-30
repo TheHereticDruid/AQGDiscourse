@@ -41,14 +41,14 @@ from features import *
 
 #Setting stanford environment variables
 
-os.environ['STANFORD_PARSER'] = '/home/druidicheretic/jars'
-os.environ['STANFORD_MODELS'] = '/home/druidicheretic/jars'
+os.environ['STANFORD_PARSER'] = '/home/anirudh/jars'
+os.environ['STANFORD_MODELS'] = '/home/anirudh/jars'
 
 
 ############################################# Class initializations ############################################################
 
 stemmer = SnowballStemmer("english")
-parser = stanford.StanfordParser(model_path="/home/druidicheretic/notJars/englishPCFG.ser.gz")
+parser = stanford.StanfordParser(model_path="/home/anirudh/englishPCFG.ser.gz")
 
 class StanfordNLP:
     def __init__(self):
@@ -1159,10 +1159,19 @@ def getNode(tree):
 		n2= t
 		break
 
+	flag8= 0
 	for t in n2:
-		if(t.label()== "S" or t.label()== "FRAG"):
+		if(t.label()== "S" or t.label()== "FRAG" or t.label()== "SQ"):
+			flag8= 1
 			node= t
 			break
+		tnode= t
+
+	if(flag8== 0):
+		for t in tnode:
+			if(t.label()== "S" or t.label()== "FRAG" or t.label()== "SQ"):
+				node= t
+				break
 
 	s= ""
 	flag1= 0
