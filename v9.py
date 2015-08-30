@@ -41,14 +41,14 @@ from features import *
 
 #Setting stanford environment variables
 
-os.environ['STANFORD_PARSER'] = '/home/anirudh/jars'
-os.environ['STANFORD_MODELS'] = '/home/anirudh/jars'
+os.environ['STANFORD_PARSER'] = '/home/druidicheretic/jars'
+os.environ['STANFORD_MODELS'] = '/home/druidicheretic/jars'
 
 
 ############################################# Class initializations ############################################################
 
 stemmer = SnowballStemmer("english")
-parser = stanford.StanfordParser(model_path="/home/anirudh/englishPCFG.ser.gz")
+parser = stanford.StanfordParser(model_path="/home/druidicheretic/notJars/englishPCFG.ser.gz")
 
 class StanfordNLP:
     def __init__(self):
@@ -1259,24 +1259,25 @@ def pronoun_resolution():
 
 				flag2= 0
 				pronounres= []
-				for res in result['coref']:
-					for j in res:
-						if(j[0][1] == sentnumb_map[k][c][0] and j[0][0]== w and flag2== 0):
-							pronounres= j
-							flag2= 1
+				if result.get('coref',-1)!=-1:
+					for res in result['coref']:
+						for j in res:
+							if(j[0][1] == sentnumb_map[k][c][0] and j[0][0]== w and flag2== 0):
+								pronounres= j
+								flag2= 1
+								break
+						if(flag2):
 							break
+
 					if(flag2):
-						break
+						if(len(pronounres[1][0].split())>= 3):
+							sim= simplify(pronounres[1][0])
 
-				if(flag2):
-					if(len(pronounres[1][0].split())>= 3):
-						sim= simplify(pronounres[1][0])
+						else:
+							sim= pronounres[1][0]
 
-					else:
-						sim= pronounres[1][0]
-
-					if(sim not in all_questions[i][0]):
-						all_questions[i][0]= all_questions[i][0].replace(pronounres[0][0], sim)
+						if(sim not in all_questions[i][0]):
+							all_questions[i][0]= all_questions[i][0].replace(pronounres[0][0], sim)
 
 			c+= 1
 			i+= 1
@@ -1832,14 +1833,18 @@ def genContQuestionTerms():
 		discmark= discmark.replace(",", "")
 
 		details= d[discmark.lower()]
-
 		if(l== 1):
 			sen= s[0].split(discmark)[details[0]-1]
 
 		else:
 			sen= s[details[0]-1]
 
-
+		tags= nltk.pos_tag(nltk.word_tokenize(sen))
+		sen=""
+		for word, tag in tags:
+			if not re.search("RB", tag):
+				sen+=word+" "
+		sen=sen[:-1]
 		if(sen[-1] != "."):
 			sen= sen+ "."
 
@@ -1992,7 +1997,7 @@ def remQsns():
 	for it in range(len(all_questions)):
 		if all_questions[it][1]<8:
 			sent=nltk.sent_tokenize(all_questions[it][0])[0]
-			if len(nltk.word_tokenize(sent))<=4 or genPreSentence(sent)=="":
+			if len(nltk.word_tokenize(sent))<=4:
 				remLst.append(it)
 				break
 	if remLst:
