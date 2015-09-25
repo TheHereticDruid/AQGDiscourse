@@ -576,9 +576,10 @@ def genGapFill():
 	sentnumb_map[9]= copy.deepcopy(lst)
 
 
-#Function To Title And Group Sentences. Buggy?
+#Function To Title And Group Sentences.
 def titling():
 
+	prev= ""
 	context= {}
 	newContext= {}
 
@@ -586,32 +587,48 @@ def titling():
 		for i in result['coref']:
 			for j in i:
 
-				if(context.get(j[1][0], 'empty')== 'empty'):
-					context[j[1][0]]= [j[1][1]]	#List Each NP With Its Coreferences, From The Common coref Data 
+				val= j[1][0][0].upper()+ j[1][0][1:]
+				if(context.get(val, 'empty')== 'empty'):
+					context[val]= [j[1][1]]	#List Each NP With Its Coreferences, From The Common coref Data 
+				context[val].append(j[0][1])
 
-				context[j[1][0]].append(j[0][1])
-
-
+	i= -1
+	print context
 	for k, v in context.items():
-
+		i+= 1
 		tags= nltk.pos_tag(nltk.word_tokenize(k))
 		flag= 0
 		for word, tag in tags:
-			if(re.search("NN.*", tag)):
+			if(not re.search("NN.*", tag)):
 				flag= 1
 				break
 
-		if(flag):
-			newContext[k]= list(set(v))	#Get Only Noun Context Terms
+		if(flag== 0):
+			newContext[k]= v
+		
+	
+	if(not newContext):
+
+		#If there are no pronouns being resolved, this dictionary will be empty.
+		#So, we assume that then, the first sentence will contain the context.
+
+		tags= nltk.pos_tag(nltk.word_tokenize(sentences[0]))
+		for word, tag in tags:
+			if(re.search("NN.*", tag)):
+				newContext[word]= range(len(sentences))
+				break
 
 	#Print
-	# print "------------------Titling-----------------------\n"
-	# for k, v in newContext.items():
-	# 	print "Title: ", k
-	# 	print "Sentences: "
-	# 	for val in v:
-	# 		print sentences[val]
-	# 	print "\n"
+	print "------------------Titling-----------------------\n"
+	for k, v in newContext.items():
+		newContext[k]= sorted(list(set(v)))
+		print "Title: ", k
+		print "Sentences: "
+		for val in newContext[k]:
+			print sentences[val]
+		print "\n"
+
+
 
 #Get Sentences Which Haven't Been Made Into Questions Yet
 def othersNumb():
