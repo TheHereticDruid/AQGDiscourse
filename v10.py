@@ -543,6 +543,7 @@ def genGapFill():
 	for s in gapfill_Sentences:
 
 		simplify(s)
+		synReplace(s)
 		tmp= prev
 		if(tmp== []):
 			continue
@@ -631,7 +632,7 @@ def titling():
 		for val in newContext[k]:
 			print sentences[val]
 		print "\n"
-		
+
 #Get Sentences Which Haven't Been Made Into Questions Yet
 def othersNumb():
 
@@ -2155,6 +2156,40 @@ def shiftCase(w,c):
 			else:
 				retWord+=i
 	return retWord
+
+def synReplace(s):
+	words=[]
+	tags=[]
+	sents=nltk.sent_tokenize(s)
+	for st in sents:
+		for word, tag in nltk.pos_tag(nltk.word_tokenize(s)):
+			if re.search("NNS?$|JJ.?", tag):
+				words.append(word)
+				tags.append(tag)
+	for wt in range(len(words)):
+		rep=synRep(words[wt], tags[wt])
+		if rep!=words[wt]:
+			s.replace(words[wt], rep)
+			break
+	return s
+
+def synRep(w, t):
+	if t.index("JJ")==0:
+		sets=[jt for jt in wn.sysnets(w) if jt.split(".")[1]=="a"]
+	else:
+		sets=[jt for jt in wn.sysnets(w) if jt.split(".")[1]=="n"]
+	for it in sets:
+		rep=it.name.split(".")[2]
+		if rep==w:
+			continue
+		elif t!="NNS":
+			return rep
+		else:
+			rep=infEng.plural_noun(rep)
+			if rep!=w:
+				return rep
+			continue
+	return w
 
 genRegex()
 sentensify()
