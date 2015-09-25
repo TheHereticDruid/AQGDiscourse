@@ -43,14 +43,14 @@ import inflect
 
 #Setting stanford environment variables
 
-os.environ['STANFORD_PARSER'] = '/home/druidicheretic/jars'
-os.environ['STANFORD_MODELS'] = '/home/druidicheretic/jars'
+os.environ['STANFORD_PARSER'] = '/home/anirudh/jars'
+os.environ['STANFORD_MODELS'] = '/home/anirudh/jars'
 
 
 ############################################# Class initializations ############################################################
 
 stemmer = SnowballStemmer("english")
-parser = stanford.StanfordParser(model_path="/home/druidicheretic/notJars/englishPCFG.ser.gz")
+parser = stanford.StanfordParser(model_path="/home/anirudh/englishPCFG.ser.gz")
 
 class StanfordNLP:
     def __init__(self):
@@ -543,7 +543,7 @@ def genGapFill():
 	for s in gapfill_Sentences:
 
 		simplify(s)
-		synReplace(s)
+		s= synReplace(s)
 		tmp= prev
 		if(tmp== []):
 			continue
@@ -700,18 +700,22 @@ def negate(s, n, j, e, rn=-1):
 		else:
 			flg=0
 			for it in range(len(words)):
-				if accTags[it].index("JJ")==0:
-					sets=[jt for jt in wn.sysnets(words[it]) if jt.split(".")[1]=="a"]
+				if accTags[it].find("JJ")==0:
+					sets=[jt for jt in wn.synsets(words[it]) if jt.name().split(".")[1]=="a"]
 				else:
-					sets=[jt for jt in wn.sysnets(words[it]) if jt.split(".")[1]=="n"]
+					sets=[jt for jt in wn.synsets(words[it]) if jt.name().split(".")[1]=="n"]
 				if sets:
 					for kt in sets:
 						ant=kt.lemmas()[0].antonyms()
 						if ant:
 							ant=ant[0].name()
+
+							if("_" in ant):
+								ant= ant.replace("_", " ")
+
 							if accTags[it]=="NNS":
 								ant=infEng.plural_noun(ant)
-							s.replace(it,ant)
+							s= s.replace(words[it],ant)
 							flg=1
 							break
 				if flg:
@@ -1332,7 +1336,15 @@ def pronoun_resolution():
 							sim= pronounres[1][0]
 
 						if(sim not in all_questions[i][0]):
-							all_questions[i][0]= all_questions[i][0].replace(pronounres[0][0], sim)
+							flag4= 0
+							print "Here: ------------------------------------", sim.split(), all_questions[i][0].split()
+							for i in sim.split():
+								if(i in all_questions[i][0].split()):
+									flag4= 1
+									break
+
+							if(flag4== 0):
+								all_questions[i][0]= all_questions[i][0].replace(pronounres[0][0], sim)
 
 			c+= 1
 			i+= 1
@@ -2163,32 +2175,37 @@ def synReplace(s):
 	sents=nltk.sent_tokenize(s)
 	for st in sents:
 		for word, tag in nltk.pos_tag(nltk.word_tokenize(s)):
-			if re.search("NNS?$|JJ.?", tag):
+			if re.search("JJ.?", tag):
 				words.append(word)
 				tags.append(tag)
 	for wt in range(len(words)):
 		rep=synRep(words[wt], tags[wt])
 		if rep!=words[wt]:
-			s.replace(words[wt], rep)
+			s= s.replace(words[wt], rep)
 			break
 	return s
 
 def synRep(w, t):
-	if t.index("JJ")==0:
-		sets=[jt for jt in wn.sysnets(w) if jt.split(".")[1]=="a"]
+	if t.find("JJ")==0:
+		sets=[jt for jt in wn.synsets(w) if jt.name().split(".")[1]=="a"]
 	else:
-		sets=[jt for jt in wn.sysnets(w) if jt.split(".")[1]=="n"]
+		sets=[jt for jt in wn.synsets(w) if jt.name().split(".")[1]=="n"]
 	for it in sets:
-		rep=it.name.split(".")[2]
-		if rep==w:
-			continue
-		elif t!="NNS":
-			return rep
-		else:
-			rep=infEng.plural_noun(rep)
-			if rep!=w:
+		for jt in it.lemmas():
+			rep=jt.name()
+
+			if("_" in rep):
+				rep= rep.replace("_", " ")
+
+			if rep==w:
+				continue
+			elif t!="NNS":
 				return rep
-			continue
+			else:
+				rep=infEng.plural_noun(rep)
+				if rep!=w:
+					return rep
+				continue
 	return w
 
 genRegex()
