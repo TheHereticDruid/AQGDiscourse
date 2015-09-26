@@ -1,0 +1,8 @@
+Others might argue.Conversely,.However,.Although.On (the other|another|other) hand,.Whereas,.Nevertheless,.Nonetheless,.Yet,.On the contrary,.In spite of.Correspondingly,.\bBut\b.Still,.Unless.Otherwise.Instead Of
+In addition to this,.Similarly,.Equally,.Likewise,.As well as,.Moreover,.Furthermore,.In the same way,.Just as.Then,Now that.\band then\b.\band\b,.and then,.But then
+Naturally,.Of course.Admittedly,.Certainly,.In conclusion,.Consequently,.Subsequently,.Therefore,.Thus,.We can conclude that.To summarize,
+Above all,.Clearly.Essentially.Especially.Primarily.Particularly.In large.(is|are) called
+For example.To illustrate,
+because.since
+when
+Finally,.Lastly,

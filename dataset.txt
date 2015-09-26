@@ -1,0 +1,2000 @@
+So far in these lectures, we have discussed the concepts of Object Oriented Programming.0
+// recursion1
+import java.util.*;1
+public class Client1
+We have also discussed programs having constants, variables,simple input / output, assignment, expressions.0
+We have dwelt in detail about thedifferent aspects of operators like precedence, association and rank.0
+We have also made some simple classes with attributes(fields) and behaviour(methods or functions).0
+{1
+We have also mentioned the special function toinitialize an object - called its constructor.0
+	public static void main(String[] args)1
+We make a class to represent an entity or a thing or an idea.0
+A class is like a userdefined type.0
+A class contains a number of attributes.0
+	{1
+We normally put a group ofrelated classes into a file.0
+Why should we segregate our classes into differentfiles?Let us consider a simple analogy.0
+Would people at McDonalds make burgers andeat those themselves – (they may also eat a few – not sure though).0
+Customers ofMcDonalds and people of McDonalds enjoy their own lives – but interact at thecounter.0
+We would like to clearly distinguish between the creator of the class – he givesservice and the user of the class(client) – he uses the service the creator provides.0
+McDonald can cater to number of different types of customers.0
+Customers mayalso choose a different joint if they do not like McDonald.0
+		Scanner scanner = new Scanner(System.in);1
+Let us look at some examples.0
+In these discussions, we will use a simple exampleof a class - Rect – which abstracts a rectangle.0
+My rectangle has two attributeslength called l and breadth called b.0
+		int n = scanner.nextInt();1
+		MyNum mynum1 = new MyNum(n);1
+Both are of type int.0
+I am sure your rectanglecould be different.0
+We know that everything changes in this world.0
+How do we manage change? Thedeveloper of the class Rect should tell the client that he would not change thosethat the client can use and he may change those which the client cannot use.0
+		int sum = mynum1.findSum();1
+		System.out.println("sum : " + sum);1
+		scanner.close();1
+He should hide the implementation and expose the interface.0
+In this example, the client accesses the interface of Rect.0
+	}1
+Changes toimplementation of Rect will not affect the client.0
+}1
+public class MyNum1
+In this example, can the Client find the area of a rectangle within which a smallrectangle is cut out? The answer is a NO as the client can only display the areaand cannot get the area.0
+This implementation of findArea is flawed.0
+It should return the area back to theclient.0
+The client can then decide what to do with it.0
+So far we have been telling you the truth, but not the whole truth.0
+{1
+The operator new allocates memory for the fields of Rect andthen calls a special method called the constructor.0
+This constructor is used toinitialize an object.0
+	private int val;1
+	public MyNum(int val)1
+It does not create an object.0
+Constructor can have parameters.0
+	{1
+Compiler provides a constructor which has noparameters.0
+		this.val = val;1
+	}1
+This is called a default constructor.0
+	public int findSum() // wrapper for a recursive method1
+This will vanish when we makeout own constructor.0
+	{1
+The client may want to use our class to initialize objects indifferent ways.0
+You may order pizza with different toppings and with or withoutcoke.0
+		return findSumRecursive(val);1
+	}1
+	private int findSumRecursive(int val)1
+We may have overloaded constructors to support what the client wants.0
+	{1
+Giving a value or set of values to a variable or an object at the point of creation iscalled initialization.0
+Local variables are not initialized by default.0
+Object is created by using the operator new.0
+		if(val == 0)1
+It allocates memory and calls theconstructor.0
+Our rectangle has changed with an additional field to indicate whether therectangle is a square.0
+It has methods to get the values of the attributes for theclient.0
+		{1
+			return 0;1
+		}1
+		else1
+		{1
+These are called getters.0
+			return val % 10 + findSumRecursive(val / 10);1
+		}1
+We may have methods to change the values ofthe attributes of an object.0
+These are called setters.0
+Observe that isSquare depends on the other fields – we say it is a computed field.0
+This is given a value in the constructors.0
+	}1
+}1
+import java.util.*;1
+Constructors are overloaded to make the client life easier.0
+public class Client1
+Default constructor initializes the fields to some default (not reasonable in thisexample – could not think of a default rectangle!).0
+{1
+	public static void main(String[] args)1
+	{1
+		Scanner scanner = new Scanner(System.in);1
+		int m;1
+		int n;1
+We have a constructor which creates a square – takes only one argument.0
+We have also a constructor which takes two arguments.0
+If a constructor does everything tht another constructor does and then somethingmore, we can make one call the other.0
+		m = scanner.nextInt();1
+		n = scanner.nextInt();1
+We want to make Dosa and Dosa-with-Ghee in our eatery.0
+If the latter doeseverything of the former, then we can have one cook, make Dosa and thenanother cook(I can fit in here), add ghee to it.0
+Something for you to experiment.0
+In java, we use final to state that something isa constant – that it will not change once given a value.0
+		Pair pair = new Pair(m, n);1
+		System.out.println("result : " + pair.gcd()); 1
+Your usn will not changeduring your stay in our college.0
+Your pan numbers (assuming that you are payingincome tax) will not change.0
+		scanner.close();1
+Your passport number will not change even though itis not the same for your friend.0
+A variable is given a location as the control enters the body of the method.0
+Whenthe control leaves the method, the memory given to the variable is taken back.0
+So we say that the variable has life – has existence – in that block.0
+	}1
+An object gets life when the new operator is called.0
+At the end of the block thereference holding reference to the object is removed – dies.0
+But the objectremains but we have no way of accessing it.0
+So, we have a location – in this case –an object – which has no access.0
+Such a thing is called garbage.0
+}1
+Creation ofgarbage decreases the memory available.0
+public class Pair1
+When memory becomes low, Javaclears all these locations and make them useful again.0
+This concept is calledgarbage collection.0
+{1
+This concept is similar to what happens in our canteens.0
+You all consume coffeand/or tea.0
+After sometime there will be no cups available.0
+Then the manager callsout for the boy to clean these cups and make them useful again.0
+We may want to change the sides of a rectangle – modify by a factor.0
+	private int m;1
+We maywant to change the length and the breadth by different factors.0
+	private int n; 1
+So, we require twomethods.0
+	public Pair(int m, int n)1
+	{1
+Should we call by different names or same name? Giving the samename makes the life of the client easier.0
+		this.m = m;1
+He has to remember just one name.0
+Wemay observe that the operator + stands for addition of all numeric types.0
+		this.n = n;1
+	}1
+Theoperations carried internally are different.0
+This concept of giving the same namefor a group of methods logically similar is called overloading.0
+	public String toString()1
+	{1
+Your friend has a key to her locker in the bank – has something very valuable forher (look at this.0
+		return "m : " + m + " n : " + n;1
+	}	1
+	int gcd()1
+	{1
+Suddenly the keyboard changed the gender!).0
+Let us say youhave made a copy of your friend's key.0
+If you file(mechanical filing – not file onyour computer), your friend's key will not change.0
+reference.0
+	 	return gcdRecursive(m, n);1
+If you change the object using the parameter, whatever theargument refers to would be changed.0
+Your friend has a key to her locker in the bank – has something very valuable forher.0
+	}1
+Let us say you have made a copy of your friend's key.0
+	int gcdRecursive(int m, int n)1
+	{1
+		if(m == n)1
+If you access the lockerthrough your key(copy of your friend's key) – you are a nice person – so you mayput something in the locker – not a snake of course), then your friend's locker haschanged.0
+		{1
+The next time your friend opens the locker, she will get the shock of herlife.0
+Let us make another class – a triangle – to represent a Triangle of geometry.0
+			return m;1
+Wewill specify the three sides and we will assume that the triangle is formed.0
+		}1
+Can weclassify the triangle as equilateral, isosceles or scalene? I am a bit sloppy andproviding some computed members as interfaces – equi, iso and scalene.0
+		else if(m > n)1
+		{1
+Pleasedo not change them in the client code.0
+			return gcdRecursive(m - n, n);1
+		}1
+If you do, then you may end up with atriangle which is all of them simultaneously.0
+		else1
+You may change this class and makeit better by providing methods to check whether the triangle is equilateral,isosceles or scalene.0
+		{1
+Some homework for you.0
+We are using selection (if statement) to choose between the alternatives.0
+We are using boolean fields to hold the result of these comparisons.0
+			return gcdRecursive(m, n - m);1
+Observe bydefault, all these boolean fields become false because of default initializationbased on type.0
+In this example, we have if within if, Such a construct is called nested ifstatement.0
+If the first operand of && operator is false, then the whole expression is false.0
+		}1
+	}1
+}1
+There is no necessity to evaluate the second operand.0
+// recursion1
+If the first operand of || operator is true, then the whole expression is true.0
+import java.util.*;1
+public class Client1
+{1
+Thereis no necessity to evaluate the second operand.0
+We can stop as soon as the truth or falsehood is found out.0
+	public static void main(String[] args)1
+	{1
+		Scanner scanner = new Scanner(System.in);1
+That what happens inJava.0
+This is called short circuit evaluation.0
+We count the number of times a pair of sides match.0
+It can be 3 or 1 or 0.0
+Think:why it is never 2? Based on that we can classify a triangle.0
+		int n = scanner.nextInt();1
+		MyNum mynum1 = new MyNum(n);1
+Here, we have tocompare a single integer variable with number of constants for equality.0
+In suchcases, we prefer the switch statement.0
+The value of the expression of switchdecides the point of entry into the switch clauses (and not exit.0
+Thats why we usebreak to take the control out of the block!).0
+		mynum1.solveTowerOfHanoi();1
+We can have a 'catch all' clause – thatis called default.0
+This is somewhat similar to BODMAS rule that we learn in arithmetic, but morecomplicated as there are lots of operators in these programming languages.0
+		scanner.close();1
+Theorder of evaluation of operators depends on the precedence.0
+Operators withhigher precedence will be evaluated first.0
+	}1
+What if more than one operator in an expression has the same precedence? Inthat case, we evaluate left to right or right to left depending on the operator.0
+Thisconcept is called association.0
+}1
+The number of operands required for an operator is called arity.0
+public class MyNum1
+{1
+Some operatorsare unary(one operand) – some are binary(two operands) and one of them isternary(three operands).0
+	private int val;1
+	public MyNum(int val)1
+In this example, operators of division and multiplication have the same level ofprecedence and are evaluated left to right – left associative.0
+	{1
+		this.val = val;1
+	}1
+An expression has a value – of a particular type.0
+This is decided by the language.0
+	public void solveTowerOfHanoi() 1
+	{1
+		// move val disks from 1 to 3 using 21
+		moveRecursive(val, 1, 3, 2 );1
+	}1
+Division of integers in many languages results in an integer.0
+So 1 / 2 becomes 0and now you can figure out why we get zero.0
+The above program finds the area of a triangle of base 10 and height 20.0
+	private void moveRecursive(int n, int from, int to, int using)1
+What if Iwant to find area of triangle with different bases and heights.0
+	{1
+You may rememberthat in the school days, we learnt arithmetic and then algebra.0
+In algebra, welearnt the concept of variables.0
+Variables could take different values.0
+		if(n > 0)1
+		{1
+			moveRecursive(n - 1, from, using, to);1
+			System.out.println(from + " => " + to);1
+How do weuse the same idea in programming.0
+To take input from the keyboard, we have to refer to it in the program.0
+			moveRecursive(n - 1, using, to, from);1
+It is calledSystem.0
+in.0
+System.0
+out refers to output and System.0
+		}1
+	}1
+in refers to input.0
+}1
+Readingfrom the keyboard is complicated as we may decide to input a number or a stringor special characters.0
+To handle this, we use a type(class) called Scanner that Javaprovides.0
+public class Client1
+{1
+We make a variable of that type, bind it to the keyboard and then we willask it to get us the next integer.0
+To take input from the keyboard, we have to refer to it in the program.0
+	public static void main(String[] args)1
+It is calledSystem.0
+	{1
+in.0
+		MyNum n = new MyNum(25);1
+System.0
+out refers to output and System.0
+in refers to input.0
+		System.out.println("res : " + n.what());	1
+Readingfrom the keyboard is complicated as we may decide to input a number or a stringor special characters.0
+To handle this, we use a type(class) called Scanner that Javaprovides.0
+We make a variable of that type, bind it to the keyboard and then we willask it to get us the next integer.0
+	}1
+}1
+public class MyNum1
+This list is not complete.0
+We will discuss more of them later.0
+In this example, b is a variable of type int.0
+This statement causes allocation ofmemory of 4 bytes.0
+Java supports 8 types – called primitive types – byte, char,short, int, long, boolean, float and double.0
+Unlike 'C', size of each type is fixed inJava.0
+{1
+Can you find the size of each of these types.0
+	private int val;1
+	public MyNum(int val)1
+Thats a bad idea.0
+What if I had a polygon with n sides (n > 3)? We may have tospecify n sides and a few more elements to define the figure uniquely.0
+	{1
+In stead ofcarrying books separately, you may want to carry them in a bag.0
+		this.val = val;1
+	}1
+	public int whatRecursive(int val)1
+Then we can talkabout the book in Rama's bag or the book in Krishna's bag.0
+	{1
+Each of these classes can be in their own files.0
+		if(val == 0)1
+		{1
+			return 0;1
+		}1
+		else if(val % 2 == 1)1
+A program in Java can consist ofnumber of files – each file having one or more classes.0
+A file can have only onepublic class and in that case, the file name should match the class name.0
+		{1
+			return 1 + whatRecursive(val / 2);1
+Why should we develop programs in multiple files? This would allow developmentby different people, therefore would make the development faster.0
+		}1
+This alsoallows for reuse.0
+		else1
+		{1
+			return whatRecursive(val / 2);1
+The class developed can be used by others.0
+		}1
+	}1
+	public int what()1
+	{1
+		return whatRecursive(val);1
+	}1
+This concept iscalled a library in programming parlour.0
+You may remember that our city name changed recently from Bangalore toBengaluru.0
+Your course CS2 is not called CS2 : Theme : Object OrientedProgramming in Java.0
+}1
+public class Client1
+{1
+	public static void main(String[] args)1
+	{1
+What is constant in this world is change.0
+		// test 1:1
+What wouldhappen if we change the field names of the class Triangle from b to base and h toheight.0
+We want to make our field names more meaningful.0
+		final int a; // ok why?1
+		a = 10;	// ok1
+		// a = 20; // NO1
+		final int b = 10;1
+So far in these lectures, we have discussed the concepts of Object OrientedProgramming.0
+		//b = 20; // Error1
+We have also discussed programs having constants, variables,simple input / output, assignment, expressions.0
+We have dwelt in detail about thedifferent aspects of operators like precedence, association and rank.0
+	}1
+}1
+class Test1
+{	1
+We have also made some simple classes with attributes(fields) andbehaviour(methods or functions).0
+	// compare with a of main of Client1
+We have also mentioned the special function toinitialize an object - called its constructor.0
+	//private final int t1; // error1
+We make a class to represent an entity or a thing or an idea.0
+A class is like a userdefined type.0
+	// what about this?1
+A class contains a number of attributes.0
+We normally put a group ofrelated classes into a file.0
+	private final int t2;1
+	{1
+Why should we segregate our classes into differentfiles?Let us consider a simple analogy.0
+		t2 = 2;1
+	}1
+	// what about this?1
+	private final int t3;1
+Would people at McDonalds make burgers andeat those themselves – (they may also eat a few – not sure though).0
+	{1
+Customers ofMcDonalds and people of McDonalds enjoy their own lives – but interact at thecounter.0
+	}1
+We would like to clearly distinguish between the creator of the class – he givesservice and the user of the class(client) – he uses the service the creator provides.0
+McDonald can cater to number of different types of customers.0
+Customers mayalso choose a different joint if they do not like McDonald.0
+	Test() { t3 = 3; }1
+	private final int t4 = 4;1
+Let us look at some examples.0
+In these discussions, we will use a simple exampleof a class - Rect – which abstracts a rectangle.0
+	{1
+My rectangle has two attributeslength called l and breadth called b.0
+Both are of type int.0
+I am sure your rectanglecould be different.0
+		// Error1
+We know that everything changes in this world.0
+How do we manage change? Thedeveloper of the class Rect should tell the client that he would not change thosethat the client can use and he may change those which the client cannot use.0
+		//t4 = 44; // what if t4 = 4 ?1
+He should hide the implementation and expose the interface.0
+	}1
+In this example, the client accesses the interface of Rect.0
+}1
+Changes toimplementation of Rect will not affect the client.0
+In this example, can the Client find the area of a rectangle within which a smallrectangle is cut out? The answer is a NO as the client can only display the areaand cannot get the area.0
+// reference becomes constant and not its reference1
+public class Client1
+This implementation of findArea is flawed.0
+{1
+It should return the area back to theclient.0
+	public static void main(String[] args)1
+The client can then decide what to do with it.0
+So far we have been telling you the truth, but not the whole truth.0
+The operator new allocates memory for the fields of Rect andthen calls a special method called the constructor.0
+	{1
+This constructor is used toinitialize an object.0
+		MyNum n1 = new MyNum(10);1
+It does not create an object.0
+Constructor can have parameters.0
+Compiler provides a constructor which has noparameters.0
+		MyNum n2 = n1;1
+This is called a default constructor.0
+This will vanish when we makeout own constructor.0
+The client may want to use our class to initialize objects indifferent ways.0
+		n2.set(20);1
+You may order pizza with different toppings and with or withoutcoke.0
+		System.out.println("n1 : " + n1.get()); // 20 why?1
+		// what happens what n2 referred to earlier?1
+We may have overloaded constructors to support what the client wants.0
+		n2 = new MyNum(200);1
+		System.out.println("n1 : " + n1.get()); // 20 why?1
+Giving a value or set of values to a variable or an object at the point of creation iscalled initialization.0
+		final MyNum n3 = new MyNum(30);1
+Local variables are not initialized by default.0
+		System.out.println("n3 : " + n3.get());1
+Object is created by using the operator new.0
+It allocates memory and calls theconstructor.0
+Our rectangle has changed with an additional field to indicate whether therectangle is a square.0
+		//n3 = n1; // Error1
+It has methods to get the values of the attributes for theclient.0
+		//n3 = new MyNum(300); // Error1
+		n3.set(300);1
+		System.out.println("n3 : " + n3.get());1
+These are called getters.0
+We may have methods to change the values ofthe attributes of an object.0
+	}1
+These are called setters.0
+Observe that isSquare depends on the other fields – we say it is a computed field.0
+}1
+This is given a value in the constructors.0
+public class MyNum1
+{1
+	private int val;1
+	public MyNum(int val)1
+	{1
+		this.val = val;1
+Constructors are overloaded to make the client life easier.0
+Default constructor initializes the fields to some default (not reasonable in thisexample – could not think of a default rectangle!).0
+	}1
+We have a constructor which creates a square – takes only one argument.0
+We have also a constructor which takes two arguments.0
+	public int get()1
+	{1
+If a constructor does everything tht another constructor does and then somethingmore, we can make one call the other.0
+We want to make Dosa and Dosa-with-Ghee in our eatery.0
+		return val;1
+If the latter doeseverything of the former, then we can have one cook, make Dosa and thenanother cook(I can fit in here), add ghee to it.0
+Something for you to experiment.0
+In java, we use final to state that something isa constant – that it will not change once given a value.0
+	}1
+	public void set(int val)1
+Your usn will not changeduring your stay in our college.0
+Your pan numbers (assuming that you are payingincome tax) will not change.0
+Your passport number will not change even though itis not the same for your friend.0
+	{1
+		this.val = val;1
+A variable is given a location as the control enters the body of the method.0
+	}1
+Whenthe control leaves the method, the memory given to the variable is taken back.0
+So we say that the variable has life – has existence – in that block.0
+An object gets life when the new operator is called.0
+At the end of the block thereference holding reference to the object is removed – dies.0
+}1
+// Static field of a class:1
+But the objectremains but we have no way of accessing it.0
+public class Client1
+So, we have a location – in this case –an object – which has no access.0
+{1
+Such a thing is called garbage.0
+	public static void main(String[] args)1
+	{1
+Creation ofgarbage decreases the memory available.0
+When memory becomes low, Javaclears all these locations and make them useful again.0
+This concept is calledgarbage collection.0
+This concept is similar to what happens in our canteens.0
+		Student s1 = new Student("ashoka", 9.8, 1);1
+You all consume coffeand/or tea.0
+		Student s2 = new Student("akbar", 9.9, 2);1
+After sometime there will be no cups available.0
+		s1.disp();1
+Then the manager callsout for the boy to clean these cups and make them useful again.0
+		s2.disp();1
+	}1
+We may want to change the sides of a rectangle – modify by a factor.0
+}1
+public class Student1
+{1
+	private String name;1
+We maywant to change the length and the breadth by different factors.0
+	private double gpa;1
+So, we require twomethods.0
+	// Wrong design :1
+Should we call by different names or same name? Giving the samename makes the life of the client easier.0
+He has to remember just one name.0
+Wemay observe that the operator + stands for addition of all numeric types.0
+Theoperations carried internally are different.0
+	//	num of students cannot be member of every object1
+	//		we create. It is not an instance member.1
+This concept of giving the same namefor a group of methods logically similar is called overloading.0
+	//	occupies memory in each object1
+Your friend has a key to her locker in the bank – has something very valuable forher (look at this.0
+Suddenly the keyboard changed the gender!).0
+	//	if we query two objects, we get two diff results1
+Let us say youhave made a copy of your friend's key.0
+	//	if we want to update, we should change all the objects1
+	private int numOfStud;1
+	public Student(String name, double gpa, int numOfStud)1
+If you file(mechanical filing – not file onyour computer), your friend's key will not change.0
+reference.0
+	{1
+If you change the object using the parameter, whatever theargument refers to would be changed.0
+		this.name = name;1
+Your friend has a key to her locker in the bank – has something very valuable forher.0
+		this.gpa = gpa;1
+Let us say you have made a copy of your friend's key.0
+		this.numOfStud = numOfStud;1
+If you access the lockerthrough your key(copy of your friend's key) – you are a nice person – so you mayput something in the locker – not a snake of course), then your friend's locker haschanged.0
+The next time your friend opens the locker, she will get the shock of herlife.0
+Let us make another class – a triangle – to represent a Triangle of geometry.0
+Wewill specify the three sides and we will assume that the triangle is formed.0
+Can weclassify the triangle as equilateral, isosceles or scalene? I am a bit sloppy andproviding some computed members as interfaces – equi, iso and scalene.0
+Pleasedo not change them in the client code.0
+	}1
+If you do, then you may end up with atriangle which is all of them simultaneously.0
+	public void disp()1
+	{1
+		System.out.println(1
+You may change this class and makeit better by providing methods to check whether the triangle is equilateral,isosceles or scalene.0
+			name + ":" + gpa + ":" + numOfStud1
+Some homework for you.0
+We are using selection (if statement) to choose between the alternatives.0
+		);1
+	}1
+}1
+We are using boolean fields to hold the result of these comparisons.0
+// Static field of a class:1
+	//	all objects1
+Observe bydefault, all these boolean fields become false because of default initializationbased on type.0
+	public class Client1
+{1
+In this example, we have if within if, Such a construct is called nested ifstatement.0
+	public static void main(String[] args)1
+If the first operand of && operator is false, then the whole expression is false.0
+	{1
+		Student s1 = new Student("ashoka", 9.8);1
+There is no necessity to evaluate the second operand.0
+		Student s2 = new Student("akbar", 9.9);1
+		s1.disp();1
+		s2.disp();1
+If the first operand of || operator is true, then the whole expression is true.0
+	}1
+}1
+Thereis no necessity to evaluate the second operand.0
+public class Student1
+We can stop as soon as the truth or falsehood is found out.0
+{1
+	private String name;1
+	private double gpa;1
+	// right design:1
+That what happens inJava.0
+This is called short circuit evaluation.0
+We count the number of times a pair of sides match.0
+It can be 3 or 1 or 0.0
+	// This is shared with all objects of the class1
+	// It is a class attribute and an instance attribute1
+	// can be accessed using the class name or the instance name1
+	// experiment:1
+	//	created first time the class is used1
+	//	initialization:1
+Think:why it is never 2? Based on that we can classify a triangle.0
+Here, we have tocompare a single integer variable with number of constants for equality.0
+In suchcases, we prefer the switch statement.0
+	//		default based on type1
+	//		in the class1
+	//		static initialization block1
+	// we can provide static methods to access these fields.1
+	private static int numOfStud = 0;1
+The value of the expression of switchdecides the point of entry into the switch clauses (and not exit.0
+	public Student(String name, double gpa)1
+Thats why we usebreak to take the control out of the block!).0
+	{1
+		this.name = name;1
+		this.gpa = gpa;1
+We can have a 'catch all' clause – thatis called default.0
+This is somewhat similar to BODMAS rule that we learn in arithmetic, but morecomplicated as there are lots of operators in these programming languages.0
+		numOfStud++;1
+Theorder of evaluation of operators depends on the precedence.0
+Operators withhigher precedence will be evaluated first.0
+		//this.numOfStud++; // how about this?	1
+What if more than one operator in an expression has the same precedence? Inthat case, we evaluate left to right or right to left depending on the operator.0
+Thisconcept is called association.0
+The number of operands required for an operator is called arity.0
+	}1
+Some operatorsare unary(one operand) – some are binary(two operands) and one of them isternary(three operands).0
+In this example, operators of division and multiplication have the same level ofprecedence and are evaluated left to right – left associative.0
+An expression has a value – of a particular type.0
+	// can we display a static member here?1
+	public void disp()1
+This is decided by the language.0
+Division of integers in many languages results in an integer.0
+	{1
+So 1 / 2 becomes 0and now you can figure out why we get zero.0
+The above program finds the area of a triangle of base 10 and height 20.0
+What if Iwant to find area of triangle with different bases and heights.0
+		System.out.println(1
+			name + ":" + gpa + ":" + numOfStud1
+You may rememberthat in the school days, we learnt arithmetic and then algebra.0
+In algebra, welearnt the concept of variables.0
+Variables could take different values.0
+How do weuse the same idea in programming.0
+To take input from the keyboard, we have to refer to it in the program.0
+		);1
+It is calledSystem.0
+	}1
+in.0
+}1
+// Static field of a class:1
+// Static method of a class:1
+System.0
+out refers to output and System.0
+in refers to input.0
+Readingfrom the keyboard is complicated as we may decide to input a number or a stringor special characters.0
+To handle this, we use a type(class) called Scanner that Javaprovides.0
+We make a variable of that type, bind it to the keyboard and then we willask it to get us the next integer.0
+//	1. used to access the static field1
+To take input from the keyboard, we have to refer to it in the program.0
+public class Client1
+{1
+It is calledSystem.0
+	public static void main(String[] args)1
+in.0
+	{1
+System.0
+		Student s1 = new Student("ashoka", 9.8);1
+out refers to output and System.0
+in refers to input.0
+Readingfrom the keyboard is complicated as we may decide to input a number or a stringor special characters.0
+To handle this, we use a type(class) called Scanner that Javaprovides.0
+		Student s2 = new Student("akbar", 9.9);1
+We make a variable of that type, bind it to the keyboard and then we willask it to get us the next integer.0
+This list is not complete.0
+		s1.dispNumOfStud();1
+We will discuss more of them later.0
+In this example, b is a variable of type int.0
+This statement causes allocation ofmemory of 4 bytes.0
+		Student.dispNumOfStud();1
+	}1
+Java supports 8 types – called primitive types – byte, char,short, int, long, boolean, float and double.0
+}1
+Unlike 'C', size of each type is fixed inJava.0
+Can you find the size of each of these types.0
+Thats a bad idea.0
+What if I had a polygon with n sides (n > 3)? We may have tospecify n sides and a few more elements to define the figure uniquely.0
+public class Student1
+{1
+In stead ofcarrying books separately, you may want to carry them in a bag.0
+Then we can talkabout the book in Rama's bag or the book in Krishna's bag.0
+	private String name;1
+Each of these classes can be in their own files.0
+	private double gpa;1
+	private static int numOfStud = 0;1
+A program in Java can consist ofnumber of files – each file having one or more classes.0
+A file can have only onepublic class and in that case, the file name should match the class name.0
+Why should we develop programs in multiple files? This would allow developmentby different people, therefore would make the development faster.0
+This alsoallows for reuse.0
+The class developed can be used by others.0
+	public Student(String name, double gpa)1
+	{1
+		this.name = name;1
+This concept iscalled a library in programming parlour.0
+		this.gpa = gpa;1
+You may remember that our city name changed recently from Bangalore toBengaluru.0
+		numOfStud++;1
+	}1
+Your course CS2 is not called CS2 : Theme : Object OrientedProgramming in Java.0
+	public void disp()1
+	{1
+		System.out.println(1
+What is constant in this world is change.0
+What wouldhappen if we change the field names of the class Triangle from b to base and h toheight.0
+We want to make our field names more meaningful.0
+The phenomenon occurs if the angle of incidence is greater than a certain limiting angle, called the critical angle.0
+In general, total internal reflection takes place at the boundary between two transparent media when a ray of light in a medium of higher index of refraction approaches the other medium at an angle of incidence greater than the critical angle.0
+For a water-air surface the critical angle is 48.5°.0
+			name + ":" + gpa + ":" + numOfStud1
+Because indices of refraction depend on wavelength, the critical angle (and hence the angle of total internal reflection) will vary slightly with wavelength and, therefore, with colour.0
+At all angles less than the critical angle, both refraction and reflection occur in varying proportions.0
+Glass prisms can be shaped to produce total internal reflection and as such are employed in binoculars, periscopes, telescopes, and other optical instruments.0
+Light rays may be conducted over long, twisting paths by multiple total internal reflection in glass or plastic rods or fibres.0
+		);1
+	}1
+In the name of development, we remove trees and vegetation, change how we use land, and keep expanding paved areas.0
+	// static method to access static member1
+All these not only affect the soil ecology, but also the water balance.0
+	// static method does not get 'this' reference1
+	//	no matter how the method is called1
+	public static void dispNumOfStud()1
+	{1
+Increased urbanization also requires more water to feed the city's population and industry, often requiring deeper and deeper wells to be drilled or water to be moved from even more distant locations.0
+		System.out.println("# of students : " + numOfStud);1
+		//System.out.println("name : " + name); // Error. why?1
+You will likely start to balance equations almost automatically in your mind.0
+	}1
+The motion of a pendulum is a classic example of mechanical energy conservation.0
+A pendulum consists of a mass (known as a bob) attached by a string to a pivot point.0
+As the pendulum moves it sweeps out a circular arc, moving back and forth in a periodic fashion.0
+Neglecting air resistance (which would indeed be small for an aerodynamically shaped bob), there are only two forces acting upon the pendulum bob.0
+One force is gravity. The force of gravity acts in a downward direction and does work upon the pendulum bob.0
+}1
+public class Client1
+This equation states that 1 iron (Fe) atom will react with two oxygen (O) atoms to yield 2 iron atoms and 3 oxygen atoms(The subscript number, such as the two in O2 describe how many atoms of an element are in a molecule.).0
+{	1
+This unbalanced reaction can't possibly represent a real reaction because it describes a reaction in which one Fe atom magically becomes two Fe atoms.0
+Therefore, we must balance the equation by placing coefficients before the various molecules and atoms to ensure that the number of atoms on the left side of the arrow corresponds exactly to the number of elements on the right.0
+The process of converting given units into moles involves conversion factors.0
+Below we will provide the most common and important conversion factors to convert between moles and grams, moles and volumes of gases, moles and molecules, and moles and solutions.0
+These conversion factors function in the same way as those discussed in the previous section.0
+	public static void main(String[] args)1
+Note also that though these conversion factors focus on converting from some other unit to moles, they can also be turned around, allowing you to convert from moles to some other unit.0
+	{1
+Increase of pavement area not lonely lessens the amount of water vapour that transpires back from the vegetation but also contributes to groundwater pollution if the salt used to melt road ice were allowed to runoff into the natural drainage system.0
+		MyNum x = new MyNum(222);1
+		x.disp();1
+Visit this site for a detailed look at water as a precious resource and how human development affects water and its ecosystem.0
+It is dedicated to Water Day.0
+However, gravity is an internal force (or conservative force) and thus does not serve to change the total amount of mechanical energy of the bob.0
+	}1
+The other force acting upon the bob is the force of tension.0
+}1
+Tension is an external force and if it did do work upon the pendulum bob it would indeed serve to change the total mechanical energy of the bob.0
+Total internal reflection, in physics, complete reflection of a ray of light within a medium such as water or glass from the surrounding surfaces back into the medium.0
+Ecology is the science of the study of ecosystems.0
+Ecological balance has been defined by various online dictionaries as "a state of dynamic equilibrium within a community of organisms in which genetic, species and ecosystem diversity remain relatively stable, subject to gradual changes through natural succession." and "A stable balance in the numbers of each species in an ecosystem."0
+The process of converting given units into moles involves conversion factors.0
+public class MyNum1
+Below we will provide the most common and important conversion factors to convert between moles and grams, moles and volumes of gases, moles and molecules, and moles and solutions.0
+These conversion factors function in the same way as those discussed in the previous section Note also that though these conversion factors focus on converting from some other unit to moles, they can also be turned around, allowing you to convert from moles to some other unit.0
+{1
+To understand how human population and increased developmental activities affect the ecosystem, there are live examples all over the world.0
+	private int val;1
+	private MyNum ref; // some name!1
+	public MyNum()1
+	{1
+Armenia is one such example of what is happening to the ecosystem because of increased population and developmental activities.0
+Over the last 1,000 years human impacts on the land have increased, mainly through deforestation and increased use of pastures.0
+		this.val = 111;1
+		this.ref = null;1
+In the name of development, we remove trees and vegetation, change how we use land, and keep expanding paved areas.0
+All these not only affect the soil ecology, but also the water balance.0
+Increased urbanization also requires more water to feed the city's population and industry, often requiring deeper and deeper wells to be drilled or water to be moved from even more distant locations.0
+To understand how human population and increased developmental activities affect the ecosystem, there are live examples all over the world.0
+Armenia is one such example of what is happening to the ecosystem because of increased population and developmental activities.0
+Over the last 1,000 years human impacts on the land have increased, mainly through deforestation and increased use of pastures.0
+	}1
+The most important point being that the natural balance in an ecosystem is maintained.0
+	public MyNum(int val)1
+This balance may be disturbed due to the introduction of new species, the sudden death of some species, natural hazards or man-made causes.0
+	{1
+In this field trip we will explore how human population and development affects the ecological balance.0
+Take time to explore this site as your gateway to the world of ecology.0
+It has interesting articles and facts.0
+		this.val = val;1
+		this.ref = new MyNum();1
+There are features such as the Environmental Timeline that shows how there were different concerns about the environment throughout history.0
+	}1
+	public void disp()1
+The environmental impact of war is an interesting article on how preparation of war and warfare leads to environmental losses.0
+	{1
+The carpet bombing of the lush green forests during the Vietnam war led to the loss of habitat of many species.0
+		System.out.println(this.val + ":" +1
+Special features on population and the environment show how population has increased from the industrial age and how it will affect the environment.0
+There are additional resources for higher classes.0
+			this.ref.val);1
+Over time, the English Wikipedia and some other Wikipedias gradually have restricted modifications.0
+	}1
+}1
+For example, in the English Wikipedia and some other language editions, only registered users may create a new article.0
+On the English Wikipedia and some others, some particularly controversial, sensitive and/or vandalism-prone pages are now "protected" to some degree.0
+A frequently vandalized article can be semi-protected, meaning that only certain editors are able to modify it.0
+public class Client1
+A particularly contentious article may be locked so that only administrators are able to make changes.0
+Any edit that changes content in a way that deliberately compromises the integrity of Wikipedia is considered vandalism.0
+The most common and obvious types of vandalism include insertion of obscenities and crude humor.0
+Vandalism can also include advertising language and other types of spam.0
+{	1
+Sometimes editors commit vandalism by removing information or entirely blanking a given page.0
+	public static void main(String[] args)1
+Less common types of vandalism, such as the deliberate addition of plausible but false information to an article, can be more difficult to detect.0
+Vandals can introduce irrelevant formatting, modify page semantics such as the page's title or categorization, manipulate the underlying code of an article, or use images disruptively.0
+White-haired elderly gentleman in suit and tie speaks at a podium.0
+American journalist John Seigenthaler (1927–2014), subject of the Seigenthaler incident.0
+	{1
+Obvious vandalism is generally easy to remove from wiki articles; the median time to detect and fix vandalism is a few minutes.0
+However, some vandalism takes much longer to repair.0
+		MyNum x = new MyNum(222);1
+		x.disp();1
+In the Wikipedia Seigenthaler biography incident, an anonymous editor introduced false information into the biography of American political figure John Seigenthaler in May 2005.0
+Seigenthaler was falsely presented as a suspect in the assassination of John F. Kennedy.0
+		MyNum y = new MyNum(333);1
+The article remained uncorrected for four months.0
+		y.disp();1
+	}1
+}1
+public class MyNum1
+Seigenthaler, the founding editorial director of USA Today and founder of the Freedom Forum First Amendment Center at Vanderbilt University, called Wikipedia co-founder Jimmy Wales and asked whether he had any way of knowing who contributed the misinformation.0
+Wales replied that he did not, although the perpetrator was eventually traced.0
+After the incident, Seigenthaler described Wikipedia as "a flawed and irresponsible research tool".0
+{1
+This incident led to policy changes at Wikipedia, specifically targeted at tightening up the verifiability of biographical articles of living people.0
+	private int val;1
+According to the rules on the English Wikipedia, each entry in Wikipedia must be about a topic that is encyclopedic and is not a dictionary entry or dictionary-like.0
+	private static MyNum ref = new MyNum(1000);	1
+A topic should also meet Wikipedia's standards of "notability", which generally means that the topic must have been covered in mainstream media or major academic journal sources that are independent of the article's subject.0
+Further, Wikipedia intends to convey only knowledge that is already established and recognized.0
+It must not present original research.0
+A claim that is likely to be challenged requires a reference to a reliable source.0
+	public MyNum(int val)1
+	{1
+		this.val = val;1
+	}1
+Among Wikipedia editors, this is often phrased as "verifiability, not truth" to express the idea that the readers, not the encyclopedia, are ultimately responsible for checking the truthfulness of the articles and making their own interpretations.0
+	// Observe the second part of the display is same for1
+This can at times lead to the removal of information that is valid.0
+	// all objects. ref is shared with all objects.1
+	public void disp()1
+Finally, Wikipedia must not take sides.0
+All opinions and viewpoints, if attributable to external sources, must enjoy an appropriate share of coverage within an article.0
+This is known as neutral point of view (NPOV).0
+	{1
+		System.out.println(this.val + ":" +1
+			this.ref.val);1
+A report in August 2014 showed that Wikipedia had at least 80,000 editors.0
+A significant decline in the number of English-language editors was reported in 2013 by Tom Simonite who stated: "The number of active editors on the English-language Wikipedia peaked in 2007 at more than 51,000 and has been declining ever since...(t)his past summer (2013) only 31,000 people could be considered active editors.".0
+Several attempts to explain this have been offered.0
+	}1
+One possible explanation is that some users become turned off by their experiences.0
+Another explanation, according to Eric Goldman, is found in editors who fail to comply with Wikipedia cultural rituals, such as signing talk pages, implicitly signal that they are Wikipedia outsiders, increasing the odds that Wikipedia insiders may target or discount their contributions.0
+Becoming a Wikipedia insider involves non-trivial costs: the contributor is expected to build a user page, learn Wikipedia-specific technological codes, submit to a sometimes convoluted dispute resolution process, and learn a "baffling culture rich with in-jokes and insider references".0
+Editors who do not log in are in some sense second-class citizens on Wikipedia, as "participants are accredited by members of the wiki community, who have a vested interest in preserving the quality of the work product, on the basis of their ongoing participation", but the contribution histories of IP addresses cannot be attributed to a particular editor with certainty.0
+}1
+A 2007 study by researchers from Dartmouth College found that "anonymous and infrequent contributors to Wikipedia [...] are as reliable a source of knowledge as those contributors who register with the site".0
+public class Client1
+Jimmy Wales stated in 2009 that "(I)t turns out over 50% of all the edits are done by just .7% of the users... 524 people... And in fact the most active 2%, which is 1400 people, have done 73.4% of all the edits.".0
+{1
+	public static void main(String[] args)1
+	{1
+However, Business Insider editor and journalist Henry Blodget showed in 2009 that in a random sample of articles, most content in Wikipedia (measured by the amount of contributed text that survives to the latest sampled edit) is created by "outsiders", while most editing and formatting is done by "insiders".0
+D.O. studied at Toronto's York University and graduated with an honours English degree in 2001.0
+		// cannot call ctor1
+		//MyNum x = new MyNum(222);1
+		//x.disp();1
+On July 5, 2003, D.O. set a Guinness World Record for the longest freestyle rap at the Dark Nights Nationals car show, an outdoor car festival in Toronto, Canada. His rap lasted for 8 hours and 45 minutes and was performed in front of hundreds of spectators.0
+He was the first rapper to have a video-documented evidence to support the claims to have done the world’s longest freestyle rap.0
+In 2001, he created a school tour program, Stay Driven, to educate students on anti-bullying, anti-violence, peer pressure, leadership and working at peak performance.0
+He has subsequently visited hundreds of schools to speak on those topics and in 2012 published a book Stay Driven: Can't Nobody Hold You Down on the same topics.0
+		//MyNum y = new MyNum(333);1
+		//y.disp();1
+In 2007, D.O. released his debut album “The Norhtstarr”.0
+		// can we call any instance method of the class?1
+the album garnered an nomination from the Ontario Independent Music Awards.0
+In 2009, D.O’s sophomore album “Stay Driven” hit number 7 on the Canadian College Charts.[9] In 2012, he released his third solo album “Heavy In The Game” which included the single “Can’t Tell Me” featuring SonReal, Famous and Chris Jackson[disambiguation needed].0
+		//	NO1
+The track peaked at Number 3 on the US College Hip Hop Charts in July 2012.0
+		// can we call a class method(static method)1
+		// YES1
+D.O. records as a solo artist and is also one-half of the duo Art of Fresh with beatmaker and vocalist Byram Joseph, aka Slakah the Beatchild.0
+In 2009 their debut album “Back to the Earth” reached #2 on the National College Radio Charts.0
+In 2010, the groups song “Out This World” hit number 1 on the US College Hip-Hop Radio Charts.0
+Other musicians that he has collaborated with include DL Incognito, Red 1 of the Rascalz, Classified, Marco Polo, Metty the Dert Merchant (Sweatshop Union), JRDN, Maestro Fresh Wes and others.0
+He videos rotate on MuchMusic, he has toured Canada multiple times and performed globally with stops in Tokyo, Hong Kong, London, New York City, Miami and Las Vegas.0
+		// can that method make an object? YES1
+He spent most of his life working in France.0
+He moved to Paris in 1776, and entered the service of the Duke of Montmorency and then of the Count of Valentinois as a horn player.0
+He composed a great number of orchestral and chamber works but is best remembered for his oratorio Jephte, performed at the Concert Spirituel in September 1781, and for his two operas.0
+Although his music was received favourably, his works never became extremely popular because they were deemed as 'too complicated and baroque'.0
+		MyNum x = MyNum.makeMyNum(11);1
+		x.disp();1
+		MyNum y = MyNum.makeMyNum(22);1
+		y.disp();1
+	}1
+}1
+Vogel was an enthusiast for the operas of Gluck, and his first opera, La toison d'or, is dedicated to the composer as 'legislateur de la musique'.0
+In places it appears to be a faithful stylistic imitation of Gluck's two Iphigenia operas, Iphigenie en Tauride and Iphigenie auf Tauris , but with a fuller orchestration and a greater lyricism in the arias.0
+public class MyNum1
+{1
+The opera was written in 1781 but was not performed until 5 September 1786 at the Opera National de Paris.0
+It played for only 12 performances and was met with limited success since it seemed old-fashioned and contained no ballet.0
+Philippe Desriaux, for many years the secretary of Baron von Tschudi, wrote the librettos for both La toison d'or and Vogel’s second opera, Demophon.0
+	private int val;1
+	private MyNum(int val)1
+	{1
+		this.val = val;1
+Its posthumous premiere (at the Opera on 22 September 1789) was given only after the premiere of Cherubini's opera on the same subject.0
+Among the musical qualities of this work are the variety of recitative forms, the treatment of the woodwind as solo instruments and the harmonic colour of the choruses.0
+The overture, composed in monothematic sonata form, remained popular into the early 19th century, and was incorporated into Pierre Gardel's ballet-pantomime Psyche (1790), which had more than 1000 performances at the Opera National de Paris between its premiere and 1829.0
+"More" is vocalist Alison Moyet's first and only single from 2003, being the third and last single of the album Hometime.0
+	}1
+Like Moyet's two previous singles, the single failed to enter the UK top 100, peaking at #127.0
+Moyet's previous single "Do You Ever Wonder" peaked at #113 whilst "Should I Feel That It's Over" peaked at #144.0
+Unlike the two previous singles, this single had a promotional video created for the single.0
+	public void disp()1
+	{1
+		System.out.println(this.val);1
+The song was written by Alison Moyet and Pete Glenister, who has frequently worked with Moyet throughout her solo career.0
+The two b-sides for the single are "If You Don't Come Back To Me (Live)" and "Should I Feel That It's Over (Live)" which both were recorded live in October 2002.0
+Both of these tracks were exclusive to the single although the original studio recordings are from the "Hometime" album.0
+The single and album was produced by Tim Norfolk and Bob Locke under the name "The Insects", known for their Emmy-award winning soundtrack work and collaborations with Goldfrapp, Massive Attack and Madonna.0
+	}1
+Decision tree based state tying uses so-called phonetic questions to assign triphone states to reasonable acoustic models.0
+These phonetic questions are in fact phonetic categories such as vowels, plosives or fricatives.0
+	public static MyNum makeMyNum(int val)1
+The assumption behind this is that context phonemes which belong to the same phonetic class have a similar inﬂuence on the pronunciation of a phoneme.0
+For a new phoneme set, which has to be used e.g. when switching to a different corpus, a phonetic expert is needed to deﬁne proper phonetic questions.0
+	{1
+		return new MyNum(val);1
+In this paper a new method is presented which automatically deﬁnes good phonetic questions for a phoneme set.0
+This method uses the intermediate clusters from a phoneme clustering algorithm which are reduced to an appropriate number afterwards.0
+	}1
+}1
+// can the ctors of the class be made private? yes1
+Recognition results on the Wall Street Journal data for within-word and acrossword phoneme models show competitive performance of the automatically generated questions with our best handcrafted question set.0
+// how do we instantiate such a class? YES, through a static method1
+// Can we control the number of objects?1
+This research proposes an automatic question generation model for evaluating the understanding of semantic attributes in a sentence.0
+The Semantic Role Labeling and Named Entity Recognition are used as a preprocessing step to convert the input sentence into a semantic pattern.0
+//	This allows only one object of the class : called singleton class1
+The Artificial Immune System is used to build a classifier that will be able to classify the patterns according to the question type in the training phase.0
+The question types considered here are the set of WH-questions like who, when, where, why, and how.0
+A pattern matching phase is applied for selecting the best matching question pattern for the test sentence.0
+public class Client1
+{1
+	public static void main(String[] args)1
+	{1
+The proposed model is tested against a set of sentences obtained from many sources such as the TREC 2007 dataset for question answering, Wikipedia articles, and English book of grade II preparatory.0
+The experimental results of the proposed model are promising in determining the question type with classification accuracy reaching 95%, and 87% in generating the new question patterns..0
+		MyNum x = MyNum.makeMyNum(11);1
+The paper proposed a model of automatic test paper generation system since the traditional test was time-consuming, labor-intensive and unstable.0
+		x.disp();1
+Based on the demand of the automatic test paper generation system the model explored the setting of the initial value information of the ant colony optimization and updated the rules so that the test results could he feed backed to the system. This model not only effectively solved the problem of the auto-generating test-paper but also improved the autonomous learning ability of the system, which was more intelligent to improve the performance.0
+The practical test proves that the system has achieved the expected goal with high quality and high efficiency.0
+		MyNum y = MyNum.makeMyNum(22);1
+The practical test shows that the system has advantages like fast generation of test papers, low repetition of the selected papers and effective colony algorithm.0
+Examinations designed based on this system an achieve the expected testing goals.0
+		y.disp();1
+	}1
+With the rapid development of computer technology and database technology, the people have been occurred great changes in various fields of life, especially in the field of education.0
+The computer-aided education has become one of the most important tools in the common day-to-day work of the major schools.0
+The massive rise in the number of students increased teaching load at the same time and the direct result of the various institutions of higher learning takes a lot of human, financial and material resources in the organization of the examination affairs.0
+Therefore, this paper researched and designed the automatic test paper system which based on computer information technology and could improve the efficient direction of development of the examination affairs, in institutions of higher learning in the teaching process, because a good test paper generation system can accurately test teachers teaching results and student achievement.0
+To develop a test paper system which can evaluate the teaching levels objectively is an important subject for the teaching reform.0
+Purpose of this paper is to study and develop a set of constraints to the conditions setoff the user automatically and quickly generate a set of high-quality papers, to check the students test the true purpose of learning ability.0
+}1
+public class MyNum1
+Automatic generation of efficiency and quality depends largely on the Question Bank questions arithmetic in the design and selection, so the main contents of this paper is the mathematical model and the test paper questions arithmetic.0
+{1
+Generation patterns specify the text, verb forms and semantic arguments from the source sentence to form the question.0
+	private int val;1
+	private static MyNum ref = null;  1
+	private MyNum(int val)1
+	{1
+Additionally, patterns indicate the semantic arguments that provide the answertothequestion,requiredﬁelds,andﬁltercondition ﬁelds.0
+		this.val = val;1
+As these patterns are matched, they will be rejected as candidates for generation for a particular sentence if the required arguments are absent or if ﬁlter conditions are present.0
+For example, a ﬁlter for personal pronouns will prevent a question being generated with an argument that starts with a personal pronoun.0
+	}1
+	public void disp()1
+From: It means that the universe is expanding, we do not want to generate a vague question such as: What does it mean.0
+	{1
+		System.out.println(this.val + ":" +1
+			this.ref.val);1
+Coreference resolution, which could help avoid vague question generation, is discussed in Section5.0
+Table1 shows selected required and ﬁlter ﬁelds, Section 3.3 gives examples of their use.0
+	}1
+Patterns specify whether verbs should be included in their lexical form or as they appear in the source text.0
+	public static MyNum makeMyNum(int val)1
+	{1
+Either form will include subsequent particles such as: The lungs take in air.0
+The most common use of the verb as it appears in the sentence is with the verb be, as in: What were fused into helium nuclei.0
+This pattern takes the copular be as it appears in the source text. However, most patterns use the lexical form of the main verb along with the appropriate form of the auxiliary do (do, does, did), for the subject-auxiliary inversion required in forming interrogatives.0
+		if(ref == null)1
+		{1
+			ref = new MyNum(10000);1
+		}1
+We explored the ability of our AQG system to generate quality questions by comparingautomaticallygeneratedquestionstothoseproducedbyhumans.Lik.0
+the Bystander Turing Test conducted by Person and Graesser , our judges were asked to rate each question along several dimesions of quality.0
+		return ref;1
+	}1
+}1
+public class Circle implements Displayable1
+{1
+	private double radius;1
+Also, we conducted an evaluation in which judges were asked to ascertain whether the question was generated by a human (lecturer, tutor, generic) or a system.0
+The major difference between the test carried out by Person and Graesser and our evaluation is the application context: we focus on questions for academic writing while they used a snippets of tutorial dialog.0
+Also, our judges were the writers of the source content based on which the questions were generated while their judges did not know the content before the experiment.0
+This is an advantage of our methodology because our judges were experts on the content the questions asked about.0
+Section 4.1 describes the participants and procedure we used in the pilot study.0
+	public Circle(double r)1
+Section 4.2 reports the AQG system performance in terms of the semantic correctness of the generated question as well as the accuracy relative to the citation extraction step.0
+	{1
+		radius = r;1
+Section 4.3 shows the results along 5 dimensions of quality and of the Bystander Turing test.0
+Section 5 discusses these results.0
+	}1
+	// wrong signature; every method in the interface class1
+The whole system includes item bank management, test paper generation management, statistical analysis of results and system management and other functional modules.0
+	//	is abstract and public;1
+	// use @Override to check1
+	//void disp()1
+The structure diagram is as follows: Item bank management: management of the item bank is a precondition to normal test paper generation.0
+	public void disp()	{1
+		System.out.println("radius : " + radius);1
+This module enables professional teachers to create the question bank of their own subject and add, modify, delete, inquire and browse questions in the question bank they established.0
+	}1
+}1
+public interface Displayable1
+{1
+Test paper generation management: test paper generation is the nature and core of the system.0
+Users can enter requirements of test paper generation through this module and automatically generate a test paper meeting user’s needs by the system Results.0
+	void disp();1
+}1
+statistical analysis: after the students finish the test, teachers can enter their marks into the system by this module.0
+The system will conduct statistical analysis after receiving the mark of each subject and print the analysis results in files.0
+public class Example11
+The analysis results can be provided for relevant teacher for further analysis and improvement of the question bank by adjusting the questions based on the analysis results.0
+{1
+	public static void main(String[] args)1
+	{1
+System management: this module is set to ensure security of the whole system and the test paper. System administrator can add or delete user permission of related operator by this module..0
+The core of auto-forming test paper system is high-quality item bank  and high-efficient algorithm of generating test paper.0
+		Rect r = new Rect(20, 10);1
+This paper updates the strategy on the basis of existing ant colony algorithm design and solves the problem of high repetition rate of questions in test paper.0
+		Circle c = new Circle(7);1
+		foo(r);1
+		foo(c);1
+	}1
+With the use of ant colony algorithm, the feedback of examination results to the item bank  will be completed, so that the item bank  information can truly reflect the test questions information.0
+The experiment shows that, the system can meet the test requirements and achieve test objectives through continuous learning and accumulation.0
+	public static void foo(Displayable d)1
+In this paper, we propose a multiple-choice question generation methodology for understanding evaluation of adjectives in a text.0
+	{1
+Based on the sense association among adjectives, an adjective being examined can be usually substituted by some other adjectives.0
+In order to discourage learners from answering questions by recalling memorized answers, and to expose learners with more vocabularies, the answer of the questions generated is a substitute of the adjective being examined.0
+		d.disp();1
+The candidates of a substitute are gathered from WordNet and filtered by web corpus searching.0
+	}1
+Based on the proposed methodology, the choice candidates that are not selected as the answer are still useful.0
+}1
+// A few questions to discuss:1
+// can we instantiate an interface?1
+They are more distracting than the dissimilar adjectives and can be used as distractors to improve the distinguishability of a question..0
+Critical review skill is one important aspect of academic writing.0
+// can we have data members in an interface?1
+// can we specify that the method of an interface is private?1
+// can we specify that the method of an interface is protected?1
+// can an interface extend an interface?1
+// can a class implement more than one interface?1
+//		would there be a class if both the interfaces have method1
+//			with the same name?1
+// can a class override a few methods of the interface 1
+Generic trigger questions have been widely used to support this activity.0
+When students have a concrete topic in mind, trigger questions are less effective if they are too general.0
+This article presents a learning-to-rank based system which automatically generates specific trigger questions from citations for critical review support.0
+The performance of the proposed question ranking models was evaluated and the quality of generated questions is reported.0
+Experimental results showed an accuracy of 75.8% on the top 25% ranked questions.0
+These top ranked questions are as useful for selfreflection as questions generated by human tutors and supervisors.0
+//		which it implements?1
+public class Example21
+A qualitative analysis was also conducted using an information seeking question taxonomy in order to further analyze the questions generated by humans.0
+{1
+The analysis revealed that explanation and association questions are the most frequent question types and that the explanation questions are considered the most valuables by student writers.0
+	public static void main(String[] args)1
+	{1
+		//Example2.java:16: error: IWhat is abstract; cannot be instantiated1
+		//IWhat what = new IWhat();1
+Our goal is to create a computational account of learning from reading.0
+	}1
+}1
+Our focus is on conceptual knowledge, i.e., factual knowledge, including general principles, explicit strategies, as well as particular information about the world, the kinds of things that occur in it, and how it came to be.0
+interface IWhat1
+Language, especially written language, is human culture’s best invention for enabling learners to accumulate substantial bodies of conceptual knowledge.0
+We want to enable our machines to exploit this same resource. .0
+This has been one of AI’s grand challenges of course, and remains so today.0
+{1
+We have an approach that we believe will enable us to make considerable progress.0
+Human cultures for centuries have taught children by using simplified language.0
+	void foo();1
+By restricting syntax, we better enable them to focus on understanding the content that is being communicated.0
+	//Example2.java:26: error: = expected1
+	//int x1
+We are using an analogous approach.0
+That is, unlike many natural language researchers, we are not concerned with parsing the full syntactic complexity of, say, the New York Times.0
+	int y = 100; // ok; what does this mean?1
+	//protected void foo1(); // Error; modifier not allowed1
+}1
+class CWhat implements IWhat1
+Instead, our goal is to have our system deeply understand what it reads, without a priori bounds on the contents of texts, other than having enough background in the knowledge base to be able to make some sense of it.   .0
+{1
+	public void foo() { System.out.println("y : " + y); }1
+We believe this simplified language approach is promising for several reasons.0
+	public void bar(int y)1
+    { 1
+		//Example2.java:37: error: cannot assign a value to final variable y1
+		//this.y = y; // Error1
+First, even though rewriting texts is less convenient than, say, giving the system a URL and having it read whatever text is there, it is still easier to do than writing knowledge in predicate calculus.0
+	}1
+Second, we have already successfully used this technique as part of an exploration of the role of qualitative physics in natural language semantics.0
+That NLU system used an offthe-shelf parser and did not contain any knowledge assimilation facilities.0
+}1
+interface ITest1
+{1
+	void f1();1
+Both of these limitations are being tackled in the current project.0
+Instead of limiting ourselves to descriptions of physical domains, we are tackling world history, including everyday political reasoning, as our initial domain.0
+This is far broader than any other system that we know of.0
+Our Learning Reader prototype is based on the following design.0
+	void f2();1
+We start with a large knowledge base.0
+Specifically, we are using the contents of Cycorp’s ResearchCyc knowledge base, plus our own extensions for qualitative reasoning and analogical processing.0
+}1
+This gives us over 34,000 concepts and over 12,000 predicates to build upon, covering a wide range of basic knowledge.0
+// class has to be abstract as f2 is not implemented!1
+(We use our own FIRE reasoning engine rather than Cycorp’s because we make heavy use of analogical processing, as discussed below.).0
+abstract class CTest implements ITest1
+{1
+He established career highs in average, .320, hits, 147, doubles, 16, triples, 10, stolen bases, 24 and runs scored 69. His .320 batting average and 24 stolen bases led the Triple-A Richmond Braves in 2004.0
+	public void f1() { }1
+}1
+He was selected to play in the International League All-Star game.0
+interface I11
+He was named International League April Player of the Month, posting a .381 batting average with four doubles, one triple and five RBIs.0
+{1
+	void f1(int i);1
+}1
+He ranked fifth in the IL and fourth among Braves Minor Leaguers in average, tied second in the IL and led Braves Minor Leaguers in triples, tied for sixth in the IL and led Braves Minor Leaguers in hits and tied for seventh among Braves Minor Leaguers in stolen bases.0
+Orr won the Bill Lucas Award as the player who best represents the Braves organization on and off the field by the 400 Club.0
+interface I21
+{1
+	void f1(double d);1
+He was also part of Team Canada who finished in fourth place at the 2004 Summer Olympics.0
+In 1983 Lok Sabha election, Soz contested and won the Baramulla seat as a candidate of the ruling Jammu and Kashmir National Conference party.0
+At the time, the JKNC was headed by Dr. Farooq Abdullah. Soz went on to win three more Lok Sabha elections as a member of the JKNC.0
+}1
+He also represented the JKNC and the state of Jammu and Kashmir in the Rajya Sabha in the mid-'90s.0
+// Error: should also override f1 of I11
+In 1997-98, he became India's Minister of Environment and Forests in the cabinet of Prime Minister Inder Kumar Gujral.0
+During 1998-99, Soz served in the same capacity under Prime Minister H.D. Deve Gowda.0
+At the time, the JKNC was part of the United Front government ruling India.0
+In 1999, Soz resigned and was expelled from the JKNC for voting against the government of Prime Minister Atal Behari Vajpayee.0
+/*1
+class C implements I1, I21
+{1
+	public void f1(double d)1
+	{1
+	}1
+}1
+Soz was a JKNC member of parliament and defied his party's leadership.0
+His vote brought the BJP government down which led the then Prime Minister to tender his resignation.0
+*/1
+In 2003, Soz joined the Congress party and was elected to the Rajya Sabha.0
+In January 2006, he was inducted into the ministry of Prime Minister Manmohan Singh as Minister of Water Resources, a position he held until early 2009.0
+// interface :1
+Soz was appointed President of the Jammu and Kashmir Pradesh (state) Congress Committee in February 2008.0
+//		cannot be instantiated1
+He was also one of the front runners for the post of Vice-President of India in 2007 and 2012.0
+//		is like an abstract class (with no default implementation)1
+A US diplomatic cable leaked by the whistle blowing website Wikileaks claimed that Saifuddin Soz was facilitating a discreet dialogue between Indian government and separatist leaders before 2006.0
+//		all methods are public1
+The cable sent by then US Ambassador to India David Mulford to State Department in US, describes Soz as a long-standing ‘contact’ of the (US) Embassy’s political section.0
+Glass casting is the process in which glass objects are cast by directing molten glass into a mould where it solidifies.0
+The technique has been used since the Egyptian period.0
+Modern cast glass is formed by a variety of processes such as kiln casting, or casting into sand, graphite or metal moulds.During the Roman period moulds consisting of two or more interlocking parts were used to create blank glass dishes.0
+Glass could be added to the mould either by frit casting, where the mould was filled with chips of glass (called frit) and then heated to melt the glass, or by pouring molten glass into the mould.Evidence from Pompeii suggests that molten hot glass may have been introduced as early as the mid-1st century CE.Blank vessels were then annealed, fixed to lathes and cut and polished on all surfaces to achieve their final shape.Pliny the Elder indicates in his Natural History (36.193) that lathes were used in the production of most glass of the mid-1st century.Sand casting involves the use of hot molten glass poured directly into a preformed mould.0
+//		all data members are static final1
+It is a process similar to casting metal into a mould.0
+public class Rect implements Displayable1
+{1
+	private double length;1
+The sand mould is typically prepared by using a mixture of clean sand and a small proportion of the water-absorbing clay bentonite.0
+Bentonite acts as a binding material.0
+	private double breadth;1
+	public Rect(double l, double b)1
+	{1
+		length = l; breadth = b;1
+In the process, a small amount of water is added to the sand-bentonite mixture and this is well mixed and sifted before addition to an open topped container.0
+A template is prepared (typically made of wood, or a found object or even a body part such as a hand or fist) which is tightly pressed into the sand to make a clean impression.0
+	}1
+	// wrong signature; every method in the interface class1
+	//	is abstract and public;1
+This impression then forms the mould.The surface of the mould can be covered in coloured glass powders or frits to give a surface colour to the sand cast glass object.0
+When the mould preparation is complete hot glass is ladled from the furnace at temperatures of about 1200 C (2192 F) to allow it to freely pour.0
+The hot glass is poured directly into the mould.0
+	// use @Override to check1
+During the pouring process, glass or compatible objects may be placed to later give the appearance of floating in the solid glass object.0
+	//void disp()1
+	public void disp()1
+	{1
+		System.out.println("length : " + length);1
+		System.out.println("breadth : " + breadth);1
+	}1
+This very immediate and dynamic method was pioneered and perfected in the 1980s by the Swedish artist Bertil Vallien.Kiln casting involves the preparation of a mould which is often made of plaster or plaster mixtures.0
+}1
+// discuss about the Object class1
+A model can be made of any solid material such as wax, wood or metal and after taking a cast of the model, (a process called investment), the model is removed from the mould.0
+One method of forming a mould is by the Cire perdue or "lost wax" method.0
+Using this, a model can be made from wax and after investment the wax can be steamed or burned away in a kiln.0
+//	toString1
+public class Example11
+The heat resistant mould is then placed in a kiln with a funnel like refractory opening which is filled with solid glass granules or lumps.0
+The kiln is heated to a high temperature, normally between 800 and 1000 degrees Celsius (1472 - 1832 F), and as the glass melts it runs, settling into and filling the mould.Such kiln cast work could be made of very large proportions such as by the Czechoslovakian artists Stanislav Libensky and Jaroslava Brychtova.0
+{1
+	public static void main(String[] args)1
+Kiln cast glass has become an important material for contemporary artists such as Clifford Rainey and Karen LaMonte.Pâte de verre is another form of kiln casting and literally translated means glass paste.0
+In this process, finely crushed glass is mixed with a binding material, such as a mixture of gum arabic and water, and often with colourants and enamels.0
+The resultant paste is applied to the inner surface of a negative mould forming a coating.0
+	{1
+After the coated mould is fired at the appropriate temperature the glass is fused creating a hollow object that can have thick or thin walls depending on the thickness of the pate de verre layers.0
+Daum, a French commercial crystal manufacturer, produce highly sculptural pieces in pate de verre.Graphite is also used in the hot forming of glass.0
+Graphite moulds are prepared by carving into them, machining them into curved forms or by stacking them into shapes.0
+		Rect r = new Rect(20, 10);1
+Molten glass is poured into the moulds then cooled until hard enough to be removed and placed into an annealing kiln to cool slowly.0
+		Object o = r;1
+		System.out.println(o);1
+Tropomyosin receptor kinase B is the high affinity catalytic receptor for several "neurotrophins", which are small protein growth factors that induce the survival and differentiation of distinct cell populations.0
+The neurotrophins that activate TrkB are: BDNF (Brain Derived Neurotrophic Factor), neurotrophin-4 (NT-4), and neurotrophin-3 (NT-3).0
+As such, TrkB mediates the multiple effects of these neurotrophic factors, which includes neuronal differentiation and survival.0
+		System.out.println(r);1
+	}1
+Research has shown that activation of the TrkB receptor can lead to down regulation of the KCC2 chloride transporter in cells of the CNS.0
+}1
+The TrkB receptor is part of the large family of receptor tyrosine kinases.0
+A "tyrosine kinase" is an enzyme which is capable of adding a phosphate group to certain tyrosines on target proteins, or "substrates".0
+class Rect // extends Object1
+A receptor tyrosine kinase is a "tyrosine kinase" which is located at the cellular membrane, and is activated by binding of a ligand to the receptor's extracellular domain.0
+Other examples of tyrosine kinase receptors include the insulin receptor, the IGF1 receptor, the MuSK protein receptor, the Vascular Endothelial Growth Factor (or VEGF) receptor, etc.0
+{1
+	private double length;1
+	private double breadth;1
+urrently, there are three TrkB isoforms in the mammalian CNS.0
+	public Rect(double l, double b)1
+The full-length isoform (TK+) is a typical tyrosine kinase receptor, and transduces the BDNF signal via Ras-ERK, PI3K, and PLCγ.0
+	{1
+In contrast, two truncated isoforms (TK-: T1 and T2) possess the same extracellular domain, transmembrane domain, and first 12 intracellular amino acid sequences as TK+.0
+However, the C-terminal sequences are the isoform-specific (11 and 9 amino acids, respectively).0
+T1 has the original signaling cascade that is involved in the regulation of cell morphology and calcium influx.0
+rkB is part of a sub-family of protein kinases which includes TrkA and TrkC.0
+Also, there are other neurotrophic factors structurally related to BDNF: NGF (for Nerve Growth Factor), NT-3 (for Neurotrophin-3) and NT-4 (for Neurotrophin-4).0
+		length = l; breadth = b;1
+	} 1
+While TrkB mediates the effects of BDNF, NT-4 and NT-3, TrkA is bound and thereby activated only by NGF.0
+	// show with or without toString method1
+Further, TrkC binds and is activated by NT-3.0
+	@Override1
+TrkB binds BDNF and NT-4 more strongly than it binds NT-3.0
+	public String toString()1
+	{1
+TrkC binds NT-3 more strongly than TrkB does.0
+		// return "MyRect";1
+		return length + " : " + breadth + "\n";1
+	} 1
+here is one other BDNF receptor besides TrkB, called the "LNGFR" (for "low-affinity nerve growth factor receptor").0
+As opposed to TrkB, the LNGFR plays a somewhat less clear role in BDNF biology.0
+}1
+Some researchers have shown the LNGFR binds and serves as a "sink" for neurotrophins.0
+Cells which express both the LNGFR and the Trk receptors might therefore have a greater activity - since they have a higher "microconcentration" of the neurotrophin.0
+// discuss about the Object class1
+It has also been shown, however, that the LNGFR may signal a cell to die via apoptosis - so therefore cells expressing the LNGFR in the absence of Trk receptors may die rather than live in the presence of a neurotrophin.0
+rone music, drone-based music, drone ambient, ambient drone, or simply drone, is a minimalist musical genre that emphasizes the use of sustained or repeated sounds, notes, or tone-clusters – called drones.0
+It is typically characterized by lengthy audio programs with relatively slight harmonic variations throughout each piece compared to other musics.0
+//	equals1
+//	hashCode1
+La Monte Young, one of its 1960s originators, defined it in 2000 as "the sustained tone branch of minimalism".0
+public class Example21
+usic which contains drones and is rhythmically still or very slow, called "drone music", can be found in many parts of the world, including bagpipe traditions, among them Scottish pibroch piping; didgeridoo music in Australia, South Indian classical Carnatic music and Hindustani classical music (both of which are accompanied almost invariably by the tambura, a plucked, four-string instrument which is only capable of playing a drone); the sustained tones found in the Japanese gagaku classical tradition; possibly (disputed) in pre-polyphonic organum vocal music of late medieval Europe; and the Byzantine chant's ison (or drone-singing, attested after the fifteenth century).0
+{1
+Repetition of tones, supposed to be in imitation of bagpipes, is found in a wide variety of genres and musical forms.0
+However, the lineage of stillness and long tones occurring in classical compositions during adagio movements, including, for instance, the third movement of Anton Webern's Five Small Pieces for Orchestra, as well as in Northern European folk musics in the form of "slow airs" has directly descended into modern popular and electronic music.0
+citation needed].0
+	public static void main(String[] args)1
+The modern genre also called drone music (called "dronology" by some books, labels and stores, to differentiate it from ethnic drone-based music) is often applied to artists who have allied themselves closely with underground music and the post-rock or experimental music genres.0
+Drone music also fits into the genres of found sound, minimalist music, dark ambient, drone doom/drone metal, and noise music.0
+	{1
+Most often utilizing electronic instruments or electronic processing of acoustic instruments, they typically create dense and unmoving harmonies and a stilled or "hovering" sense of time.0
+		Rect r1 = new Rect(20, 10);1
+		Rect r2 = r1;1
+		Rect r3 = new Rect(20, 10);1
+		Rect r4 = new Rect(30, 15);1
+		// reference semantiscs1
+citation needed] While the hallmarks of drone music are easy to recognize, the backgrounds and goals of the artists vary greatly.0
+		System.out.println("r1 == r2 : " + (r1 == r2)); // true1
+		System.out.println("r1 == r3 : " + (r1 == r3)); // false1
+Pitchfork Media and Allmusic journalist Mark Richardson defined it thus: "The vanishing-point music created by drone elders Phill Niblock and, especially, LaMonte Young is what happens when a fixation on held tones reaches a tipping point.0
+		System.out.println("r1 == r4 : " + (r1 == r4)); // false1
+Timbre is reduced to either a single clear instrument or a sine wave, silence disappears completely, and the base-level interaction between small clusters of "pure" tone becomes the music's content.0
+This kind of work takes what typically helps us to distinguish "music" from "sound," discards nearly all of it, and then starts over again from scratch.0
+La Monte Young, fascinated with "the sound of the wind blowing", the "60 cycle per second drone" of "step-down transformers on telephone poles", the tanpura drone and the alap of Indian classical music, "certain static aspects of serialism, as in the Webern slow movement of the Symphony Opus 21", and Japanese gagaku "which has sustained tones in it in the instruments such as the Sho", started writing music incorporating sustained tones in 1957 with the middle section of For Brass, then in 1958 what he describes as "the first work in the history of music that is completely composed of long sustained tones and silences" with Trio for Strings, before exploring this drone music within the Theatre of Eternal Music that he founded in 1962.0
+The Theatre of Eternal Music is a multi-media performance group who, in its 1960s–1970s heyday included at various times La Monte Young, Marian Zazeela, Tony Conrad, Angus MacLise, Terry Jennings, John Cale, Billy Name, Jon Hassell, Alex Dea and others, each from various backgrounds (classical composition and performance, painting, mathematics, poetry, jazz, etc.0
+Operating from the world of lofts and galleries in New York in the mid-sixties to the mid-seventies in particular, and tied to the aesthetics of Fluxus and the post-John Cage-continuum, the group gave performances on the East Coast of the United States as well as in Western Europe comprised long periods of sensory inundation with combinations of harmonic relationships, which moved slowly from one to the next by means of "laws" laid out by Young regarding "allowable" sequencies and simultaneities, perhaps in imitation of Hindustani classical music which he, Zazeela and the others either studied or at least admired.0
+The group released nothing during their lifetime (although Young and Zazeela issued a collaborative LP in 1969, and Young contributed in 1970 one side of a flexi-disc accompanying Aspen magazine).0
+		// value semantics1
+The concerts themselves were influential on their own upon the art world including Karlheinz Stockhausen (whose Stimmung bears their influence most strikingly) and the drone-based minimalist works of dozens of other composers many of whom made parallel innovations including Young classmate Pauline Oliveros, or Eliane Radigue, Charlemagne Palestine, Yoshi Wada, Phill Niblock and many others.0
+		System.out.println("r1 equals r2 : " + 1
+			r1.equals(r2)); // true1
+Then group member John Cale went on to extend and popularize this work into 1960s rock music with the Velvet Underground (along with songwriter Lou Reed).0
+		System.out.println("r1 equals r3 : " +		1
+In 2000, La Monte Young wrote: "[About] the style of music that I originated, I believe that the sustained tone branch of minimalism, also known as “drone music,” is a fertile area for exploration.0
+The Velvet Underground's first EP release in 1966, entitled Loop was an experimental drone piece created by member John Cale.0
+			r1.equals(r3)); // true1
+This rare release was far removed from the band's usual rock-based music, however the usage of drone elements in these songs was still apparent, particularly in the song "Heroin", which consisted of Cale's grinding viola drone with Reed's two-chord guitar figure.0
+This song, appearing on the band's first album The Velvet Underground & Nico (1967), laid the foundation for drone music as a rock music genre in close proximity to the art-world project of the Theatre of Eternal Music.0
+Cale's departure from the group in 1968 blurred matters considerably, as Reed continued to play primitive figures (sometimes in reference to R&B), while Cale went quickly on to produce the Stooges' debut (1969), including his viola drone on the track "We Will Fall" and Nico's The Marble Index (1969) which also included Cale's viola drone on "Frozen Warnings".0
+		System.out.println("r1 equals r4 : " + 1
+Later, Lou Reed issued in 1975 a double LP of multi-tracked electric-guitar feedback titled Metal Machine Music which listed (misspelling included) "Drone cognizance and harmonic possibilities vis a vis Lamont Young's Dream Music" among its "Specifications".0
+n the late sixties and early seventies German rock musicians including Can, Neu! and Faust drew from the heritage of experimental sixties rock like Captain Beefheart at his most collagic and jamming as well as from composers like Stockhausen and La Monte Young.0
+			r1.equals(r4)); // false1
+These groups became influential on art-rock contemporaries in their own day and punk-rock and post-punk players subsequently.0
+		// hashCode should support value semantics1
+		System.out.println("hashCode r1 : " + r1.hashCode());1
+Tony Conrad, of the Theatre of Eternal Music, notably made a collaborative LP with Faust which included nothing but two sides of complex violin drones accompanied only by a single note on bass guitar and a bloody-minded percussion accompaniment.0
+		System.out.println("hashCode r2 : " + r2.hashCode());1
+Single-note bass-lines were also featured on Can's track "Mother Sky" (album Soundtracks, 1970) and the entirety of Die Krupp's first album (1979).0
+arallel to Krautrock's rockist impulses, across North America and Europe, some musicians sought to reconcile Asian classicalism, austere minimalism and folk music's consonant aspects in the service of spirituality.0
+		System.out.println("hashCode r3 : " + r3.hashCode());1
+Among them was Theatre of Eternal Music alumnus Terry Riley with his 1964 In C  and who had become a disciple, along with Young and Zazeela, of the Hindustani classical singer Pandit Pran Nath.0
+In parallel, then-Krautrock band Tangerine Dream and their recently departed member Klaus Schulze both moved toward a more contemplative and consonant harmonic music, each releasing their own drone music album on the label Ohr in August 1972 (Zeit and Irrlicht, respectively).0
+		System.out.println("hashCode r4 : " + r4.hashCode());1
+Meanwhile, as increasingly elaborate studio technology was born during the seventies, Brian Eno, an alumn of the glam/art-rock band Roxy Music postulated ambient music (drawing, in part from John Cage and his antecedent Erik Satie's 1910s concept of furniture music, in part from minimalists such as La Monte Young) as "able to accommodate many levels of listening attention without enforcing one in particular; it must be as ignorable as it is interesting".0
+	}1
+}1
+// will this work if we a subclass object of Rect?1
+While his late seventies ambient tape-music recordings are not drone music, his acknowledgment of Young ("the daddy of us all") and his influence on later drone music made him an undeniable link in the chain.0
+// should this work if we pass  object of some other class1
+//	which also has length and breadth?1
+class Rect // extends Object1
+{1
+Klaus Wiese have been a master of the Tibetan singing bowls, he created an extensive series of album releases using them, making impressive acoustic drones.0
+	private double length;1
+	private double breadth;1
+owery Electric, Cocteau Twins, Coil, My Bloody Valentine, Slowdive, The Jesus and Mary Chain, Ride, Loop (who covered Can's "Mother Sky!"), Brian Jonestown Massacre (Methodrone album) and Spacemen 3 (who used a text by Young for the liner notes to their record Dreamweapon: An Evening of Contemporary Sitar Music, a live 45-minute drone piece) reasserted the influence of the Velvet Underground and its antecedents in their use of overwhelming volume and hovering sounds, while Sonic Youth quite often prolong notes to add more droning in their songs.0
+	public Rect(double l, double b)1
+	{1
+n the late 1990s and early 2000s, drone music was intermixed with rock, ambient, dark ambient, electronic, techno and new-age music.0
+Many drone music originators, including Phill Niblock, Eliane Radigue and La Monte Young are still active and continue to work exclusively in long, sustained tones.0
+		length = l; breadth = b;1
+Improvisors like Hototogisu and Sunroof! play nothing but sustained fields which are close to drones.0
+Sunn O))), a drone metal band, almost exclusively plays sustained tone pieces, and their peers Boris and Merzbow released a collaborative 62-minute drone piece called Sun Baked Snow Cave in 2005.0
+Quantum mechanics (QM; also known as quantum physics, or quantum theory) is a fundamental branch of physics which describes physical phenomena at scales typical of the quantum realm of atomic and subatomic length scales, where the action is on the order of the Planck constant.0
+	} 1
+	// understand the signature; why is the parameter1
+At these scales, many everyday concepts concerning physical objects and energy (including the photons making up visible light) are believed to behave and interact extremely differently than is usually seen in daily life.0
+Quantum mechanics provides an extremely accurate description of the behavior of photons, electrons, and other atomic- and molecular-scale objects.0
+	//	not Rect1
+At larger (macroscopic) scales its predictions simplify to become the laws of classical mechanics familiar in the everyday world, although even in the everyday world, many phenomena can be observed with the naked eye, which cannot be explained classically but require a quantum mechanical explanation.0
+Important applications of quantum mechanical theory include superconducting magnets, LEDs and the laser, the transistor and semiconductors such as the microprocessor, medical and research imaging such as MRI and the electron microscopy, and explanations for many biological and physical phenomena.0
+Quantum mechanics takes its name from the observation that some physical quantities exist, and can change and interact, only by discrete amounts (in a 'step-like' manner) and behave probabilistically rather than deterministically.0
+The "steps" are so tiny that they are completely imperceptible even with a microscope, and any description must be given in terms of a wave function rather than specific particles and movements.0
+The term "quantum" itself (plural: quanta) comes from the Latin word quantus meaning how much?, referring to a 'packet' (or amount) of energy, momentum, or any other attribute that is quantized and can only change by discrete amounts.0
+	@Override1
+	public boolean equals(Object o)1
+This tiny scale is why quantum mechanics generally leads to classical mechanics in macroscopic situations: - the vast numbers of quantum effects involved in everyday observations means that discrete quantum behaviors are usually hidden by much larger statistical effects (similar to "averaging").0
+Other fundamental quantum mechanical principles are wave-particle duality (quanta exhibit both 'wave-like' behaviors such as refraction and 'particle-like' behavior), the uncertainty principle (attempting to measure one attribute such as velocity or position may cause another attribute to become less measurable), and superposition and the status of the observer (a wave function superimposes multiple co-existing states that have different probabilities; observation causes collapse of the wave function to some specific state, in several interpretations , as in the famous example of Schrödinger's Cat).0
+Quantum mechanics was initially developed as a field in the early 20th century, driven by the black-body radiation problem (reported 1859) and Albert Einstein's 1905 paper which offered a quantum-based theory to explain the photoelectric effect (reported 1887).0
+Around 1900-1910, the atomic theory and the corpuscular theory of light first came to be widely accepted as scientific fact; these latter theories can be viewed as quantum theories of matter and electromagnetic radiation, respectively.0
+	{1
+		boolean res = false;1
+		if(o == null || !(o instanceof Rect) )1
+		{1
+Early quantum theory was significantly reformulated in the mid-1920s by Werner Heisenberg, Max Born and Pascual Jordan (matrix mechanics); Louis de Broglie and Erwin Schrödinger (wave mechanics); and Wolfgang Pauli and Satyendra Nath Bose (statistics of subatomic particles).0
+Moreover, the Copenhagen interpretation of Niels Bohr became widely accepted.0
+			res = false;1
+		}		1
+		else1
+By 1930, quantum mechanics had been further unified and formalized by the work of David Hilbert, Paul Dirac and John von Neumann with greater emphasis on measurement, the statistical nature of our knowledge of reality, and philosophical speculation about the 'observer'.0
+		{1
+			Rect that = (Rect)o;1
+It has since permeated many disciplines including quantum chemistry, quantum electronics, quantum optics, and quantum information science, and its modern developments include quantum field theory, string theory, and speculative quantum gravity theories.0
+It also provides a useful framework for many features of the modern periodic table of elements, and describes the behaviors of atoms during chemical bonding and the flow of electrons in computer semiconductors, and therefore plays a crucial role in many modern technologies.0
+			res = this.length == that.length && 1
+The mathematical formulations of quantum mechanics are abstract.0
+				this.breadth == that.breadth;1
+		}1
+		return res;1
+	}1
+A mathematical function, the wave function, provides information about the probability amplitude of position, momentum, and other physical properties of a particle.0
+	// whenever we override the equals method, we should1
+Mathematical manipulations of the wave function usually involve bra–ket notation, which requires an understanding of complex numbers and linear functionals.0
+The wavefunction formulation treats the particle as a quantum harmonic oscillator, and the mathematics is akin to that describing acoustic resonance.0
+	//	override the hashCode1
+	@Override1
+Many of the results of quantum mechanics are not easily visualized in terms of classical mechanics.0
+For instance, in a quantum mechanical model, the lowest energy state of a system, the ground state, is non-zero as opposed to a more "traditional" ground state with zero kinetic energy (all particles at rest).0
+Instead of a traditional static, unchanging zero energy state, quantum mechanics allows for far more dynamic, chaotic possibilities, according to John Wheeler.0
+cientific inquiry into the wave nature of light began in the 17th and 18th centuries, when scientists such as Robert Hooke, Christiaan Huygens and Leonhard Euler proposed a wave theory of light based on experimental observations.0
+	public int hashCode()1
+In 1803, Thomas Young, an English polymath, performed the famous double-slit experiment that he later described in a paper entitled On the nature of light and colours.0
+	{1
+		// some expression based on length and breadth1
+		return (int)(length * 100 + breadth);1
+	}1
+}1
+// discuss about the Object class1
+This experiment played a major role in the general acceptance of the wave theory of light.0
+//	clone1
+In 1838, Michael Faraday discovered cathode rays.0
+These studies were followed by the 1859 statement of the black-body radiation problem by Gustav Kirchhoff, the 1877 suggestion by Ludwig Boltzmann that the energy states of a physical system can be discrete, and the 1900 quantum hypothesis of Max Planck.0
+//	discuss the concept of shallow and deep copy1
+Planck's hypothesis that energy is radiated and absorbed in discrete "quanta" (or energy elements) precisely matched the observed patterns of black-body radiation.0
+In 1896, Wilhelm Wien empirically determined a distribution law of black-body radiation, known as Wien's law in his honor.0
+//				concept of marker interface(not the term used1
+//				in java documentation)1
+Ludwig Boltzmann independently arrived at this result by considerations of Maxwell's equations.0
+However, it was valid only at high frequencies and underestimated the radiance at low frequencies.0
+Later, Planck corrected this model using Boltzmann's statistical interpretation of thermodynamics and proposed what is now called Planck's law, which led to the development of quantum mechanics.0
+Among the first to study quantum phenomena in nature were Arthur Compton, C.0
+Raman, and Pieter Zeeman, each of whom has a quantum effect named after him.0
+Robert A.0
+Millikan studied the photoelectric effect experimentally, and Albert Einstein developed a theory for it.0
+//	clone is a method of the object class and not1
+//	of cloneable interface1
+At the same time, Niels Bohr developed his theory of the atomic structure, which was later confirmed by the experiments of Henry Moseley.0
+// you may want to discuss what if the class1
+In 1913, Peter Debye extended Niels Bohr's theory of atomic structure, introducing elliptical orbits, a concept also introduced by Arnold Sommerfeld.0
+This phase is known as old quantum theory.0
+lanck cautiously insisted that this was simply an aspect of the processes of absorption and emission of radiation and had nothing to do with the physical reality of the radiation itself.0
+In fact, he considered his quantum hypothesis a mathematical trick to get the right answer rather than a sizable discovery.0
+However, in 1905 Albert Einstein interpreted Planck's quantum hypothesis realistically and used it to explain the photoelectric effect, in which shining light on certain materials can eject electrons from the material.0
+He won the 1921 Nobel Prize in Physics for this work.0
+//	has composition(like an array)1
+Einstein further developed this idea to show that an electromagnetic wave such as light could also be described as a particle (later called the photon), with a discrete quantum of energy that was dependent on its frequency.0
+he foundations of quantum mechanics were established during the first half of the 20th century by Max Planck, Niels Bohr, Werner Heisenberg, Louis de Broglie, Arthur Compton, Albert Einstein, Erwin Schrödinger, Max Born, John von Neumann, Paul Dirac, Enrico Fermi, Wolfgang Pauli, Max von Laue, Freeman Dyson, David Hilbert, Wilhelm Wien, Satyendra Nath Bose, Arnold Sommerfeld, and others.0
+In the mid-1920s, developments in quantum mechanics led to its becoming the standard formulation for atomic physics.0
+In the summer of 1925, Bohr and Heisenberg published results that closed the old quantum theory.0
+//	has superclass1
+public class Example31
+{1
+	public static void main(String[] args)1
+Out of deference to their particle-like behavior in certain processes and measurements, light quanta came to be called photons (1926).0
+From Einstein's simple postulation was born a flurry of debating, theorizing, and testing.0
+Thus, the entire field of quantum physics emerged, leading to its wider acceptance at the Fifth Solvay Conference in 1927.0
+	{1
+It was found that subatomic particles and electromagnetic waves are neither simply particle nor wave but have certain properties of each.0
+		Rect r1 = new Rect(20, 10);1
+This originated the concept of wave–particle duality.0
+		Rect r2 = r1;1
+		Rect r3 = r1.clone();1
+		System.out.println(r1);1
+While quantum mechanics traditionally described the world of the very small, it is also needed to explain certain recently investigated macroscopic systems such as superconductors, superfluids, and large organic molecules.0
+The word quantum derives from the Latin, meaning "how great" or "how much".0
+		System.out.println(r2);1
+In quantum mechanics, it refers to a discrete unit assigned to certain physical quantities such as the energy of an atom at rest (see Figure 1).0
+		System.out.println(r3);1
+		r1.setLength(30);1
+		System.out.println(r1);1
+		System.out.println(r2);1
+		System.out.println(r3);1
+	}1
+}1
+The discovery that particles are discrete packets of energy with wave-like properties led to the branch of physics dealing with atomic and subatomic systems which is today called quantum mechanics.0
+It underlies the mathematical framework of many fields of physics and chemistry, including condensed matter physics, solid-state physics, atomic physics, molecular physics, computational physics, computational chemistry, quantum chemistry, particle physics, nuclear chemistry, and nuclear physics.0
+class Rect implements Cloneable1
+{1
+	private double length;1
+Some fundamental aspects of the theory are still actively studied.0
+Quantum mechanics is essential to understanding the behavior of systems at atomic length scales and smaller.0
+	private double breadth;1
+If the physical nature of an atom was solely described by classical mechanics, electrons would not orbit the nucleus, since orbiting electrons emit radiation (due to circular motion) and would eventually collide with the nucleus due to this loss of energy.0
+	public Rect(double l, double b)1
+	{1
+		length = l; breadth = b;1
+This framework was unable to explain the stability of atoms.0
+Instead, electrons remain in an uncertain, non-deterministic, smeared, probabilistic wave–particle orbital about the nucleus, defying the traditional assumptions of classical mechanics and electromagnetism.0
+	} 1
+	@Override1
+Quantum mechanics was initially developed to provide a better explanation and description of the atom, especially the differences in the spectra of light emitted by different isotopes of the same chemical element, as well as subatomic particles.0
+In short, the quantum-mechanical atomic model has succeeded spectacularly in the realm where classical mechanics and electromagnetism falter.0
+n the mathematically rigorous formulation of quantum mechanics developed by Paul Dirac, David Hilbert, John von Neumann, and Hermann Weyl, the possible states of a quantum mechanical system are represented by unit vectors (called state vectors).0
+Formally, these reside in a complex separable Hilbert space—variously called the state space or the associated Hilbert space of the system—that is well defined up to a complex number of norm 1 (the phase factor).0
+In other words, the possible states are points in the projective space of a Hilbert space, usually called the complex projective space.0
+	public String toString()1
+The exact nature of this Hilbert space is dependent on the system—for example, the state space for position and momentum states is the space of square-integrable functions, while the state space for the spin of a single proton is just the product of two complex planes.0
+	{1
+		return length + " : " + breadth + "\n";1
+Each observable is represented by a maximally Hermitian (precisely: by a self-adjoint) linear operator acting on the state space.0
+Each eigenstate of an observable corresponds to an eigenvector of the operator, and the associated eigenvalue corresponds to the value of the observable in that eigenstate.0
+	} 1
+If the operator's spectrum is discrete, the observable can attain only those discrete eigenvalues.0
+	public void setLength(double l)1
+In the formalism of quantum mechanics, the state of a system at a given time is described by a complex wave function, also referred to as state vector in a complex vector space.0
+This abstract mathematical object allows for the calculation of probabilities of outcomes of concrete experiments.0
+	{1
+		length = l;1
+For example, it allows one to compute the probability of finding an electron in a particular region around the nucleus at a particular time.0
+	}	1
+Contrary to classical mechanics, one can never make simultaneous predictions of conjugate variables, such as position and momentum, with accuracy.0
+For instance, electrons may be considered (to a certain probability) to be located somewhere within a given region of space, but with their exact positions unknown.0
+Contours of constant probability, often referred to as "clouds", may be drawn around the nucleus of an atom to conceptualize where the electron might be located with the most probability.0
+	@Override1
+	public Rect clone() 1
+Heisenberg's uncertainty principle quantifies the inability to precisely locate the particle given its conjugate momentum.0
+	{1
+		Rect that = null;1
+According to one interpretation, as the result of a measurement the wave function containing the probability information for a system collapses from a given initial state to a particular eigenstate.0
+		try1
+The possible results of a measurement are the eigenvalues of the operator representing the observable—which explains the choice of Hermitian operators, for which all the eigenvalues are real.0
+The probability distribution of an observable in a given state can be found by computing the spectral decomposition of the corresponding operator.0
+Heisenberg's uncertainty principle is represented by the statement that the operators corresponding to certain observables do not commute.0
+		{1
+			that = (Rect)super.clone();1
+The probabilistic nature of quantum mechanics thus stems from the act of measurement.0
+		}1
+This is one of the most difficult aspects of quantum systems to understand.0
+It was the central topic in the famous Bohr-Einstein debates, in which the two scientists attempted to clarify these fundamental principles by way of thought experiments.0
+In the decades after the formulation of quantum mechanics, the question of what constitutes a "measurement" has been extensively studied.0
+Newer interpretations of quantum mechanics have been formulated that do away with the concept of "wavefunction collapse" (see, for example, the relative state interpretation).0
+The basic idea is that when a quantum system interacts with a measuring apparatus, their respective wavefunctions become entangled, so that the original quantum system ceases to exist as an independent entity.0
+For details, see the article on measurement in quantum mechanics.0
+		catch(CloneNotSupportedException e)1
+		{1
+			System.out.println(e);1
+Generally, quantum mechanics does not assign definite values.0
+Instead, it makes a prediction using a probability distribution; that is, it describes the probability of obtaining the possible outcomes from measuring an observable.0
+Often these results are skewed by many causes, such as dense probability clouds.0
+	return 31
+Probability clouds are approximate (but better than the Bohr model) whereby electron location is given by a probability function, the wave function eigenvalue, such that the probability is the squared modulus of the complex amplitude, or quantum state nuclear attraction.0
+Naturally, these probabilities will depend on the quantum state at the "instant" of the measurement.0
+Hence, uncertainty is involved in the value.0
+		}1
+		return that;1
+	}1
+There are, however, certain states that are associated with a definite value of a particular observable.0
+These are known as eigenstates of the observable ("eigen" can be translated from German as meaning "inherent" or "characteristic").0
+In the everyday world, it is natural and intuitive to think of everything (every observable) as being in an eigenstate.0
+}1
+Everything appears to have a definite position, a definite momentum, a definite energy, and a definite time of occurrence.0
+// Wrong design1
+However, quantum mechanics does not pinpoint the exact values of a particle's position and momentum (since they are conjugate pairs) or its energy and time (since they too are conjugate pairs); rather, it provides only a range of probabilities in which that particle might be given its momentum and momentum probability.0
+// subclass cannot support every method of the superclass1
+// this is  a clearly a case of composition and not inheritance1
+Therefore, it is helpful to use different words to describe states having uncertain values and states having definite values (eigenstates).0
+public class Example11
+Usually, a system will not be in an eigenstate of the observable (particle) we are interested in.0
+However, if one measures the observable, the wavefunction will instantaneously be an eigenstate (or "generalized" eigenstate) of that observable.0
+{1
+This process is known as wavefunction collapse, a controversial and much-debated process that involves expanding the system under study to include the measurement device.0
+	public static void main(String[] args1
+	{1
+If one knows the corresponding wave function at the instant before the measurement, one will be able to compute the probability of the wavefunction collapsing into each of the possible eigenstates.0
+For example, the free particle in the previous example will usually have a wavefunction that is a wave packet centered around some mean position x0 (neither an eigenstate of position nor of momentum).0
+When one measures the position of the particle, it is impossible to predict with certainty the result.0
+It is probable, but not certain, that it will be near x0, where the amplitude of the wave function is large.0
+		Room r = new Room();1
+After the measurement is performed, having obtained some result x, the wave function collapses into a position eigenstate centered at x.0
+The time evolution of a quantum state is described by the Schrödinger equation, in which the Hamiltonian (the operator corresponding to the total energy of the system) generates the time evolution.0
+		r.startRotation(); // does room rotate?1
+The time evolution of wave functions is deterministic in the sense that - given a wavefunction at an initial time - it makes a definite prediction of what the wavefunction will be at any later time.0
+	}1
+During a measurement, on the other hand, the change of the initial wavefunction into another, later wavefunction is not deterministic, it is unpredictable (i.0
+}1
+class Fan1
+{1
+ random).0
+	public void startRotation()1
+A time-evolution simulation can be seen here.0
+Wave functions change as time progresses.0
+The Schrödinger equation describes how wavefunctions change in time, playing a role similar to Newton's second law in classical mechanics.0
+The Schrödinger equation, applied to the aforementioned example of the free particle, predicts that the center of a wave packet will move through space at a constant velocity (like a classical particle with no forces acting on it).0
+However, the wave packet will also spread out as time progresses, which means that the position becomes more uncertain with time.0
+	{1
+This also has the effect of turning a position eigenstate (which can be thought of as an infinitely sharp wave packet) into a broadened wave packet that no longer represents a (definite, certain) position eigenstate.0
+Fig.0
+		System.out.println("starts rotating");1
+	}1
+1: Probability densities corresponding to the wavefunctions of an electron in a hydrogen atom possessing definite energy levels (increasing from the top of the image to the bottom: n = 1, 2, 3, .0
+ and angular momenta (increasing across from left to right: s, p, d, .0
+Brighter areas correspond to higher probability density in a position measurement.0
+Such wavefunctions are directly comparable to Chladni's figures of acoustic modes of vibration in classical physics, and are modes of oscillation as well, possessing a sharp energy and, thus, a definite frequency.0
+The angular momentum and energy are quantized, and take only discrete values like those shown (as is the case for resonant frequencies in acoustics).0
+Some wave functions produce probability distributions that are constant, or independent of time—such as when in a stationary state of constant energy, time vanishes in the absolute square of the wave function.0
+}1
+Many systems that are treated dynamically in classical mechanics are described by such "static" wave functions.0
+class Room extends Fan1
+{1
+For example, a single electron in an unexcited atom is pictured classically as a particle moving in a circular trajectory around the atomic nucleus, whereas in quantum mechanics it is described by a static, spherically symmetric wavefunction surrounding the nucleus (Fig.0
+}1
+1) (note, however, that only the lowest angular momentum states, labeled s, are spherically symmetric).0
+// extending provides a single object of superclass in subclass1
+// what if the subclass requires more than one object?1
+The Schrödinger equation acts on the entire probability amplitude, not merely its absolute value.0
+Whereas the absolute value of the probability amplitude encodes information about probabilities, its phase encodes information about the interference between quantum states.0
+// if the subclass has more than one object, interface of one 1
+This gives rise to the "wave-like" behavior of quantum states.0
+//	can be accessed directly. Does the reflect the actual condition?1
+public class Example21
+{1
+	public static void main(String[] args)1
+As it turns out, analytic solutions of the Schrödinger equation are available for only a very small number of relatively simple model Hamiltonians, of which the quantum harmonic oscillator, the particle in a box, the hydrogen molecular ion, and the hydrogen atom are the most important representatives.0
+	{1
+		// line has two points1
+		Line l = new Line(3, 4, 5, 6);1
+		l.disp(); // which point?1
+Even the helium atom—which contains just one more electron than does the hydrogen atom—has defied all attempts at a fully analytic treatment.0
+	}1
+}1
+There exist several techniques for generating approximate solutions, however.0
+class Point1
+In the important method known as perturbation theory, one uses the analytic result for a simple quantum mechanical model to generate a result for a more complicated model that is related to the simpler model by (for one example) the addition of a weak potential energy.0
+Another method is the "semi-classical equation of motion" approach, which applies to systems for which quantum mechanics produces only weak (small) deviations from classical behavior.0
+{1
+These deviations can then be computed based on the classical motion.0
+	private int x;1
+	private int y;1
+	public Point(int x, int y) { this.x = x; this.y = y; }1
+This approach is particularly important in the field of quantum chaos.0
+	public void disp() 1
+	{ 1
+		System.out.println("x : " + x);1
+There exist several techniques for generating approximate solutions, however.0
+In the important method known as perturbation theory, one uses the analytic result for a simple quantum mechanical model to generate a result for a more complicated model that is related to the simpler model by (for one example) the addition of a weak potential energy.0
+		System.out.println("y : " + y);1
+	}1
+Another method is the "semi-classical equation of motion" approach, which applies to systems for which quantum mechanics produces only weak (small) deviations from classical behavior.0
+}1
+// one point by embedding; cannot be directly accessed1
+// one point by extending! can be accessed1
+//	1
+class Line extends Point1
+These deviations can then be computed based on the classical motion.0
+This approach is particularly important in the field of quantum chaos.0
+{1
+The rules of quantum mechanics are fundamental.0
+	private Point other;1
+	public Line(int x1, int y1, int x2, int y2)1
+They assert that the state space of a system is a Hilbert space and that observables of that system are Hermitian operators acting on that space—although they do not tell us which Hilbert space or which operators.0
+	{1
+		super(x1, y1);1
+These can be chosen appropriately in order to obtain a quantitative description of a quantum system.0
+		other = new Point(x2, y2);1
+	}1
+}1
+// limitations of inheritance:1
+//	- only one object of superclass1
+An important guide for making these choices is the correspondence principle, which states that the predictions of quantum mechanics reduce to those of classical mechanics when a system moves to higher energies or, equivalently, larger quantum numbers, i.0
+//	- every method of superclass should be supported by subclass1
+whereas a single particle exhibits a degree of randomness, in systems incorporating millions of particles averaging takes over and, at the high energy limit, the statistical probability of random behaviour approaches zero.0
+//	- binding of subclass to superclass at compile time1
+// room has fans;1
+// each fan can be of different type1
+public class Example31
+In other words, classical mechanics is simply a quantum mechanics of large systems.0
+{1
+This "high energy" limit is known as the classical or correspondence limit.0
+	public static void main(String[] args)1
+One can even start from an established classical model of a particular system, then attempt to guess the underlying quantum model that would give rise to the classical model in the correspondence limit.0
+hen quantum mechanics was originally formulated, it was applied to models whose correspondence limit was non-relativistic classical mechanics.0
+For instance, the well-known model of the quantum harmonic oscillator uses an explicitly non-relativistic expression for the kinetic energy of the oscillator, and is thus a quantum version of the classical harmonic oscillator.0
+	{1
+Early attempts to merge quantum mechanics with special relativity involved the replacement of the Schrödinger equation with a covariant equation such as the Klein–Gordon equation or the Dirac equation.0
+		Room r1 = new Room(new Fan());1
+While these theories were successful in explaining many experimental results, they had certain unsatisfactory qualities stemming from their neglect of the relativistic creation and annihilation of particles.0
+A fully relativistic quantum theory required the development of quantum field theory, which applies quantization to a field (rather than a fixed set of particles).0
+		Room r2 = new Room(new OrnamentalFan());1
+The first complete quantum field theory, quantum electrodynamics, provides a fully quantum description of the electromagnetic interaction.0
+The full apparatus of quantum field theory is often unnecessary for describing electrodynamic systems.0
+A simpler approach, one that has been employed since the inception of quantum mechanics, is to treat charged particles as quantum mechanical objects being acted on by a classical electromagnetic field.0
+For example, the elementary quantum model of the hydrogen atom describes the electric field of the hydrogen atom using a classical \scriptstyle -e^2/(4 \pi\ \epsilon_{_0}\ r) Coulomb potential.0
+This "semi-classical" approach fails if quantum fluctuations in the electromagnetic field play an important role, such as in the emission of photons by charged particles.0
+Quantum field theories for the strong nuclear force and the weak nuclear force have also been developed.0
+The quantum field theory of the strong nuclear force is called quantum chromodynamics, and describes the interactions of subnuclear particles such as quarks and gluons.0
+The weak nuclear force and the electromagnetic force were unified, in their quantized forms, into a single quantum field theory (known as electroweak theory), by the physicists Abdus Salam, Sheldon Glashow and Steven Weinberg.0
+These three men shared the Nobel Prize in Physics in 1979 for this work.0
+It has proven difficult to construct quantum models of gravity, the remaining fundamental force.0
+		Room r3 = new Room(new ThreeBladeFan());1
+Semi-classical approximations are workable, and have led to predictions such as Hawking radiation.0
+		Room r4 = new Room(new FourBladeFan());1
+		r1.rotateFan();1
+		r2.rotateFan();1
+		r3.rotateFan();1
+		r4.rotateFan();1
+However, the formulation of a complete theory of quantum gravity is hindered by apparent incompatibilities between general relativity (the most accurate theory of gravity currently known) and some of the fundamental assumptions of quantum theory.0
+	}1
+}1
+class Fan1
+The resolution of these incompatibilities is an area of active research, and theories such as string theory are among the possible candidates for a future theory of quantum gravity.0
+Classical mechanics has also been extended into the complex domain, with complex classical mechanics exhibiting behaviors similar to quantum mechanics.0
+{1
+redictions of quantum mechanics have been verified experimentally to an extremely high degree of accuracy.0
+According to the correspondence principle between classical and quantum mechanics, all objects obey the laws of quantum mechanics, and classical mechanics is just an approximation for large systems of objects (or a statistical quantum mechanics of a large collection of particles).0
+	public void startRotation()1
+	{1
+The laws of classical mechanics thus follow from the laws of quantum mechanics as a statistical average at the limit of large systems or large quantum numbers.0
+		System.out.println("starts rotating");1
+However, chaotic systems do not have good quantum numbers, and quantum chaos studies the relationship between classical and quantum descriptions in these systems.0
+	}1
+Quantum coherence is an essential difference between classical and quantum theories as illustrated by the Einstein–Podolsky–Rosen (EPR) paradox — an attack on a certain philosophical interpretation of quantum mechanics by an appeal to local realism.0
+}1
+class ThreeBladeFan extends Fan1
+{1
+Quantum interference involves adding together probability amplitudes, whereas classical "waves" infer that there is an adding together of intensities.0
+For microscopic bodies, the extension of the system is much smaller than the coherence length, which gives rise to long-range entanglement and other nonlocal phenomena characteristic of quantum systems.0
+Quantum coherence is not typically evident at macroscopic scales, though an exception to this rule may occur at extremely low temperatures (i.0
+	public void startRotation()1
+approaching absolute zero) at which quantum behavior may manifest itself macroscopically.0
+	{1
+		System.out.println("starts rotating 3 blade fan");1
+	}1
+ big difference between classical and quantum mechanics is that they use very different kinematic descriptions.0
+In Niels Bohr's mature view, quantum mechanical phenomena are required to be experiments, with complete descriptions of all the devices for the system, preparative, intermediary, and finally measuring.0
+}1
+class FourBladeFan extends Fan1
+{1
+	public void startRotation()1
+	{1
+		System.out.println("starts rotating 4 blade fan");1
+The descriptions are in macroscopic terms, expressed in ordinary language, supplemented with the concepts of classical mechanics.0
+	}1
+The initial condition and the final condition of the system are respectively described by values in a configuration space, for example a position space, or some equivalent space such as a momentum space.0
+Quantum mechanics does not admit a completely precise description, in terms of both position and momentum, of an initial condition or "state" (in the classical sense of the word) that would support a precisely deterministic and causal prediction of a final condition.0
+In this sense, advocated by Bohr in his mature writings, a quantum phenomenon is a process, a passage from initial to final condition, not an instantaneous "state" in the classical sense of that word.0
+Thus there are two kinds of processes in quantum mechanics: stationary and transitional.0
+For a stationary process, the initial and final condition are the same.0
+For a transition, they are different.0
+Obviously by definition, if only the initial condition is given, the process is not determined.0
+}1
+Given its initial condition, prediction of its final condition is possible, causally but only probabilistically, because the Schrödinger equation is deterministic for wave function evolution, but the wave function describes the system only probabilistically.0
+class OrnamentalFan extends Fan1
+For many experiments, it is possible to think of the initial and final conditions of the system as being a particle.0
+{1
+	public void startRotation()1
+	{1
+		System.out.println("starts rotating ornamental fan");1
+	}1
+}1
+// Room has a Fan 1
+In some cases it appears that there are potentially several spatially distinct pathways or trajectories by which a particle might pass from initial to final condition.0
+// you can also support multiple fans1
+class Room 1
+It is an important feature of the quantum kinematic description that it does not permit a unique definite statement of which of those pathways is actually followed.0
+Only the initial and final conditions are definite, and, as stated in the foregoing paragraph, they are defined only as precisely as allowed by the configuration space description or its equivalent.0
+In every case for which a quantum kinematic description is needed, there is always a compelling reason for this restriction of kinematic precision.0
+{1
+An example of such a reason is that for a particle to be experimentally found in a definite position, it must be held motionless; for it to be experimentally found to have a definite momentum, it must have free motion; these two are logically incompatible.0
+Classical kinematics does not primarily demand experimental description of its phenomena.0
+It allows completely precise description of an instantaneous state by a value in phase space, the Cartesian product of configuration and momentum spaces.0
+This description simply assumes or imagines a state as a physically existing entity without concern about its experimental measurability.0
+	private Fan fan; // this can be anytype of fan; no committment here1
+Such a description of an initial condition, together with Newton's laws of motion, allows a precise deterministic and causal prediction of a final condition, with a definite trajectory of passage.0
+Hamiltonian dynamics can be used for this.0
+Classical kinematics also allows the description of a process analogous to the initial and final condition description used by quantum mechanics.0
+	// has other things like light, clock ...; not shown!1
+Lagrangian mechanics applies to this.0
+	public Room(Fan fan)1
+For processes that need account to be taken of actions of a small number of Planck constants, classical kinematics is not adequate; quantum mechanics is needed.0
+ven with the defining postulates of both Einstein's theory of general relativity and quantum theory being indisputably supported by rigorous and repeated empirical evidence, and while they do not directly contradict each other theoretically (at least with regard to their primary claims), they have proven extremely difficult to incorporate into one consistent, cohesive model.0
+	{1
+Einstein himself is well known for rejecting some of the claims of quantum mechanics.0
+While clearly contributing to the field, he did not accept many of the more "philosophical consequences and interpretations" of quantum mechanics, such as the lack of deterministic causality.0
+He is famously quoted as saying, in response to this aspect, "My God does not play with dice".0
+He also had difficulty with the assertion that a single subatomic particle can occupy numerous areas of space at one time.0
+		this.fan = fan;1
+However, he was also the first to notice some of the apparently exotic consequences of entanglement, and used them to formulate the Einstein–Podolsky–Rosen paradox in the hope of showing that quantum mechanics had unacceptable implications if taken as a complete description of physical reality.0
+This was 1935, but in 1964 it was shown by John Bell (see Bell inequality) that - although Einstein was correct in identifying seemingly paradoxical implications of quantum mechanical nonlocality - these implications could be experimentally tested.0
+	}1
+	public void rotateFan()1
+	{1
+		fan.startRotation();1
+Alain Aspect's initial experiments in 1982, and many subsequent experiments since, have definitively verified quantum entanglement.0
+According to the paper of J.0
+	}1
+Bell and the Copenhagen interpretation—the common interpretation of quantum mechanics by physicists since 1927 - and contrary to Einstein's ideas, quantum mechanics was not, at the same time a "realistic" theory and a "local" theory.0
+The Einstein–Podolsky–Rosen paradox shows in any case that there exist experiments by which one can measure the state of one particle and instantaneously change the state of its entangled partner - although the two particles can be an arbitrary distance apart.0
+However, this effect does not violate causality, since no transfer of information happens.0
+}1
+Quantum entanglement forms the basis of quantum cryptography, which is used in high-security commercial applications in banking and government.0
+Gravity is negligible in many areas of particle physics, so that unification between general relativity and quantum mechanics is not an urgent issue in those particular applications.0
+However, the lack of a correct theory of quantum gravity is an important issue in cosmology and the search by physicists for an elegant "Theory of Everything" (TOE).0
+Consequently, resolving the inconsistencies between both theories has been a major goal of 20th and 21st century physics.0
+// line and points1
+Many prominent physicists, including Stephen Hawking, have labored for many years in the attempt to discover a theory underlying everything.0
+This TOE would combine not only the different models of subatomic physics, but also derive the four fundamental forces of nature - the strong force, electromagnetism, the weak force, and gravity - from a single force or phenomenon.0
+While Stephen Hawking was initially a believer in the Theory of Everything, after considering Gödel's Incompleteness Theorem, he has concluded that one is not obtainable, and has stated so publicly in his lecture "Gödel and the End of Physics" (2002).0
+he quest to unify the fundamental forces through quantum mechanics is still ongoing.0
+public class Example41
+{1
+	public static void main(String[] args)1
+	{1
+Quantum electrodynamics (or "quantum electromagnetism"), which is currently (in the perturbative regime at least) the most accurately tested physical theory in competition with general relativity,[unreliable source?](blog) has been successfully merged with the weak nuclear force into the electroweak force and work is currently being done to merge the electroweak and strong force into the electrostrong force.0
+Current predictions state that at around 1014 GeV the three aforementioned forces are fused into a single unified field.0
+Beyond this "grand unification", it is speculated that it may be possible to merge gravity with the other three gauge symmetries, expected to occur at roughly 1019 GeV.0
+However — and while special relativity is parsimoniously incorporated into quantum electrodynamics — the expanded general relativity, currently the best theory describing the gravitation force, has not been fully incorporated into quantum theory.0
+		// line has two points1
+One of those searching for a coherent TOE is Edward Witten, a theoretical physicist who formulated the M-theory, which is an attempt at describing the supersymmetrical based string theory.0
+M-theory posits that our apparent 4-dimensional spacetime is, in reality, actually an 11-dimensional spacetime containing 10 spatial dimensions and 1 time dimension, although 7 of the spatial dimensions are - at lower energies - completely "compactified" (or infinitely curved) and not readily amenable to measurement or probing.0
+Another popular theory is Loop quantum gravity (LQG), a theory first proposed by Carlo Rovelli that describes the quantum properties of gravity.0
+		Line l = new Line(3, 4, 5, 6);1
+It is also a theory of quantum space and quantum time, because in general relativity the geometry of spacetime is a manifestation of gravity.0
+		l.dispOne();  1
+LQG is an attempt to merge and adapt standard quantum mechanics and standard general relativity.0
+		l.dispTwo();  1
+The main output of the theory is a physical picture of space where space is granular.0
+	}1
+The granularity is a direct consequence of the quantization.0
+}1
+It has the same nature of the granularity of the photons in the quantum theory of electromagnetism or the discrete levels of the energy of the atoms.0
+class Point1
+{1
+	private int x;1
+But here it is space itself which is discrete.0
+More precisely, space can be viewed as an extremely fine fabric or network "woven" of finite loops.0
+These networks of loops are called spin networks.0
+The evolution of a spin network over time is called a spin foam.0
+The predicted size of this structure is the Planck length, which is approximately 1.0
+16×10−35 m.0
+	private int y;1
+According to theory, there is no meaning to length shorter than this (cf.0
+	public Point(int x, int y) { this.x = x; this.y = y; }1
+Planck scale energy).0
+Therefore, LQG predicts that not just matter, but also space itself, has an atomic structure.0
+	public void disp() 1
+	{ 1
+ince its inception, the many counter-intuitive aspects and results of quantum mechanics have provoked strong philosophical debates and many interpretations.0
+Even fundamental issues, such as Max Born's basic rules concerning probability amplitudes and probability distributions, took decades to be appreciated by society and many leading scientists.0
+		System.out.println("x : " + x);1
+Richard Feynman once said, "I think I can safely say that nobody understands quantum mechanics.0
+		System.out.println("y : " + y);1
+	}1
+ According to Steven Weinberg, "There is now in my opinion no entirely satisfactory interpretation of quantum mechanics.0
+}1
+The Copenhagen interpretation - due largely to the Danish theoretical physicist Niels Bohr - remains the quantum mechanical formalism that is currently most widely accepted amongst physicists, some 75 years after its enunciation.0
+According to this interpretation, the probabilistic nature of quantum mechanics is not a temporary feature which will eventually be replaced by a deterministic theory, but instead must be considered a final renunciation of the classical idea of "causality.0
+ It is also believed therein that any well-defined application of the quantum mechanical formalism must always make reference to the experimental arrangement, due to the conjugate nature of evidence obtained under different experimental situations.0
+Albert Einstein, himself one of the founders of quantum theory, rejected the quantum theoretical doctrine that the state of a system depends on the experimental arrangement for its measurement.0
+// both points by embedding	1
+He held that underlying quantum mechanics there should be a theory that thoroughly and directly expresses the rule against action at a distance; in other words, he insisted on the principle of locality.0
+He inferred that the present theory was incomplete, contrary to the Copenhagen doctrine that it is complete.0
+He therefore produced a series of objections, the most famous of which has become known as the Einstein–Podolsky–Rosen paradox.0
+John Bell showed that this "EPR" paradox led to experimentally testable differences between quantum mechanics and theories that rely on added hidden variables.0
+Experiments have been performed confirming the accuracy of quantum mechanics, thereby demonstrating that quantum mechanics cannot be improved upon by addition of hidden variables.0
+class Line 1
+{1
+	private Point one;1
+	private Point two;1
+	public Line(int x1, int y1, int x2, int y2)1
+The Bohr-Einstein debates provide a vibrant critique of the Copenhagen Interpretation from an epistemological point of view.0
+The Everett many-worlds interpretation, formulated in 1956, holds that all the possibilities described by quantum theory simultaneously occur in a multiverse composed of mostly independent parallel universes.0
+	{1
+		one = new Point(x1, y1);1
+		two = new Point(x2, y2);1
+This is not accomplished by introducing some "new axiom" to quantum mechanics, but on the contrary, by removing the axiom of the collapse of the wave packet.0
+All of the possible consistent states of the measured system and the measuring apparatus (including the observer) are present in a real physical - not just formally mathematical, as in other interpretations - quantum superposition.0
+	}1
+Such a superposition of consistent state combinations of different systems is called an entangled state.0
+While the multiverse is deterministic, we perceive non-deterministic behavior governed by probabilities, because we can only observe the universe (i.0
+	public void dispOne()1
+ the consistent state contribution to the aforementioned superposition) that we, as observers, inhabit.0
+Everett's interpretation is perfectly consistent with John Bell's experiments and makes them intuitively understandable.0
+However, according to the theory of quantum decoherence, these "parallel universes" will never be accessible to us.0
+The inaccessibility can be understood as follows: once a measurement is done, the measured system becomes entangled with both the physicist who measured it and a huge number of other particles, some of which are photons flying away at the speed of light towards the other end of the universe.0
+	{1
+In order to prove that the wave function did not collapse, one would have to bring all these particles back and measure them again, together with the system that was originally measured.0
+Not only is this completely impractical, but even if one could theoretically do this, it would have to destroy any evidence that the original measurement took place (including the physicist's memory).0
+In light of these Bell tests, Cramer (1986) formulated his transactional interpretation.0
+		one.disp();1
+	}1
+	public void dispTwo()1
+	{1
+Relational quantum mechanics appeared in the late 1990s as the modern derivative of the Copenhagen Interpretation.0
+		two.disp();1
+uantum mechanics has had enormous success in explaining many of the features of our universe.0
+	}1
+Quantum mechanics is often the only tool available that can reveal the individual behaviors of the subatomic particles that make up all forms of matter (electrons, protons, neutrons, photons, and others).0
+}1
+public class One1
+Quantum mechanics has strongly influenced string theories, candidates for a Theory of Everything (see reductionism).0
+{1
+Quantum mechanics is also critically important for understanding how individual atoms combine covalently to form molecules.0
+The application of quantum mechanics to chemistry is known as quantum chemistry.0
+Relativistic quantum mechanics can, in principle, mathematically describe most of chemistry.0
+	public void foo()1
+Quantum mechanics can also provide quantitative insight into ionic and covalent bonding processes by explicitly showing which molecules are energetically favorable to which others and the magnitudes of the energies involved.0
+Furthermore, most of the calculations performed in modern computational chemistry rely on quantum mechanics.0
+	{1
+		System.out.println("foo of Test of MyLib");1
+	}1
+}1
+public class One1
+{1
+ great deal of modern technological inventions operate at a scale where quantum effects are significant.0
+Examples include the laser, the transistor (and thus the microchip), the electron microscope, and magnetic resonance imaging (MRI).0
+	public void foo()1
+	{1
+		System.out.println("foo of Test of MyLib1");1
+	}1
+}1
+// directory MyLib has One.class1
+The study of semiconductors led to the invention of the diode and the transistor, which are indispensable parts of modern electronics systems and devices.0
+Researchers are currently seeking robust methods of directly manipulating quantum states.0
+// directory MyLib1 has one.class1
+// Which One will be used here?1
+// depends on CLASSPATH1
+// how to avoid clash of names?1
+Efforts are being made to more fully develop quantum cryptography, which will theoretically allow guaranteed secure transmission of information.0
+A more distant goal is the development of quantum computers, which are expected to perform certain computational tasks exponentially faster than classical computers.0
+// use the concept of package1
+public class Example21
+Instead of using classical bits, quantum computers use qubits, which can be in superpositions of states.0
+{1
+Another active research topic is quantum teleportation, which deals with techniques to transmit quantum information over arbitrary distances.0
+Quantum tunneling is vital to the operation of many devices.0
+Even in the simple light switch, the electrons in the electric current could not penetrate the potential barrier made up of a layer of oxide without quantum tunneling.0
+	public static void main(String[] args)1
+Flash memory chips found in USB drives use quantum tunneling to erase their memory cells.0
+While quantum mechanics primarily applies to the smaller atomic regimes of matter and energy, some systems exhibit quantum mechanical effects on a large scale.0
+Superfluidity, the frictionless flow of a liquid at temperatures near absolute zero, is one well-known example.0
+	{1
+		One test = new One();1
+		test.foo();1
+	}1
+So is the closely related phenomenon of superconductivity, the frictionless flow of an electron gas in a conducting material (an electric current) at sufficiently low temperatures.0
+Quantum theory also provides accurate descriptions for many previously unexplained phenomena, such as black-body radiation and the stability of the orbitals of electrons in atoms.0
+}1
+public class Test1
+{1
+	public void foo()1
+	{1
+		System.out.println("foo of Test");1
+	}1
+}1
+import MyLib;1
+import MyLib1;1
+public class Example31
+{1
+	public static void main(String[] args)1
+	{1
+		MyLib.One x = new MyLib.One();1
+		x.foo();1
+		MyLib1.One y = new MyLib1.One();1
+		y.foo();1
+	}1
+}1
+public class Example31
+{1
+	public static void main(String[] args)1
+	{1
+		MyLib.One x = new MyLib.One();1
+		x.foo();1
+		MyLib1.One y = new MyLib1.One();1
+		y.foo();1
+	}1
+}1
+import MyLib.One;1
+public class Example41
+{1
+	public static void main(String[] args)1
+	{1
+		One x = new One();1
+		x.foo();1
+		MyLib1.One y = new MyLib1.One();1
+		y.foo();1
+	}1
+}1
+import MyLib.One;1
+import MyLib1.One; // Error1
+public class Example51
+{1
+	public static void main(String[] args)1
+	{1
+		One x = new One();1
+		x.foo();1
+		One y = new One();1
+		y.foo();1
+	}1
+}1
+// non static inner class1
+// every inner class object refers to an outer class object1
+//	has an outer this1
+public class Example11
+{1
+	public static void main(String[] args)1
+	{1
+		Domain d1 = new Domain("RainBow");1
+		Domain.member m1 = d1.new member("john");1
+		Domain.member m2 = d1.new member("peter");1
+		Domain d2 = new Domain("Sea");1
+		Domain.member m3 = d2.new member("mary");1
+		m1.disp();1
+		m2.disp();1
+		m3.disp();1
+	}1
+}1
+// show the limitation1
+//	types are fixed; cannot work on any type of array1
+//	Or type could be made Object - then only reference types can be used1
