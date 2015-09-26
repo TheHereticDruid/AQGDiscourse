@@ -789,9 +789,8 @@ def genTrueFalse(num):
 				rand= random.randint(0, 1)
 				tfSentences.append(remBrackets(resSentences[i]))
 				sentnumb_map[8].append([i])
-				rand=0
 				if(rand== 0):
-					negate(tfSentences[-1], i, just, eM, rn=1)
+					negate(tfSentences[-1], i, just, eM)
 				else:
 					all_questions.append([tfSentences[-1]+ " True/False?"+just, 8, 1+eM, i+eM, "True"])	#Direct True False
 					j+= 1
