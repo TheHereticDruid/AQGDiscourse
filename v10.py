@@ -410,7 +410,14 @@ def calcFreq():
 		for i in result['coref']:
 			for j in i:
 				if(j[0][3] > j[1][3] and j[0][1]!= j[1][1]):
-					resSentences[j[0][1]]= resSentences[j[0][1]].replace(j[0][0], j[1][0])
+					flag4= 0
+					for k in j[1][0].split():
+						if(k in resSentences[j[0][1]].split()):
+							flag4= 1
+							break
+
+					if(flag4== 0):
+						resSentences[j[0][1]]= resSentences[j[0][1]].replace(j[0][0], j[1][0])
 
 
 	for i in resSentences:
@@ -782,8 +789,9 @@ def genTrueFalse(num):
 				rand= random.randint(0, 1)
 				tfSentences.append(remBrackets(resSentences[i]))
 				sentnumb_map[8].append([i])
+				rand=0
 				if(rand== 0):
-					negate(tfSentences[-1], i, just, eM)
+					negate(tfSentences[-1], i, just, eM, rn=1)
 				else:
 					all_questions.append([tfSentences[-1]+ " True/False?"+just, 8, 1+eM, i+eM, "True"])	#Direct True False
 					j+= 1
@@ -1336,7 +1344,6 @@ def pronoun_resolution():
 
 						if(sim not in all_questions[i][0]):
 							flag4= 0
-							print "Here: ------------------------------------", sim.split(), all_questions[i][0].split()
 							for i in sim.split():
 								if(i in all_questions[i][0].split()):
 									flag4= 1
