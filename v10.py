@@ -42,15 +42,18 @@ import inflect
 
 
 #Setting stanford environment variables
+cFp=open("config.txt","r")
+cFr=cFp.read().split("\n")
+cFp.close()
 
-os.environ['STANFORD_PARSER'] = '/home/anirudh/jars'
-os.environ['STANFORD_MODELS'] = '/home/anirudh/jars'
+os.environ['STANFORD_PARSER'] = cFr[0].split(":")[1]
+os.environ['STANFORD_MODELS'] = cFr[1].split(":")[1]
 
 
 ############################################# Class initializations ############################################################
 
 stemmer = SnowballStemmer("english")
-parser = stanford.StanfordParser(model_path="/home/anirudh/englishPCFG.ser.gz")
+parser = stanford.StanfordParser(model_path=cFr[2].split(":")[1])
 
 class StanfordNLP:
     def __init__(self):
@@ -156,10 +159,10 @@ def coreference():
 # Function To Draw The Decision Tree For Programming Languages, Tag All Lines As Natural Or Not, And Make A List Of Non-Naturals
 def decisionTree():
 
-	fp= open("decision.pickle", "r")	#Set To Language Specific File
+	fp= open(cFr[3].split(":")[1], "r")	#Set To Language Specific File
 	tree= ast.literal_eval(fp.read().strip())
 	fp.close()
-	fp=open("args.pickle","r")
+	fp=open(cFr[4].split(":")[1],"r")
 	start=fp.read().strip().split("\n")
 	dt= Decision(tree= tree, start=[float(i) for i in start])	#Also Set Start Here
 	b= []
@@ -641,32 +644,40 @@ def titling():
 
 	context= newContext
 
-	newContext= {}
+	combineList= []
 	keys= context.keys()
-	
-	# for k in range(len(keys)):
+	for i in range(len(keys)):
+		for j in range(len(keys[i+1:])):
+			if keys[i].find(keys[j+i+1])>=0 or keys[j+i+1].find(keys[i])>=0:
+				if nounCount(keys[i])==nounCount(keys[j+i+1]):
+					flg2=0
+					for kt in range(len(combineList)):
+						if i in combineList[kt]:
+							combineList[kt].append(j+i+1)
+							flg2=1
+						elif j+i+1 in combineList[kt]:
+							combineList[kt].append(i)
+							flg2=1
+					if not flg2:
+						combineList.append([i,j+i+1])
+	dL=[]
+	newContext={}
+	for it in combineList:
+		for jt in it:
+			if newContext.get(keys[it[0]],"_empty")=="_empty":
+				newContext[keys[it[0]]]=[]
+			newContext[keys[it[0]]]+=context[keys[jt]]
+			dL.append(keys[jt])
+	for k, v in context.items():
+		if k not in dL:
+			newContext[k]=v
 
-	# 	tags= nltk.pos_tag(nltk.word_tokenize(keys[k1]))
-	# 	count= 0
-	# 	for w, t in tags:
-	# 		if(re.search("NN.*", t)):
-	# 			count+= 1
-
-	# 	keys[k]= [keys[k], count]
-
-
-	# for k1 in range(len(keys)):
-	# 	flag= 0
-	# 	for k2 in range(k1+1, len(keys)):
-	# 		words= keys[k1][0].split(" ")
-	# 		for word in words:
-	# 			if(word in keys[k2][0].split(" ") and keys[k1][1]== keys[k2][1]):
-	# 				flag= 1
-	# 				common= word
-	# 				break
-
-	# 		if()
-	# 		newContext[word]= 
+	print "\nTitling\n"
+	for k,v in newContext.items():
+		print "Context Phrase",k,"\nSentences Are:\n"
+		for it in v:
+			print sentences[it]
+		print ""
 
 #Get Sentences Which Haven't Been Made Into Questions Yet
 def othersNumb():
@@ -818,9 +829,9 @@ def genTrueFalse(num):
 				tfSentences.append(remBrackets(resSentences[i]))
 				sentnumb_map[8].append([i])
 				if(rand== 0):
-					negate(tfSentences[-1], i, just, eM)
+					negate(synReplace(tfSentences[-1]), i, just, eM)
 				else:
-					all_questions.append([tfSentences[-1]+ " True/False?"+just, 8, 1+eM, i+eM, "True"])	#Direct True False
+					all_questions.append([synReplace(tfSentences[-1])+ " True/False?"+just, 8, 1+eM, i+eM, "True"])	#Direct True False
 					j+= 1
 
 	
@@ -2138,7 +2149,8 @@ def remExtras():
 		all_questions[it][0]=re.sub("  +", " ", all_questions[it][0])
 	for it in range(len(all_questions)):
 		if all_questions[it][1]<8:
-			all_questions[it][0]=reCase(all_questions[it][0]).strip()
+			all_questions[it][0]=reCase(all_questions[it][0].strip())
+			all_questions[it][0]=synReplace(all_questions[it][0])
 
 def quoteBreak(lst):
 	flag=""
@@ -2202,27 +2214,31 @@ def shiftCase(w,c):
 				retWord+=i
 	return retWord
 
-def synReplace(s):
+def synReplace(s, c=1):
 	words=[]
 	tags=[]
 	sents=nltk.sent_tokenize(s)
 	for st in sents:
 		for word, tag in nltk.pos_tag(nltk.word_tokenize(s)):
-			if re.search("JJ.?", tag):
+			if re.search("JJ.?|RB.?", tag):
 				words.append(word)
 				tags.append(tag)
 	for wt in range(len(words)):
 		rep=synRep(words[wt], tags[wt])
 		if rep!=words[wt]:
 			s= s.replace(words[wt], rep)
-			break
+			c-=1
+			if c==0:
+				break
 	return s
 
 def synRep(w, t):
 	if t.find("JJ")==0:
 		sets=[jt for jt in wn.synsets(w) if jt.name().split(".")[1]=="a"]
+	elif(w.lower()!="not"):
+		sets=[jt for jt in wn.synsets(w) if jt.name().split(".")[1]=="r"]
 	else:
-		sets=[jt for jt in wn.synsets(w) if jt.name().split(".")[1]=="n"]
+		sets=[]
 	for it in sets:
 		for jt in it.lemmas():
 			rep=jt.name()
@@ -2240,6 +2256,19 @@ def synRep(w, t):
 					return rep
 				continue
 	return w
+
+def nounCount(w):
+	tags=[tag for word, tag in nltk.pos_tag(nltk.word_tokenize(w))]
+	nC=0
+	pt=0
+	for it in tags:
+		if re.search("NN.*", it):
+			if pt!=1:
+				pt=1
+				nC+=1
+		else:
+			pt=0
+	return nC
 
 genRegex()
 sentensify()
