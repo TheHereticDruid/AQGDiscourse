@@ -597,48 +597,76 @@ def titling():
 
 	if "coref" in result:
 		for i in result['coref']:
-			for j in i:
+			l= []
+			sennum= [i[0][1][1]]
+			for j in range(len(i)):
+				if(j==0):
+					l.append(i[j][0][0])
+					l.append(i[j][1][0])
+					sennum.append(i[j][0][1])
+					sennum.append(i[j][1][1])
+				else:
+					l.append(i[j][0][0])
+					sennum.append(i[j][0][1])
 
-				val= j[1][0][0].upper()+ j[1][0][1:]
-				if(context.get(val, 'empty')== 'empty'):
-					context[val]= [j[1][1]]	#List Each NP With Its Coreferences, From The Common coref Data 
-				context[val].append(j[0][1])
+			flag= 0
+			sub= ""
+			for j in l:
+				tags= nltk.pos_tag(nltk.word_tokenize(j))
+				for word, tag in tags:
+					if(re.search("NN.*", tag)):
+						flag= 1
+						sub= j
+						break
+				if(flag):
+					break
 
-	i= -1
-	print context
-	for k, v in context.items():
-		i+= 1
+			if(sub!= ""):
+				context[sub]= sorted(list(set(sennum)))
+
+	for k in context.keys():
+
 		tags= nltk.pos_tag(nltk.word_tokenize(k))
 		flag= 0
+		s= ""
 		for word, tag in tags:
-			if(not re.search("NN.*", tag)):
+			if(re.search("NN.*|JJ.*|VB.*", tag) and flag==0):
 				flag= 1
-				break
 
-		if(flag== 0):
-			newContext[k]= v
-		
+			if(flag== 1):
+				s+= word+ " "
+		s= s[0].upper()+ s[1:-1]
+
+		newContext[s]= context[k]
+
+	context= newContext
+
+	newContext= {}
+	keys= context.keys()
 	
-	if(not newContext):
+	# for k in range(len(keys)):
 
-		#If there are no pronouns being resolved, this dictionary will be empty.
-		#So, we assume that then, the first sentence will contain the context.
+	# 	tags= nltk.pos_tag(nltk.word_tokenize(keys[k1]))
+	# 	count= 0
+	# 	for w, t in tags:
+	# 		if(re.search("NN.*", t)):
+	# 			count+= 1
 
-		tags= nltk.pos_tag(nltk.word_tokenize(sentences[0]))
-		for word, tag in tags:
-			if(re.search("NN.*", tag)):
-				newContext[word]= range(len(sentences))
-				break
+	# 	keys[k]= [keys[k], count]
 
-	#Print
-	print "------------------Titling-----------------------\n"
-	for k, v in newContext.items():
-		newContext[k]= sorted(list(set(v)))
-		print "Title: ", k
-		print "Sentences: "
-		for val in newContext[k]:
-			print sentences[val]
-		print "\n"
+
+	# for k1 in range(len(keys)):
+	# 	flag= 0
+	# 	for k2 in range(k1+1, len(keys)):
+	# 		words= keys[k1][0].split(" ")
+	# 		for word in words:
+	# 			if(word in keys[k2][0].split(" ") and keys[k1][1]== keys[k2][1]):
+	# 				flag= 1
+	# 				common= word
+	# 				break
+
+	# 		if()
+	# 		newContext[word]= 
 
 #Get Sentences Which Haven't Been Made Into Questions Yet
 def othersNumb():
