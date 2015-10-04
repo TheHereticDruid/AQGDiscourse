@@ -103,6 +103,7 @@ gapfill_Sentences= []
 tfSentences= []
 equation_sentences= []
 program_sentences= []
+groupableSet=[]
 others= []
 
 prev= []
@@ -204,7 +205,7 @@ def chain(braces):
 	#If A Later Block Starts With An Indented Line, Attach To The Previous Block
 	i= 1
 	while(i < len(tmp)):
-		print resSentences[tmp[i][0]]
+		# print resSentences[tmp[i][0]]
 		if(obj.indent(resSentences[tmp[i][0]])):
 			iV=tmp[i-1][1]
 			jV=tmp[i][0]
@@ -593,6 +594,12 @@ def genGapFill():
 
 #Function To Title And Group Sentences.
 def titling():
+	groupableSet=[]
+	for k,v in sentnumb_map.items():
+		if int(k)<=7:
+			for vt in v:
+				groupableSet+=vt
+	groupableSet+=rem
 
 	prev= ""
 	context= {}
@@ -678,6 +685,39 @@ def titling():
 		for it in v:
 			print sentences[it]
 		print ""
+	usedSet=[]
+	for k,v in newContext.items():
+		usedSet+=v
+	unusedSet=list(set(groupableSet)-set(usedSet))
+	# print unusedSet
+	titleDict={}
+	discourseDict={}
+	for jt in set(groupableSet):
+		if titleDict.get(jt, "_empty")=="_empty":
+			titleDict[jt]=[]
+		if jt in unusedSet:
+			titleDict[jt]=titleDict[jt-1]
+		else:
+			for k,v in newContext.items():
+				if jt in v:
+					titleDict[jt].append(k)
+	for k,v in sentnumb_map.items():
+		if k<=7:
+			temp=[]
+			for vt in v:
+				temp+=vt
+			temp=set(temp)
+			for tt in temp:
+				if discourseDict.get(tt, "_empty")=="_empty":
+					discourseDict[tt]=[]
+				discourseDict[tt].append(k)
+	for k in titleDict.keys():
+		if discourseDict.get(k, "_empty")=="_empty":
+			discourseDict[k]=[-1]
+	print "\nTitleDict", titleDict
+	print "DiscourseDict", discourseDict
+	print
+
 
 #Get Sentences Which Haven't Been Made Into Questions Yet
 def othersNumb():
@@ -1456,10 +1496,9 @@ def cluster(sentences):
 						print "Exception"
 
 					
-
 	curr= contradictory_sentences+ additive_sentences+ concluding_sentences+ emphasis_sentences+ illustrate_sentences+ why_sentences+ when_sentences+ discuss_sentences
 	tmp= []
-	for i in curr:
+	for i in curr+equation_sentences:
 		for j in i:
 			tmp.append(j)
 	others= list(set(sentences)- set(tmp))
