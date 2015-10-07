@@ -1536,15 +1536,17 @@ def genDiscussQuestions():
 		for word, tag in tags:
 			if(re.search("VB.*", tag) and flag==0):
 				s+= en.verb.present_participle(word)+ " "	#Convert The Main Verb To Present Participle
-				flag=1
-			else:
+				if not en.verb.present_participle(word)==word:
+					flag=1
+			elif not re.search("MD", tag):
 				s+= word+ " "
 
 		if(s!= "" and s[-2]!= "."):
 			s= s[:-1]+"."
-
-		all_questions.append(["Discuss about "+s, 7, 5, sentnumb_map[7][i][0], -1])	#Add To All Questions
-
+		if flag:
+			all_questions.append(["Discuss about "+s, 7, 5, sentnumb_map[7][i][0], -1])	#Add To All Questions
+		else:
+			all_questions.append([s+" Discuss.", 7, 5, sentnumb_map[7][i][0], -1])	#Add To All Questions
 
 ################################################# genwhenQuestions ###############################################################
 # Function used to generate why questions
@@ -1703,12 +1705,13 @@ def genIllustrativeQuestions():
 
 						s= ""
 						tmp= None
+						frag=0
 						for word, tag in tags:
 							
-							if(re.search("VB.*", tag)):
+							if(re.search("VB.*", tag) and not frag):
 								tmp= word
-
-							else:
+								frag=1
+							elif(not re.search("MD", tag)):
 								if(tmp):
 									tmp= en.verb.present_participle(tmp)	#If Previous Word Was Verb, Make It Present Participle Before Adding Both
 									s+= tmp+" "+ word+ " "
@@ -1727,13 +1730,14 @@ def genIllustrativeQuestions():
 				tags= nltk.pos_tag(nltk.word_tokenize(s))
 				s= ""
 				tmp= None
+				frag=0
 				for word, tag in tags:
 
 					
-					if(re.search("VB.*", tag)):
+					if(re.search("VB.*", tag) and not frag):
 						tmp= word
-
-					else:
+						frag=1
+					elif(not re.search("MD", tag)):
 						if(tmp!="safe" and tmp):
 							tmp= en.verb.present_participle(tmp)
 							s+= tmp+" "+ word+ " "
