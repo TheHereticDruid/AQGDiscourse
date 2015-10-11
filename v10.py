@@ -602,10 +602,14 @@ def getSubject(node):
 	for i in node:
 
 		if(type(i)== nltk.tree.Tree):
-			if(i.label()== "S"):
+			if(i.label()== "NP"):
 				return i
+			elif(i.label()== "S"):
+				return i
+			
 			else:
 				return getSubject(i)
+
 
 
 #Function To Title And Group Sentences.
@@ -621,13 +625,16 @@ def titling():
 
 		sub= getSubject(tree[0])
 		
-		for node in sub:
-			if(node.label()!= "NP"):
-				continue
+		if(sub!= None and sub.label()== "S"):
+			for node in sub:
+				if(node.label()== "NP"):
+					title.append([i, " ".join(node.leaves())])
+					break					
 
-			else:
-				title.append([i, " ".join(node.leaves())])
-				break
+		elif(sub!= None and sub.label()== "NP"):
+			title.append([i, " ".join(sub.leaves())])
+
+
 
 	# groupableSet=[]
 	# for k,v in sentnumb_map.items():
@@ -751,7 +758,7 @@ def titling():
 	# 		discourseDict[k]=[-1]
 
 	for i in range(len(title)):
-		if(re.search("there", title[i][1], re.I) and i>0):
+		if((re.search("there", title[i][1], re.I) or re.search("they", title[i][1], re.I)) and i>0):
 			titleDict[title[i][0]]= [title[i-1][1]]
 		else:
 			titleDict[title[i][0]]= [title[i][1]]
