@@ -1515,7 +1515,7 @@ def cluster(sentences):
 									temp= sentences[s-1: s+1]
 									temp2= [s-1, s]
 
-							elif(all_discourse[i][j].search('Although')):	#Contradictory
+							elif(all_discourse[i][j].search('Although', re.I)):	#Contradictory
 								temp= [sentences[s]]
 								temp2= [s]
 
@@ -1768,8 +1768,8 @@ def genIllustrativeQuestions():
 
 			else:	#Marker Is At The Start Of The Sentence
 
-				s= genPreSentence(sentnumb_map[4][i][0])
-				tags= nltk.pos_tag(nltk.word_tokenize(s))
+				ns= genPreSentence(sentnumb_map[4][i][0])
+				tags= nltk.pos_tag(nltk.word_tokenize(ns))
 				s= ""
 				tmp= None
 				frag=0
@@ -1791,7 +1791,7 @@ def genIllustrativeQuestions():
 				if(s!= "" and len(s.split())<= 15):		
 					all_questions.append(["Give an illustration for "+ s, 4, 2, sentnumb_map[4][i][0], " ".join(sentences[sentnumb_map[4][i][0]: sentnumb_map[4][i][-1]+1])])	#Make The Question Similarly
 				elif(s!= ""):		
-					all_questions.append([s[0].upper()+ s[1:]+ " Give an illustration.", 4, 2, sentnumb_map[4][i][0], " ".join(sentences[sentnumb_map[4][i][0]: sentnumb_map[4][i][-1]+1])])	#Make The Question Similarly
+					all_questions.append([ns[0].upper()+ ns[1:]+ " Give an illustration.", 4, 2, sentnumb_map[4][i][0], " ".join(sentences[sentnumb_map[4][i][0]: sentnumb_map[4][i][-1]+1])])	#Make The Question Similarly
 
 
 
@@ -2031,11 +2031,14 @@ def genContQuestionTerms():
 		details= d[discmark.lower()]
 		if(l== 1):
 			sen= s[0].split(discmark)[details[0]-1]
+			if(re.search("although", discmark, re.I)):
+				sen= sen.split(",")[0]+"."
 
 		else:
-			sen= s[details[0]-1]
+			sen= s[details[0]-1]+"."
 
 		tags= nltk.pos_tag(nltk.word_tokenize(sen))
+		print tags
 		sen=""
 		for word, tag in tags:
 			if not re.search("RB", tag):
@@ -2044,7 +2047,7 @@ def genContQuestionTerms():
 		if(sen[-1] != "."):
 			sen= sen+ "."
 
-		qterms.append(sen)
+		qterms.append(remPunct(sen))
 		# sen= parser.raw_parse_sents((sen, ""))
 
 		# tree= Tree("root", sen)
