@@ -2066,56 +2066,11 @@ def genContQuestion():
 
 def genContQuestionTerms():
 
-	# fp= open("targetarg.txt", "r")
-	# d= fp.read().strip("\n")
-
-	# d= ast.literal_eval(d)
-
-	# global curr
-	# for s in contradictory_sentences:		
-	# 	for dm in all_discourse[0]:
-	# 		res= dm.search(' '.join(s))
-	# 		if(res):
-	# 			discmark= res.group()
-	# 			break
-	# 	l= len(s)
-
-	# 	discmark= discmark.replace("\b", "")
-	# 	discmark= discmark.replace(",", "")
-
-	# 	details= d[discmark.lower()]
-	# 	if(l== 1):
-	# 		sen= s[0].split(discmark)[details[0]-1]
-	# 		if(re.search("although", discmark, re.I)):
-	# 			sen= sen.split(",")[0]+"."
-
-	# 	else:
-	# 		sen= s[details[0]-1]+"."
-
-	# 	tags= nltk.pos_tag(nltk.word_tokenize(sen))
-	# 	print tags
-	# 	sen=""
-	# 	for word, tag in tags:
-	# 		if not re.search("RB", tag):
-	# 			sen+=word+" "
-	# 	sen=sen[:-1]
-	# 	if(sen[-1] != "."):
-	# 		sen= sen+ "."
-
-	# 	qterms.append(remPunct(sen))
-		# sen= parser.raw_parse_sents((sen, ""))
-
-		# tree= Tree("root", sen)
-		# curr= ""
-
-
-		# treegen(tree[0], details[1])
-
 	fp= open("targetarg.txt", "r")
 	d= fp.read().strip("\n")
 
 	d= ast.literal_eval(d)
-
+	print "D", d
 	global curr
 	for s in contradictory_sentences:
 		for dm in all_discourse[0]:
@@ -2127,18 +2082,21 @@ def genContQuestionTerms():
 		discmark= discmark.replace("\b", "")
 		discmark= discmark.replace(",", "")
 
-		details= d[discmark.lower()]
+		# details= d[discmark.lower()]
+		for k, v in d.items():
+			if re.search(k, discmark):
+				details=v
 		if(l==1):
 			sen= s[0].split(discmark)
 			if(re.search("although", discmark, re.I)):
 				sen= sen[details[0]-1].split(",")[0]+"."
-			elif sen[details[0]-1].strip()[-1]==",":
+			elif sen[details[0]-1].strip()[-1]=="," and sen[-1][0]==",":
 				sen=sen[details[0]-1].strip()[:-1]+sen[-1].strip(",")
+			else:
+				sen=sen[details[0]-1].strip()[:-1]
 		else:
 			sen= s[details[0]-1]+"."
-
 		tags= nltk.pos_tag(nltk.word_tokenize(sen))
-		print tags
 		sen=""
 		for word, tag in tags:
 			if not re.search("RB", tag):
