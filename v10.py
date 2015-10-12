@@ -596,16 +596,60 @@ def genGapFill():
 
 	sentnumb_map[9]= copy.deepcopy(lst)
 
-
 def getSubject(node):
 
-	for i in node:
+	lst= []
+	if(type(node)== nltk.tree.Tree):
+		if(re.search("S[^Y]*", node.label())):
+			lst.append(node)
+		
+		for j in node:
+			lst.extend(getSubject(j))
 
+	return lst
+
+def findNP(node):
+
+	al= []
+	l= []
+	for i in node:
 		if(type(i)== nltk.tree.Tree):
-			if(i.label()== "S"):
-				return i
-			else:
-				return getSubject(i)
+			al.append(i)
+			l.append(i.label())
+
+	if("NP" in l and "VP" in l):
+		ind= l.index("NP")
+		return " ".join(al[ind].leaves())
+
+
+# def getSubject(node):
+
+# 	lst= []
+# 	if(type(node)== nltk.tree.Tree):
+# 		if(node.label()== "S"):
+# 			lst.append(node)
+		
+# 		else:
+# 			for j in node:
+# 				lst.extend(getSubject(j))
+
+# 	return lst
+
+# def findNP(node):
+
+# 	flag= 0
+# 	for i in node:
+# 		if(i.label()== "NP"):
+# 			print i.left_siblings(), i.right_siblings()
+# 			flag=1
+# 			np= " ".join(i.leaves())
+# 			break
+# 	if(flag== 1):
+# 		return np
+
+# 	else:
+# 		for i in node:
+# 			return findNP(i)
 
 
 #Function To Title And Group Sentences.
@@ -619,15 +663,19 @@ def titling():
 
 		tree= Tree("root", s)
 
-		sub= getSubject(tree[0])
-		
-		for node in sub:
-			if(node.label()!= "NP"):
-				continue
+		sub= ""
+		for k in tree[0]:
+			sub= getSubject(k)
+			break
 
-			else:
-				title.append([i, " ".join(node.leaves())])
-				break
+		if(sub!= ""):
+			subtmp= []
+			for k in sub:
+				res= findNP(k)
+				if(res):
+					subtmp.append(res)
+		
+			title.append([i, list(set(subtmp))])
 
 	# groupableSet=[]
 	# for k,v in sentnumb_map.items():
@@ -719,7 +767,7 @@ def titling():
 	# 	print "Context Phrase",k,"\nSentences Are:\n"
 	# 	for it in v:
 	# 		print sentences[it]
-	# 	print ""
+	# 	print ""	
 	# usedSet=[]
 	# for k,v in newContext.items():
 	# 	usedSet+=v
@@ -751,10 +799,17 @@ def titling():
 	# 		discourseDict[k]=[-1]
 
 	for i in range(len(title)):
-		if(re.search("there", title[i][1], re.I) and i>0):
-			titleDict[title[i][0]]= [title[i-1][1]]
-		else:
-			titleDict[title[i][0]]= [title[i][1]]
+		for j in range(len(title[i][1])):
+			if((re.search("there", title[i][1][j], re.I) or re.search("they", title[i][1][j], re.I)) and i>0):
+				if(titleDict.get(title[i][0], "empty")== "empty"):
+					titleDict[title[i][0]]= [title[i-1][1][j]]
+				else:
+					titleDict[title[i][0]].append(title[i-1][1][j])
+			else:
+				if(titleDict.get(title[i][0], "empty")== "empty"):
+					titleDict[title[i][0]]=[title[i][1][j]]
+				else:
+					titleDict[title[i][0]].append(title[i][1][j])
 
 	print "\nTitleDict", titleDict
 	print "DiscourseDict", discourseDict
@@ -2011,29 +2066,74 @@ def genContQuestion():
 
 def genContQuestionTerms():
 
+	# fp= open("targetarg.txt", "r")
+	# d= fp.read().strip("\n")
+
+	# d= ast.literal_eval(d)
+
+	# global curr
+	# for s in contradictory_sentences:		
+	# 	for dm in all_discourse[0]:
+	# 		res= dm.search(' '.join(s))
+	# 		if(res):
+	# 			discmark= res.group()
+	# 			break
+	# 	l= len(s)
+
+	# 	discmark= discmark.replace("\b", "")
+	# 	discmark= discmark.replace(",", "")
+
+	# 	details= d[discmark.lower()]
+	# 	if(l== 1):
+	# 		sen= s[0].split(discmark)[details[0]-1]
+	# 		if(re.search("although", discmark, re.I)):
+	# 			sen= sen.split(",")[0]+"."
+
+	# 	else:
+	# 		sen= s[details[0]-1]+"."
+
+	# 	tags= nltk.pos_tag(nltk.word_tokenize(sen))
+	# 	print tags
+	# 	sen=""
+	# 	for word, tag in tags:
+	# 		if not re.search("RB", tag):
+	# 			sen+=word+" "
+	# 	sen=sen[:-1]
+	# 	if(sen[-1] != "."):
+	# 		sen= sen+ "."
+
+	# 	qterms.append(remPunct(sen))
+		# sen= parser.raw_parse_sents((sen, ""))
+
+		# tree= Tree("root", sen)
+		# curr= ""
+
+
+		# treegen(tree[0], details[1])
+
 	fp= open("targetarg.txt", "r")
 	d= fp.read().strip("\n")
 
 	d= ast.literal_eval(d)
 
 	global curr
-	for s in contradictory_sentences:		
+	for s in contradictory_sentences:
 		for dm in all_discourse[0]:
 			res= dm.search(' '.join(s))
 			if(res):
 				discmark= res.group()
 				break
 		l= len(s)
-
 		discmark= discmark.replace("\b", "")
 		discmark= discmark.replace(",", "")
 
 		details= d[discmark.lower()]
-		if(l== 1):
-			sen= s[0].split(discmark)[details[0]-1]
+		if(l==1):
+			sen= s[0].split(discmark)
 			if(re.search("although", discmark, re.I)):
-				sen= sen.split(",")[0]+"."
-
+				sen= sen[details[0]-1].split(",")[0]+"."
+			elif sen[details[0]-1].strip()[-1]==",":
+				sen=sen[details[0]-1].strip()[:-1]+sen[-1].strip(",")
 		else:
 			sen= s[details[0]-1]+"."
 
@@ -2048,13 +2148,6 @@ def genContQuestionTerms():
 			sen= sen+ "."
 
 		qterms.append(remPunct(sen))
-		# sen= parser.raw_parse_sents((sen, ""))
-
-		# tree= Tree("root", sen)
-		# curr= ""
-
-
-		# treegen(tree[0], details[1])
 
 
 ################################################# treegen ########################################################################
