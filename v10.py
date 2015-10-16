@@ -37,6 +37,7 @@ from decision import *
 from features import *
 from nltk.corpus import wordnet as wn
 import inflect
+from titling import *
 
 #################################################################################################################################
 
@@ -64,6 +65,8 @@ class StanfordNLP:
         return json.loads(self.server.parse(text))
 
 obj=Features()
+nlp = StanfordNLP()
+tokenizer = nltk.data.load('tokenizers/punkt/english.pickle')
 # brown_tagged_sents = brown.tagged_sents(categories='news')
 # brown_sents = brown.sents(categories='news')
 # unigram_tagger = nltk.UnigramTagger(brown_tagged_sents)
@@ -116,6 +119,9 @@ sentences_map= {0: contradictory_sentences, 1: additive_sentences, 2: concluding
  4: illustrate_sentences, 5: why_sentences, 6: when_sentences, 7: discuss_sentences, 8: tfSentences, 9: gapfill_Sentences, 
  11: equation_sentences, 12: program_sentences}
 
+sentences_mapstr= {0: "Contradiction-", 1: "Addition-", 2: "Conclusion-", 3: "Emphasis-", 4: "Illustrate-", 5: "Reasoning-",
+ 6: "Explanation-", 7: "Discussion-"}
+
 #Maps sentence numbers to each selected split sentence.
 sentnumb_map= {0: [], 1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7:[], 8: [], 9: [], 11: [], 12: []}
 
@@ -153,7 +159,6 @@ def coreference():
 
 	text= ' '.join(sentences)
 
-	nlp = StanfordNLP()
 	result = nlp.parse(text)
 
 
@@ -402,7 +407,6 @@ def calcFreq():
 	global termRel
 	global termFreq
 	global resSentences
-	global titleList
 	#global unigram_tagger
 
 	termRel= {}
@@ -410,7 +414,7 @@ def calcFreq():
 	termFreq= {}
 	words= []
 
-	titleList= sentences
+	# titleList= sentences
 	resSentences= sentences
 	if "coref" in result:
 		for i in result['coref']:
@@ -425,8 +429,8 @@ def calcFreq():
 					if(flag4== 0):
 						resSentences[j[0][1]]= resSentences[j[0][1]].replace(j[0][0], j[1][0])
 
-				if(len(j[1][0].split(" "))== 1 or j[0][1]!= j[1][1]):
-					titleList[j[0][1]]= titleList[j[0][1]].replace(j[0][0], j[1][0])
+				# if(len(j[1][0].split(" "))== 1 or j[0][1]!= j[1][1]):
+				# 	titleList[j[0][1]]= titleList[j[0][1]].replace(j[0][0], j[1][0])
 
 
 	for i in resSentences:
@@ -655,166 +659,403 @@ def findNP(node):
 #Function To Title And Group Sentences.
 def titling():
 
-	title= []
+	global titleList
+	previou= 0
+	
 
-	for i in range(len(titleList)):
+	titleforall= []
 
-		s= parser.raw_parse_sents((resSentences[i], ""))
+	data= divide()
 
-		tree= Tree("root", s)
+	for para in data:
 
-		sub= ""
-		for k in tree[0]:
-			sub= getSubject(k)
-			break
+		title= []
+		resultPara = nlp.parse(" ".join(para))
 
-		if(sub!= ""):
-			subtmp= []
-			for k in sub:
-				res= findNP(k)
-				if(res):
-					subtmp.append(res)
-		
-			title.append([i, list(set(subtmp))])
-
-	# groupableSet=[]
-	# for k,v in sentnumb_map.items():
-	# 	if int(k)<=7:
-	# 		for vt in v:
-	# 			groupableSet+=vt
-	# groupableSet+=rem
-
-	# prev= ""
-	# context= {}
-	# newContext= {}
-
-	# if "coref" in result:
-	# 	for i in result['coref']:
-	# 		l= []
-	# 		sennum= [i[0][1][1]]
-	# 		for j in range(len(i)):
-	# 			if(j==0):
-	# 				l.append(i[j][0][0])
-	# 				l.append(i[j][1][0])
-	# 				sennum.append(i[j][0][1])
-	# 				sennum.append(i[j][1][1])
-	# 			else:
-	# 				l.append(i[j][0][0])
-	# 				sennum.append(i[j][0][1])
-
-	# 		flag= 0
-	# 		sub= ""
-	# 		for j in l:
-	# 			tags= nltk.pos_tag(nltk.word_tokenize(j))
-	# 			for word, tag in tags:
-	# 				if(re.search("NN.*", tag)):
-	# 					flag= 1
-	# 					sub= j
-	# 					break
-	# 			if(flag):
-	# 				break
-
-	# 		if(sub!= ""):
-	# 			context[sub]= sorted(list(set(sennum)))
-
-	# for k in context.keys():
-
-	# 	tags= nltk.pos_tag(nltk.word_tokenize(k))
-	# 	flag= 0
-	# 	s= ""
-	# 	for word, tag in tags:
-	# 		if(re.search("NN.*|JJ.*|VB.*", tag) and flag==0):
-	# 			flag= 1
-
-	# 		if(flag== 1):
-	# 			s+= word+ " "
-	# 	s= s[0].upper()+ s[1:-1]
-
-	# 	newContext[s]= context[k]
-
-	# context= newContext
-
-	# combineList= []
-	# keys= context.keys()
-	# for i in range(len(keys)):
-	# 	for j in range(len(keys[i+1:])):
-	# 		if keys[i].find(keys[j+i+1])>=0 or keys[j+i+1].find(keys[i])>=0:
-	# 			if nounCount(keys[i])==nounCount(keys[j+i+1]):
-	# 				flg2=0
-	# 				for kt in range(len(combineList)):
-	# 					if i in combineList[kt]:
-	# 						combineList[kt].append(j+i+1)
-	# 						flg2=1
-	# 					elif j+i+1 in combineList[kt]:
-	# 						combineList[kt].append(i)
-	# 						flg2=1
-	# 				if not flg2:
-	# 					combineList.append([i,j+i+1])
-	# dL=[]
-	# newContext={}
-	# for it in combineList:
-	# 	for jt in it:
-	# 		if newContext.get(keys[it[0]],"_empty")=="_empty":
-	# 			newContext[keys[it[0]]]=[]
-	# 		newContext[keys[it[0]]]+=context[keys[jt]]
-	# 		dL.append(keys[jt])
-	# for k, v in context.items():
-	# 	if k not in dL:
-	# 		newContext[k]=v
-
-	# print "\nTitling\n"
-	# for k,v in newContext.items():
-	# 	print "Context Phrase",k,"\nSentences Are:\n"
-	# 	for it in v:
-	# 		print sentences[it]
-	# 	print ""	
-	# usedSet=[]
-	# for k,v in newContext.items():
-	# 	usedSet+=v
-	# unusedSet=list(set(groupableSet)-set(usedSet))
-	# print unusedSet
-	titleDict={}
-	discourseDict={}
-	# for jt in set(groupableSet):
-	# 	if titleDict.get(jt, "_empty")=="_empty":
-	# 		titleDict[jt]=[]
-	# 	if jt in unusedSet:
-	# 		titleDict[jt]=titleDict[jt-1]
-	# 	else:
-	# 		for k,v in newContext.items():
-	# 			if jt in v:
-	# 				titleDict[jt].append(k)
-	# for k,v in sentnumb_map.items():
-	# 	if k<=7:
-	# 		temp=[]
-	# 		for vt in v:
-	# 			temp+=vt
-	# 		temp=set(temp)
-	# 		for tt in temp:
-	# 			if discourseDict.get(tt, "_empty")=="_empty":
-	# 				discourseDict[tt]=[]
-	# 			discourseDict[tt].append(k)
-	# for k in titleDict.keys():
-	# 	if discourseDict.get(k, "_empty")=="_empty":
-	# 		discourseDict[k]=[-1]
-
-	for i in range(len(title)):
-		for j in range(len(title[i][1])):
-			if((re.search("there", title[i][1][j], re.I) or re.search("they", title[i][1][j], re.I)) and i>0):
-				if(titleDict.get(title[i][0], "empty")== "empty"):
-					titleDict[title[i][0]]= [title[i-1][1][j]]
-				else:
-					titleDict[title[i][0]].append(title[i-1][1][j])
+		res= tokenizer.tokenize(" ".join(para))
+		newsen= []
+		for i in range(len(res)):
+			if("\n" in res[i]):
+				tmp= res[i].split("\n")
+				newtmp= [j for j in tmp if j != ""]
+				newsen+= newtmp
 			else:
-				if(titleDict.get(title[i][0], "empty")== "empty"):
-					titleDict[title[i][0]]=[title[i][1][j]]
+				newsen+= [res[i]]
+
+		res= newsen
+
+		titleList= res
+		if "coref" in resultPara:
+			for i in resultPara['coref']:
+				for j in i:
+					if(len(j[1][0].split(" "))== 1 or j[0][1]!= j[1][1]):
+						titleList[j[0][1]]= titleList[j[0][1]].replace(j[0][0], j[1][0])
+
+		print titleList
+
+		for i in range(len(titleList)):
+
+			s= parser.raw_parse_sents((titleList[i], ""))
+
+			tree= Tree("root", s)
+
+			sub= ""
+			for k in tree[0]:
+				sub= getSubject(k)
+				break
+
+			if(sub!= ""):
+				subtmp= []
+				for k in sub:
+					res= findNP(k)
+					if(res):
+						subtmp.append(res)
+			
+				title.append([i, list(set(subtmp))])
+
+		# groupableSet=[]
+		# for k,v in sentnumb_map.items():
+		# 	if int(k)<=7:
+		# 		for vt in v:
+		# 			groupableSet+=vt
+		# groupableSet+=rem
+
+		# prev= ""
+		# context= {}
+		# newContext= {}
+
+		# if "coref" in result:
+		# 	for i in result['coref']:
+		# 		l= []
+		# 		sennum= [i[0][1][1]]
+		# 		for j in range(len(i)):
+		# 			if(j==0):
+		# 				l.append(i[j][0][0])
+		# 				l.append(i[j][1][0])
+		# 				sennum.append(i[j][0][1])
+		# 				sennum.append(i[j][1][1])
+		# 			else:
+		# 				l.append(i[j][0][0])
+		# 				sennum.append(i[j][0][1])
+
+		# 		flag= 0
+		# 		sub= ""
+		# 		for j in l:
+		# 			tags= nltk.pos_tag(nltk.word_tokenize(j))
+		# 			for word, tag in tags:
+		# 				if(re.search("NN.*", tag)):
+		# 					flag= 1
+		# 					sub= j
+		# 					break
+		# 			if(flag):
+		# 				break
+
+		# 		if(sub!= ""):
+		# 			context[sub]= sorted(list(set(sennum)))
+
+		# for k in context.keys():
+
+		# 	tags= nltk.pos_tag(nltk.word_tokenize(k))
+		# 	flag= 0
+		# 	s= ""
+		# 	for word, tag in tags:
+		# 		if(re.search("NN.*|JJ.*|VB.*", tag) and flag==0):
+		# 			flag= 1
+
+		# 		if(flag== 1):
+		# 			s+= word+ " "
+		# 	s= s[0].upper()+ s[1:-1]
+
+		# 	newContext[s]= context[k]
+
+		# context= newContext
+
+		# combineList= []
+		# keys= context.keys()
+		# for i in range(len(keys)):
+		# 	for j in range(len(keys[i+1:])):
+		# 		if keys[i].find(keys[j+i+1])>=0 or keys[j+i+1].find(keys[i])>=0:
+		# 			if nounCount(keys[i])==nounCount(keys[j+i+1]):
+		# 				flg2=0
+		# 				for kt in range(len(combineList)):
+		# 					if i in combineList[kt]:
+		# 						combineList[kt].append(j+i+1)
+		# 						flg2=1
+		# 					elif j+i+1 in combineList[kt]:
+		# 						combineList[kt].append(i)
+		# 						flg2=1
+		# 				if not flg2:
+		# 					combineList.append([i,j+i+1])
+		# dL=[]
+		# newContext={}
+		# for it in combineList:
+		# 	for jt in it:
+		# 		if newContext.get(keys[it[0]],"_empty")=="_empty":
+		# 			newContext[keys[it[0]]]=[]
+		# 		newContext[keys[it[0]]]+=context[keys[jt]]
+		# 		dL.append(keys[jt])
+		# for k, v in context.items():
+		# 	if k not in dL:
+		# 		newContext[k]=v
+
+		# print "\nTitling\n"
+		# for k,v in newContext.items():
+		# 	print "Context Phrase",k,"\nSentences Are:\n"
+		# 	for it in v:
+		# 		print sentences[it]
+		# 	print ""	
+		# usedSet=[]
+		# for k,v in newContext.items():
+		# 	usedSet+=v
+		# unusedSet=list(set(groupableSet)-set(usedSet))
+		# print unusedSet
+		titleDict={}
+		discourseDict= {}
+		# for jt in set(groupableSet):
+		# 	if titleDict.get(jt, "_empty")=="_empty":
+		# 		titleDict[jt]=[]
+		# 	if jt in unusedSet:
+		# 		titleDict[jt]=titleDict[jt-1]
+		# 	else:
+		# 		for k,v in newContext.items():
+		# 			if jt in v:
+		# 				titleDict[jt].append(k)
+		# for k,v in sentnumb_map.items():
+		# 	if k<=7:
+		# 		temp=[]
+		# 		for vt in v:
+		# 			temp+=vt
+		# 		temp=set(temp)
+		# 		for tt in temp:
+		# 			if discourseDict.get(tt, "_empty")=="_empty":
+		# 				discourseDict[tt]=[]
+		# 			discourseDict[tt].append(k)
+		# for k in titleDict.keys():
+		# 	if discourseDict.get(k, "_empty")=="_empty":
+		# 		discourseDict[k]=[-1]
+
+		for i in range(len(title)):
+			for j in range(len(title[i][1])):
+				if((re.search("there", title[i][1][j], re.I) or re.search("they", title[i][1][j], re.I)) and i>0):
+					if(titleDict.get(title[i][0], "empty")== "empty"):
+						titleDict[title[i][0]]= [title[i-1][1][j]]
+					else:
+						titleDict[title[i][0]].append(title[i-1][1][j])
 				else:
-					titleDict[title[i][0]].append(title[i][1][j])
+					if(titleDict.get(title[i][0], "empty")== "empty"):
+						titleDict[title[i][0]]=[title[i][1][j]]
+					else:
+						titleDict[title[i][0]].append(title[i][1][j])
 
-	print "\nTitleDict", titleDict
-	print "DiscourseDict", discourseDict
-	print
+		
+		for k in titleDict.keys():
+			titleDict[k]= list(set(titleDict[k]))
 
+
+		for k,v in sentnumb_map.items():
+			if k<=7:
+				temp=[]
+				for vt in v:
+					temp+=vt
+				temp=set(temp)
+				for tt in temp:
+					if discourseDict.get(tt, "_empty")=="_empty":
+						discourseDict[tt]=[]
+					discourseDict[tt].append(k)
+		for k in titleDict.keys():
+			if discourseDict.get(k, "_empty")=="_empty":
+				discourseDict[k]=[-1]
+		print "DISC", discourseDict
+
+		print "Title dict= \n", titleDict
+		#print "DiscourseDict", discourseDict
+		print
+
+		depDict, dSen= dependency(titleDict)
+		print "Dependency dict\n", depDict
+		print "dSen\n", dSen
+		titleDict, depDict= combine(depDict, titleDict, dSen)
+		print "TD",titleDict
+		print "DD",depDict
+
+
+		st= previou
+		end= previou+len(para)-1
+
+		dms= []
+		for k in range(st, end+1):
+			for c in discourseDict[k]:
+				dms.append(c)
+
+		dms= [i for i in dms if i!= -1]
+
+		if(dms== []):
+			maxdm= ""
+		else:
+			maxdm= reduce(lambda x, y: x if dms.count(x)>dms.count(y) else y, dms)
+			maxdm= sentences_mapstr[maxdm]
+		
+
+		maxlen= 0
+		maxlis= []
+		for k, v in depDict.items():
+			if(len(v) > maxlen):
+				maxlen= len(v)
+				maxlis= v
+
+		tmp= reduce(lambda x, y: x if len(x)<len(y) else y, maxlis)
+		tags= nltk.pos_tag(nltk.word_tokenize(tmp))
+		w= ""
+		flag=0
+		for word, tag in tags:
+			if re.search("NN.*", tag):
+				flag= 1
+			if(flag):
+				w+= word+ " "
+		w= w[0].upper()+ w[1:-1]
+
+		if(maxdm!= ""):
+			titleforall.append(maxdm+ " " +w)
+		else:
+			titleforall.append(w)
+
+	print titleforall
+
+
+def getNNs(s):
+
+	tags= nltk.pos_tag(nltk.word_tokenize(s+ "."))
+	l= []
+	for word, tag in tags:
+		if(re.search("NN.*", tag)):
+			l.append(word)
+
+	return l
+
+
+def combine(depDict, titleDict, dSen):
+
+	# newDep= {}
+
+	# for k, v in depDict.items():
+	# 	nns= []
+	# 	for val in range(len(v)):
+
+	# 		tmp= []
+	# 		for w in res[k][val]["words"]:
+	# 			if(w[0] in depDict[k][va]):
+	# 				pos= w[1]["PartOfSpeech"]
+	# 				if(re.search("NN.*", pos)):
+	# 					tmp.append(w[0])
+
+	# 		nns.append(tmp)
+
+	for k, v in depDict.items():
+		tmp1=[]
+		tmp2=[]
+		nns=[]
+		for vt in v:
+			nns.append(getNNs(vt))
+		for vt1 in range(len(v)):
+			for vt2 in range(vt1+1,len(v)):
+				if nns[vt1]==nns[vt2]:
+					for jt in range(len(tmp1)):
+						if v[vt1] in tmp1[jt]:
+							tmp1[jt].append(v[vt2])
+							tmp2[jt].append(dSen[k][vt2])
+							break
+					else:
+						tmp1.append([v[vt1],v[vt2]])
+						tmp2.append([dSen[k][vt1],dSen[k][vt2]])
+		tmp3=[]
+		for it in range(len(tmp1)):
+			tmp3.append(reduce(lambda x, y: x if len(x)<len(y) else y,tmp1[it]))
+		for it in range(len(tmp1)):
+			for jt in range(len(tmp1[it])):
+				if tmp1[it][jt] in titleDict[tmp2[it][jt]]:
+					titleDict[tmp2[it][jt]][titleDict[tmp2[it][jt]].index(tmp1[it][jt])]=tmp3[it]
+				if tmp1[it][jt] in depDict[k] and tmp1[it][jt]!=tmp3[it]:
+					while(depDict[k].count(tmp1[it][jt])>0):
+						del depDict[k][depDict[k].index(tmp1[it][jt])]
+
+	for k, v in depDict.items():
+		depDict[k]= list(set(depDict[k]))
+
+	for k, v in titleDict.items():
+		titleDict[k]= list(set(titleDict[k]))
+
+	return titleDict, depDict
+
+
+def dependency(titleDict):
+
+	newD= {}
+	resAll= {}
+	newDsen= {}
+	# for k in titleDict.keys():
+	# 	l+= titleDict[k]
+
+	# l= list(set(l))
+	nlp = StanfordNLP()
+
+	print titleList
+	print titleDict
+	for k, v in titleDict.items():
+	
+		res = nlp.parse(titleList[k])
+
+		r= res["sentences"][0]
+		res= r["dependencies"]
+		l= []
+		for i in res:
+			if(re.search(".subj.*", str(i[0]))):
+				l.append(i)
+
+		for val in range(len(v)):
+			for i in range(len(l)):
+				if(l[i][-1] in v[val]):
+					if(newD.get(l[i][-1], "empty")== "empty"):
+						newD[l[i][-1]]= []
+					if(resAll.get(l[i][-1], "empty")== "empty"):
+						resAll[l[i][-1]]= []
+					if(newDsen.get(l[i][-1], "empty")== "empty"):
+						newDsen[l[i][-1]]= []
+
+					
+					newD[l[i][-1]].append(v[val])
+					resAll[l[i][-1]].append(r)
+					newDsen[l[i][-1]].append(k)
+
+			
+			
+		# print "res= ", res
+		# for i in res:
+		# 	if(str(i[0])== "nsubj"):
+		# 		p= []
+		# 		for j in range(len(l)):
+		# 			if(i[-1] in l[j]):
+		# 				if(newD.get(i[-1], "empty")== "empty"):
+		# 					newD[i[-1]]= []
+		# 				if(l[j] not in newD[i[-1]]):
+		# 					newD[i[-1]].append(l[j])
+		# 				p.append(j)
+
+		# 		newL= []
+		# 		for j in range(len(l)):
+		# 			if(j not in p):
+		# 				newL.append(l[j])
+
+		# 		l= newL
+
+
+	# newnewd= {}
+
+	# for k, v in newD.items():
+	# 	newnewd[k]= list(set(v))
+
+	# newD= copy.deepcopy(newnewd)
+
+	return newD, newDsen
 
 #Get Sentences Which Haven't Been Made Into Questions Yet
 def othersNumb():
@@ -1196,7 +1437,7 @@ def sentensify():
 	global sentences
 	global equation_sentences
 
-	tokenizer = nltk.data.load('tokenizers/punkt/english.pickle')
+	
 	fp = open("input.txt")
 	data = fp.read()
 
@@ -2070,7 +2311,6 @@ def genContQuestionTerms():
 	d= fp.read().strip("\n")
 
 	d= ast.literal_eval(d)
-	print "D", d
 	global curr
 	for s in contradictory_sentences:
 		for dm in all_discourse[0]:
@@ -2082,6 +2322,7 @@ def genContQuestionTerms():
 		discmark= discmark.replace("\b", "")
 		discmark= discmark.replace(",", "")
 
+		discmark= discmark.lower()
 		# details= d[discmark.lower()]
 		for k, v in d.items():
 			if re.search(k, discmark):
@@ -2099,7 +2340,7 @@ def genContQuestionTerms():
 		tags= nltk.pos_tag(nltk.word_tokenize(sen))
 		sen=""
 		for word, tag in tags:
-			if not re.search("RB", tag):
+			if not re.search("RB$", tag):
 				sen+=word+" "
 		sen=sen[:-1]
 		if(sen[-1] != "."):
