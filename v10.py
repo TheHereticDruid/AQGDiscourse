@@ -660,14 +660,18 @@ def findNP(node):
 def titling():
 
 	global titleList
+	global titleforall
 	previou= 0
 	
 
 	titleforall= []
+	firstsen= []
 
 	data= divide()
 
 	for para in data:
+
+		firstsen.append(para[0])
 
 		title= []
 		resultPara = nlp.parse(" ".join(para))
@@ -834,13 +838,23 @@ def titling():
 		# 	if discourseDict.get(k, "_empty")=="_empty":
 		# 		discourseDict[k]=[-1]
 
-		for i in range(len(title)):
+
+		for j in range(len(title[0][1])):
+			if((re.search("there", title[0][1][j], re.I) or re.search("they", title[0][1][j], re.I)) and i>0):
+				titleDict[title[0][0]]= [""]
+			else:
+				if(titleDict.get(title[0][0], "empty")== "empty"):
+					titleDict[title[0][0]]=[title[0][1][j]]
+				else:
+					titleDict[title[0][0]].append(title[0][1][j])
+
+		for i in range(1, len(title)):
 			for j in range(len(title[i][1])):
 				if((re.search("there", title[i][1][j], re.I) or re.search("they", title[i][1][j], re.I)) and i>0):
 					if(titleDict.get(title[i][0], "empty")== "empty"):
 						titleDict[title[i][0]]= [title[i-1][1][j]]
 					else:
-						titleDict[title[i][0]].append(title[i-1][1][j])
+						titleDict[title[i][0]]= title[i-1][1]
 				else:
 					if(titleDict.get(title[i][0], "empty")== "empty"):
 						titleDict[title[i][0]]=[title[i][1][j]]
@@ -865,18 +879,18 @@ def titling():
 		for k in titleDict.keys():
 			if discourseDict.get(k, "_empty")=="_empty":
 				discourseDict[k]=[-1]
-		print "DISC", discourseDict
+		#print "DISC", discourseDict
 
-		print "Title dict= \n", titleDict
+		#print "Title dict= \n", titleDict
 		#print "DiscourseDict", discourseDict
-		print
+		#print
 
 		depDict, dSen= dependency(titleDict)
-		print "Dependency dict\n", depDict
-		print "dSen\n", dSen
+		# print "Dependency dict\n", depDict
+		# print "dSen\n", dSen
 		titleDict, depDict= combine(depDict, titleDict, dSen)
-		print "TD",titleDict
-		print "DD",depDict
+		# print "TD",titleDict
+		# print "DD",depDict
 
 
 		st= previou
@@ -896,30 +910,57 @@ def titling():
 			maxdm= sentences_mapstr[maxdm]
 		
 
-		maxlen= 0
-		maxlis= []
-		for k, v in depDict.items():
-			if(len(v) > maxlen):
-				maxlen= len(v)
-				maxlis= v
-
-		tmp= reduce(lambda x, y: x if len(x)<len(y) else y, maxlis)
-		tags= nltk.pos_tag(nltk.word_tokenize(tmp))
 		w= ""
-		flag=0
-		for word, tag in tags:
-			if re.search("NN.*", tag):
-				flag= 1
-			if(flag):
-				w+= word+ " "
-		w= w[0].upper()+ w[1:-1]
+
+		for v in titleDict[0]:
+			if(v!= [""] and para[0].index(v)== 0):
+				w= v
+				break
+
+		if(w== ""):
+			maxlen= 0
+			maxlis= []
+			for k, v in depDict.items():
+				if(len(v) > maxlen):
+					maxlen= len(v)
+					maxlis= v
+
+			tmp= reduce(lambda x, y: x if len(x)<len(y) else y, maxlis)
+			tags= nltk.pos_tag(nltk.word_tokenize(tmp))
+			flag=0
+			for word, tag in tags:
+				if re.search("NN.*", tag):
+					flag= 1
+				if(flag):
+					w+= word+ " "
+			w= w[0].lower()+ w[1:-1]
 
 		if(maxdm!= ""):
-			titleforall.append(maxdm+ " " +w)
+			titleforall.append(maxdm+ "" +w)
 		else:
 			titleforall.append(w)
 
-	print titleforall
+	genTitleQuestion(firstsen)
+
+
+def genTitleQuestion(firstsen):
+
+	#print titleforall
+	for i in range(len(titleforall)):
+		qphrase= ""
+		if("-" in titleforall[i]):
+			q= titleforall[i].split("-")[1]
+		else:
+			q= titleforall[i]
+
+		for j in firstsen:
+			if(q in j):
+				qphrase= "Write a note on "+q+"."
+				break
+		if qphrase== "":
+			qphrase= "What is "+ q+"? Explain."
+
+		print qphrase
 
 
 def getNNs(s):
@@ -998,8 +1039,6 @@ def dependency(titleDict):
 	# l= list(set(l))
 	nlp = StanfordNLP()
 
-	print titleList
-	print titleDict
 	for k, v in titleDict.items():
 	
 		res = nlp.parse(titleList[k])
