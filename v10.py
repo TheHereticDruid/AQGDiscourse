@@ -671,7 +671,7 @@ def titling():
 
 	for para in data:
 
-		firstsen.append(para[0])
+		firstsen.append(para)
 
 		title= []
 		resultPara = nlp.parse(" ".join(para))
@@ -692,10 +692,13 @@ def titling():
 		if "coref" in resultPara:
 			for i in resultPara['coref']:
 				for j in i:
-					if(len(j[1][0].split(" "))== 1 or j[0][1]!= j[1][1]):
+					tags= nltk.pos_tag(nltk.word_tokenize(j[0][0]))
+					flag= 0
+					for word, tag in tags:
+						if(re.search("PR.*", tag) or re.search("this", word, re.I) or re.search("that", word, re.I) or re.search("these", word, re.I)):
+							flag=1
+					if(flag):
 						titleList[j[0][1]]= titleList[j[0][1]].replace(j[0][0], j[1][0])
-
-		print titleList
 
 		for i in range(len(titleList)):
 
@@ -717,127 +720,8 @@ def titling():
 			
 				title.append([i, list(set(subtmp))])
 
-		# groupableSet=[]
-		# for k,v in sentnumb_map.items():
-		# 	if int(k)<=7:
-		# 		for vt in v:
-		# 			groupableSet+=vt
-		# groupableSet+=rem
-
-		# prev= ""
-		# context= {}
-		# newContext= {}
-
-		# if "coref" in result:
-		# 	for i in result['coref']:
-		# 		l= []
-		# 		sennum= [i[0][1][1]]
-		# 		for j in range(len(i)):
-		# 			if(j==0):
-		# 				l.append(i[j][0][0])
-		# 				l.append(i[j][1][0])
-		# 				sennum.append(i[j][0][1])
-		# 				sennum.append(i[j][1][1])
-		# 			else:
-		# 				l.append(i[j][0][0])
-		# 				sennum.append(i[j][0][1])
-
-		# 		flag= 0
-		# 		sub= ""
-		# 		for j in l:
-		# 			tags= nltk.pos_tag(nltk.word_tokenize(j))
-		# 			for word, tag in tags:
-		# 				if(re.search("NN.*", tag)):
-		# 					flag= 1
-		# 					sub= j
-		# 					break
-		# 			if(flag):
-		# 				break
-
-		# 		if(sub!= ""):
-		# 			context[sub]= sorted(list(set(sennum)))
-
-		# for k in context.keys():
-
-		# 	tags= nltk.pos_tag(nltk.word_tokenize(k))
-		# 	flag= 0
-		# 	s= ""
-		# 	for word, tag in tags:
-		# 		if(re.search("NN.*|JJ.*|VB.*", tag) and flag==0):
-		# 			flag= 1
-
-		# 		if(flag== 1):
-		# 			s+= word+ " "
-		# 	s= s[0].upper()+ s[1:-1]
-
-		# 	newContext[s]= context[k]
-
-		# context= newContext
-
-		# combineList= []
-		# keys= context.keys()
-		# for i in range(len(keys)):
-		# 	for j in range(len(keys[i+1:])):
-		# 		if keys[i].find(keys[j+i+1])>=0 or keys[j+i+1].find(keys[i])>=0:
-		# 			if nounCount(keys[i])==nounCount(keys[j+i+1]):
-		# 				flg2=0
-		# 				for kt in range(len(combineList)):
-		# 					if i in combineList[kt]:
-		# 						combineList[kt].append(j+i+1)
-		# 						flg2=1
-		# 					elif j+i+1 in combineList[kt]:
-		# 						combineList[kt].append(i)
-		# 						flg2=1
-		# 				if not flg2:
-		# 					combineList.append([i,j+i+1])
-		# dL=[]
-		# newContext={}
-		# for it in combineList:
-		# 	for jt in it:
-		# 		if newContext.get(keys[it[0]],"_empty")=="_empty":
-		# 			newContext[keys[it[0]]]=[]
-		# 		newContext[keys[it[0]]]+=context[keys[jt]]
-		# 		dL.append(keys[jt])
-		# for k, v in context.items():
-		# 	if k not in dL:
-		# 		newContext[k]=v
-
-		# print "\nTitling\n"
-		# for k,v in newContext.items():
-		# 	print "Context Phrase",k,"\nSentences Are:\n"
-		# 	for it in v:
-		# 		print sentences[it]
-		# 	print ""	
-		# usedSet=[]
-		# for k,v in newContext.items():
-		# 	usedSet+=v
-		# unusedSet=list(set(groupableSet)-set(usedSet))
-		# print unusedSet
 		titleDict={}
 		discourseDict= {}
-		# for jt in set(groupableSet):
-		# 	if titleDict.get(jt, "_empty")=="_empty":
-		# 		titleDict[jt]=[]
-		# 	if jt in unusedSet:
-		# 		titleDict[jt]=titleDict[jt-1]
-		# 	else:
-		# 		for k,v in newContext.items():
-		# 			if jt in v:
-		# 				titleDict[jt].append(k)
-		# for k,v in sentnumb_map.items():
-		# 	if k<=7:
-		# 		temp=[]
-		# 		for vt in v:
-		# 			temp+=vt
-		# 		temp=set(temp)
-		# 		for tt in temp:
-		# 			if discourseDict.get(tt, "_empty")=="_empty":
-		# 				discourseDict[tt]=[]
-		# 			discourseDict[tt].append(k)
-		# for k in titleDict.keys():
-		# 	if discourseDict.get(k, "_empty")=="_empty":
-		# 		discourseDict[k]=[-1]
-
 
 		for j in range(len(title[0][1])):
 			if((re.search("there", title[0][1][j], re.I) or re.search("they", title[0][1][j], re.I)) and i>0):
@@ -881,23 +765,23 @@ def titling():
 				discourseDict[k]=[-1]
 		#print "DISC", discourseDict
 
-		#print "Title dict= \n", titleDict
-		#print "DiscourseDict", discourseDict
-		#print
+		# print "Title dict= \n", titleDict
+		# print "DiscourseDict", discourseDict
+		# print
 
 		depDict, dSen= dependency(titleDict)
 		# print "Dependency dict\n", depDict
 		# print "dSen\n", dSen
 		titleDict, depDict= combine(depDict, titleDict, dSen)
-		# print "TD",titleDict
-		# print "DD",depDict
+		print "TD",titleDict
+		print "DD",depDict
 
 
 		st= previou
 		end= previou+len(para)-1
 
 		dms= []
-		for k in range(st, end+1):
+		for k in range(st, end):
 			for c in discourseDict[k]:
 				dms.append(c)
 
@@ -913,27 +797,62 @@ def titling():
 		w= ""
 
 		for v in titleDict[0]:
-			if(v!= [""] and para[0].index(v)== 0):
+			print "v= ", v
+			if(v!= "" and para[0].index(v)== 0):
 				w= v
 				break
 
-		if(w== ""):
-			maxlen= 0
-			maxlis= []
-			for k, v in depDict.items():
-				if(len(v) > maxlen):
-					maxlen= len(v)
-					maxlis= v
 
-			tmp= reduce(lambda x, y: x if len(x)<len(y) else y, maxlis)
-			tags= nltk.pos_tag(nltk.word_tokenize(tmp))
-			flag=0
-			for word, tag in tags:
-				if re.search("NN.*", tag):
-					flag= 1
-				if(flag):
-					w+= word+ " "
-			w= w[0].lower()+ w[1:-1]
+		l= []
+		if(w== ""):
+			for k, v in depDict.items():
+				l.append([dSen[k], k])
+
+			l.sort(key= lambda x: x[0])
+
+			w= l[-1][1]
+
+			l= l[len(l)/2:-1]
+			l.reverse()
+
+			sennums= []
+			for k, v in titleDict.items():
+				for val in v:
+					if(w in val):
+						sennums.append(k)
+						break
+
+			if(len(para)>8):
+				marks= 8
+			else:
+				marks= len(para)
+
+			for i in range(len(sennums)):
+				res= -1
+				if(sennums[i]>=2 and sennums[i]<=len(para)-3):
+					res, wd= findCooccurance(para, sennums[i], sennums[i]-2, sennums[i]+2, l, w)
+				elif(sennums[i]<=2 and sennums[i]<=len(para)-3):
+					res, wd= findCooccurance(para, sennums[i], sennums[0], sennums[i]+2, l, w)
+				elif(sennums[i]>=2 and sennums[i]>=len(para)-3):
+					res, wd= findCooccurance(para, sennums[i], sennums[i]-2, sennums[-1], l, w)
+
+
+				if(res!= len(para)):
+
+					for word in depDict[wd]:
+						print word, para[res]
+						if(re.search(word, para[res], re.I)):
+							wd= word
+							break
+
+					if(res== sennums[i]):
+						qphrase= "Write a note on \""+ w+ "\" and \""+ wd + "\"."
+						all_questions.append([qphrase, 13, marks, -1, " ".join(para)])
+					else:
+						if(findDM(res, sennums[i], discourseDict)):
+							qphrase= "Write a note on \""+ w+ "\" and \""+ wd + "\"."
+							all_questions.append([qphrase, 13, marks, -1, " ".join(para)])
+
 
 		if(maxdm!= ""):
 			titleforall.append(maxdm+ "" +w)
@@ -942,6 +861,30 @@ def titling():
 
 	genTitleQuestion(firstsen)
 
+
+def findDM(i, j, discourseDict):
+
+	for k in range(i, j):
+		if(discourseDict[k] != [-1]):
+			return 1
+	return 0
+
+
+def findCooccurance(para, a, i, j, sp, w):
+
+	print i, j
+	se= ""
+	n= len(para)
+	for k in range(i, j+1):
+		for s in sp:
+			if(stemmer.stem(s[1]) in [stemmer.stem(c) for c in para[k][:-1].split(" ")]):
+				tag= nltk.pos_tag(nltk.word_tokenize(s[1]))[0][1]
+				print tag, math.fabs(a-k)<= math.fabs(a-n), s, k 
+				if(math.fabs(a-k)<= math.fabs(a-n) and s[1]!= w and re.search("NN.*", tag)):
+					n= k
+					se= s[1]
+				break
+	return n, se
 
 def genTitleQuestion(firstsen):
 
@@ -954,13 +897,15 @@ def genTitleQuestion(firstsen):
 			q= titleforall[i]
 
 		for j in firstsen:
-			if(q in j):
-				qphrase= "Write a note on "+q+"."
-				break
-		if qphrase== "":
-			qphrase= "What is "+ q+"? Explain."
+			if(q in j[0]):
+				if(len(j)>8):
+					marks= 8
+				else:
+					marks= len(j)
 
-		print qphrase
+				qphrase= "Write a note on \""+q+"\"."
+				all_questions.append([qphrase, 13, marks, -1, " ".join(j)])
+				break		
 
 
 def getNNs(s):
@@ -1028,6 +973,75 @@ def combine(depDict, titleDict, dSen):
 	return titleDict, depDict
 
 
+# def dependency(titleDict):
+
+# 	newD= {}
+# 	resAll= {}
+# 	newDsen= {}
+# 	# for k in titleDict.keys():
+# 	# 	l+= titleDict[k]
+
+# 	# l= list(set(l))
+# 	nlp = StanfordNLP()
+
+# 	for k, v in titleDict.items():
+	
+# 		res = nlp.parse(titleList[k])
+
+# 		r= res["sentences"][0]
+# 		res= r["dependencies"]
+# 		l= []
+# 		for i in res:
+# 			if(re.search(".subj.*", str(i[0]))):
+# 				l.append(i)
+
+# 		for val in range(len(v)):
+# 			for i in range(len(l)):
+# 				if(l[i][-1] in v[val]):
+# 					if(newD.get(l[i][-1], "empty")== "empty"):
+# 						newD[l[i][-1]]= []
+# 					if(resAll.get(l[i][-1], "empty")== "empty"):
+# 						resAll[l[i][-1]]= []
+# 					if(newDsen.get(l[i][-1], "empty")== "empty"):
+# 						newDsen[l[i][-1]]= []
+
+					
+# 					newD[l[i][-1]].append(v[val])
+# 					resAll[l[i][-1]].append(r)
+# 					newDsen[l[i][-1]].append(k)
+
+			
+			
+# 		# print "res= ", res
+# 		# for i in res:
+# 		# 	if(str(i[0])== "nsubj"):
+# 		# 		p= []
+# 		# 		for j in range(len(l)):
+# 		# 			if(i[-1] in l[j]):
+# 		# 				if(newD.get(i[-1], "empty")== "empty"):
+# 		# 					newD[i[-1]]= []
+# 		# 				if(l[j] not in newD[i[-1]]):
+# 		# 					newD[i[-1]].append(l[j])
+# 		# 				p.append(j)
+
+# 		# 		newL= []
+# 		# 		for j in range(len(l)):
+# 		# 			if(j not in p):
+# 		# 				newL.append(l[j])
+
+# 		# 		l= newL
+
+
+# 	# newnewd= {}
+
+# 	# for k, v in newD.items():
+# 	# 	newnewd[k]= list(set(v))
+
+# 	# newD= copy.deepcopy(newnewd)
+
+# 	return newD, newDsen
+
+
 def dependency(titleDict):
 
 	newD= {}
@@ -1042,28 +1056,28 @@ def dependency(titleDict):
 	for k, v in titleDict.items():
 	
 		res = nlp.parse(titleList[k])
-
+		tmp=copy.deepcopy(v)
 		r= res["sentences"][0]
 		res= r["dependencies"]
 		l= []
 		for i in res:
 			if(re.search(".subj.*", str(i[0]))):
 				l.append(i)
-
-		for val in range(len(v)):
-			for i in range(len(l)):
-				if(l[i][-1] in v[val]):
+		dList=[]
+		for i in range(len(l)):
+			for val in range(len(tmp)):
+				if(val not in dList and l[i][-1] in tmp[val]):
 					if(newD.get(l[i][-1], "empty")== "empty"):
 						newD[l[i][-1]]= []
 					if(resAll.get(l[i][-1], "empty")== "empty"):
 						resAll[l[i][-1]]= []
 					if(newDsen.get(l[i][-1], "empty")== "empty"):
 						newDsen[l[i][-1]]= []
-
-					
-					newD[l[i][-1]].append(v[val])
+					newD[l[i][-1]].append(tmp[val])
 					resAll[l[i][-1]].append(r)
 					newDsen[l[i][-1]].append(k)
+					dList.append(val)
+					break
 
 			
 			
@@ -1261,7 +1275,7 @@ def qSet():
 	addedList=[]
 	remExtras()
 	add_context()
-	order={7: 10, 10: 10, 12: 10, 0: 10, 4: 10, 6: 10, 11: 10, 8: 10, 5: 10, 9:10}	 #Set To List Of Numbers Representing Question Types, In Order Of Highest Mark Prob To Lowest, With Type As Key, And Percentage In Decimal As Value
+	order={13: 10, 7: 5, 10: 5, 12: 10, 0: 10, 4: 10, 6: 10, 11: 10, 8: 10, 5: 10, 9:10}	 #Set To List Of Numbers Representing Question Types, In Order Of Highest Mark Prob To Lowest, With Type As Key, And Percentage In Decimal As Value
 	for o, p in order.items():
 		totalPMarks=int(totalMarks*p+carryOver)	#Total Marks For Current Part
 		if totalPMarks+curMarks>totalMarks:
