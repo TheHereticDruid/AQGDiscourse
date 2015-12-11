@@ -2274,6 +2274,7 @@ def genConcludingQuestions():
 	qphrase= " How was it concluded that "
 	i= 0
 	flag=1
+	remove= []
 	for line in concluding_sentences:
 		s= ' '.join(line)
 		q= ""
@@ -2295,9 +2296,23 @@ def genConcludingQuestions():
 		if(q!= "" and flag):
 			all_questions.append([qphrase+ q[1]+ "?", 2, 2, sentnumb_map[2][i][0], " ".join(sentences[sentnumb_map[2][i][0]: sentnumb_map[2][i][-1]+1])])
 		else:
-			del sentnumb_map[2][i]
+			remove.append(i)
 
 		i+= 1
+
+	newmap= []
+	for i in range(len(sentnumb_map[2])):
+		flag=0
+		for j in range(len(remove)):
+			if(i== j):
+				flag=1
+				break
+
+		if(flag==0):
+			newmap.append(sentnumb_map[2][i])
+
+
+	sentnumb_map[2]= newmap
 
 
 ################################################# tokenize #######################################################################

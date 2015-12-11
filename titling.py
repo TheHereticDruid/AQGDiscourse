@@ -20,7 +20,7 @@ fp.close()
 
 dt= Decision(tree= tree, start=[float(i) for i in start])
 
-def titling():
+def divide():
 
 	fp1= open("input.txt", "r").read().strip()
 	para= fp1.split("\n\n")
@@ -72,5 +72,3 @@ def recurse(para, i, j):
 
 		else:
 			return recurse(para, j, j+1)
-
-titling()
