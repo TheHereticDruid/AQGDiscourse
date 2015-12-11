@@ -596,7 +596,7 @@ def genGapFill():
 			all_questions.append([t+"\nFill In The Blanks.", 9, 1, sentnumb_map[9][v][0], replacement])
 			lst.append(sentnumb_map[9][v])
 		
-			v+= 1
+		v+= 1
 
 	sentnumb_map[9]= copy.deepcopy(lst)
 
@@ -796,19 +796,21 @@ def titling():
 
 		w= ""
 
-		for v in titleDict[0]:
-			print "v= ", v
-			if(v!= "" and para[0].index(v)== 0):
-				w= v
-				break
+		# for v in titleDict[0]:
+		# 	print "v= ", v
+		# 	if(v!= "" and para[0].index(v)== 0):
+		# 		w= v
+		# 		break
 
+
+		print "dSen= ", dSen
 
 		l= []
 		if(w== ""):
 			for k, v in depDict.items():
 				l.append([dSen[k], k])
 
-			l.sort(key= lambda x: x[0])
+			l.sort(key= lambda x: len(x[0]))
 
 			w= l[-1][1]
 
@@ -827,6 +829,8 @@ def titling():
 			else:
 				marks= len(para)
 
+
+			nw= w
 			for i in range(len(sennums)):
 				res= -1
 				if(sennums[i]>=2 and sennums[i]<=len(para)-3):
@@ -837,20 +841,24 @@ def titling():
 					res, wd= findCooccurance(para, sennums[i], sennums[i]-2, sennums[-1], l, w)
 
 
-				if(res!= len(para)):
+				if(res!=-1 and res!= len(para)):
 
 					for word in depDict[wd]:
-						print word, para[res]
-						if(re.search(word, para[res], re.I)):
+						if(re.search(wd, para[res], re.I)):
 							wd= word
 							break
 
+					for word in depDict[w]:
+						if(re.search(nw, para[sennums[i]], re.I)):
+							nw= word
+							break
+
 					if(res== sennums[i]):
-						qphrase= "Write a note on \""+ w+ "\" and \""+ wd + "\"."
+						qphrase= "Write a note on \""+ nw+ "\" and \""+ wd + "\"."
 						all_questions.append([qphrase, 13, marks, -1, " ".join(para)])
 					else:
 						if(findDM(res, sennums[i], discourseDict)):
-							qphrase= "Write a note on \""+ w+ "\" and \""+ wd + "\"."
+							qphrase= "Write a note on \""+ nw+ "\" and \""+ wd + "\"."
 							all_questions.append([qphrase, 13, marks, -1, " ".join(para)])
 
 
@@ -859,7 +867,7 @@ def titling():
 		else:
 			titleforall.append(w)
 
-	genTitleQuestion(firstsen)
+	#genTitleQuestion(firstsen)
 
 
 def findDM(i, j, discourseDict):
