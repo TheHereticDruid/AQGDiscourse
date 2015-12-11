@@ -2560,29 +2560,27 @@ def remQsns():
 
 def remBrackets(argStr=""):
 	if argStr:
+		argStr=argStr.strip(" ")
 		if argStr[0]=="(":
 			argStr=argStr[1:]
 		if argStr[-1]==")":
 			argStr=argStr[:-1]
-		argStr=re.sub("\(.*?\)","",argStr)
+		argStr=re.sub(" *\(.*?\) *"," ",argStr)
+		argStr=re.sub(" *-LRB- .*? -RRB- *"," ",argStr)
 		return argStr
 	else:
 		for k in sentences_map.keys():
 			if k<8:
 				for ln in range(len(sentences_map[k])):
 					for sn in range(len(sentences_map[k][ln])):
-						if sentences_map[k][ln][sn][0]=="(":
-							sentences_map[k][ln][sn]=sentences_map[k][ln][sn][1:]
-						if sentences_map[k][ln][sn][-1]==")":
-							sentences_map[k][ln][sn]=sentences_map[k][ln][sn][:-1]
-						sentences_map[k][ln][sn]=re.sub("\(.*?\)","",sentences_map[k][ln][sn])
+						sentences_map[k][ln][sn]=remBrackets(sentences_map[k][ln][sn])
 
 def remExtras():
 	for it in range(len(all_questions)):
 		k=all_questions[it][0][-1]
 		if k=="?" or k==".":
 			while True:
-				if (all_questions[it][0][-1]>="a" and all_questions[it][0][-1]<="z") or (all_questions[it][0][-1]>="A" and all_questions[it][0][-1]<="Z") or (all_questions[it][0][-1]>="0" and all_questions[it][0][-1]<="9"):
+				if (all_questions[it][0][-1]>="a" and all_questions[it][0][-1]<="z") or (all_questions[it][0][-1]>="A" and all_questions[it][0][-1]<="Z") or (all_questions[it][0][-1]>="0" and all_questions[it][0][-1]<="9") or all_questions[it][0][-1]==")" or all_questions[it][0][-1]=="'" or all_questions[it][0][-1]=="\"":
 					all_questions[it][0]+=k
 					break
 				else:
