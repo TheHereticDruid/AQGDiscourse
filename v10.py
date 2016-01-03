@@ -2001,7 +2001,7 @@ def genWhenQuestions():
 			if kW:
 
 				if(s!= ""):
-					question= "When"+kW+s+"?"
+					question= "When"+kW+removeDM(s)+"?"
 
 					all_questions.append([question, 6, 2, sentnumb_map[6][i][0], " ".join(sentences[sentnumb_map[6][i][0]: sentnumb_map[6][i][-1]+1])])
 			else:
@@ -2161,7 +2161,8 @@ def removeDM(s):
 		for j in i:
 			res= j.search(s)
 			if(res):
-				s= s.replace(res.group(), "")
+				s= re.sub(res.group()+",?", "",s)
+
 	return s
 
 
