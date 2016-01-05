@@ -2407,13 +2407,12 @@ def genContQuestionTerms():
 				details=v
 		if(l==1):
 			sen= re.split(discmark,s[0])
-			print "SEN:", str(sen)
 			if(re.search("although", discmark, re.I)):
 				sen= sen[details[0]-1].split(",")[0]+"."
 			elif sen[details[0]-1].strip()[-1]=="," and sen[-1][0]==",":
 				sen=sen[details[0]-1].strip()[:-1]+sen[-1].strip(",")
 			else:
-				sen=sen[details[0]-1].strip()[:-1]
+				sen=sen[details[0]-1].strip()
 		else:
 			sen= s[details[0]-1]+"."
 		tags= nltk.pos_tag(nltk.word_tokenize(sen))
