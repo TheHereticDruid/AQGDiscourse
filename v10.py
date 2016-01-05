@@ -2400,12 +2400,14 @@ def genContQuestionTerms():
 		discmark= discmark.replace(",", "")
 
 		discmark= discmark.lower()
+		discmark=r"\b"+re.escape(discmark)+r"\b"
 		# details= d[discmark.lower()]
 		for k, v in d.items():
 			if re.search(k, discmark):
 				details=v
 		if(l==1):
-			sen= s[0].split(discmark)
+			sen= re.split(discmark,s[0])
+			print "SEN:", str(sen)
 			if(re.search("although", discmark, re.I)):
 				sen= sen[details[0]-1].split(",")[0]+"."
 			elif sen[details[0]-1].strip()[-1]=="," and sen[-1][0]==",":
