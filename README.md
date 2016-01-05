@@ -11,7 +11,8 @@ Question generated is of the following types: <br/>
 7. Gap-fill <br/>
 8. Programming <br/>
 9. Equations <br/>
-10. Paragraph level <br/><br/> 
+10. Discuss <br/>
+11. Paragraph level <br/><br/> 
 Discourse Markers are used to cluster the sentences to form questions.
 	
 # Installation
