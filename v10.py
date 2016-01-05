@@ -1620,13 +1620,13 @@ def genEqnQsn():
 		q="Balance the following equation:\n"	#Third, General Type Of Question, Balancing
 		it=0
 		while it<len(spl1):
-			if(spl1[it][0]>="2" and spl1[it][0]<="9" or spl1[it][0]==" "):
+			if(spl1[it][0]>="0" and spl1[it][0]<="9" or spl1[it][0]==" "):
 				spl1[it]=spl1[it][1:]
 				it-= 1
 			it+=1	#Removing Ordinal Values From LHS
 		it=0
 		while it<len(spl2):
-			if(spl2[it][0]>="2" and spl2[it][0]<="9" or spl1[it][0]==" "):
+			if(spl2[it][0]>="0" and spl2[it][0]<="9" or spl1[it][0]==" "):
 				spl2[it]=spl2[it][1:]
 				it-= 1
 			it+=1	#Removing Ordinal Values From RHS
