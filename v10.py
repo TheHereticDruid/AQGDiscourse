@@ -1516,7 +1516,7 @@ def sentensify():
 
 	print "\nSentences Of The Document\n", "\n".join(sentences)
 	spc=r"[ \t]*"
-	ele= r"[2-9]*(([A-Z][a-z]|[A-Z])+[2-9]*|[(]([A-Z][a-z]|[A-Z])+[2-9]*[)])+"
+	ele= r"[0-9]*(([A-Z][a-z]|[A-Z])+[0-9]*|[(]([A-Z][a-z]|[A-Z])+[0-9]*[)])+"
 	regex= ele+"("+spc+"[+]"+spc+ ele+ ")*("+spc+"->"+spc+")"+ ele+"("+spc+"[+]"+spc+ele+")*"	#For Equations
 
 	flag= 0
