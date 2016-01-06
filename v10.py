@@ -184,11 +184,11 @@ def decisionTree():
 		t8= obj.capital(sentences[i])
 		t9= obj.ratioC(sentences[i])
 
-		b.append(t4)
 		tmp= [t1, t2, t3, t4, t5, t6, t7, t8, t9]
 		tmp= dt.refineR([tmp], [0, 8])
 		if(dt.score(tmp)):	#Tag The tmp Sentence, 1 For Non-Naturals
 			program_sentences.append(i)
+			b.append(obj.braceCountRet())
 
 	chain(b)
 			
@@ -247,7 +247,6 @@ def chain(braces):
 
 
 	tmp= [[program_sentences[i] for i in j] for j in tmp]
-
 	c, tmp= extractQuestionSentences(tmp)
 	genProgramQuestions(c, tmp)
 
@@ -317,7 +316,6 @@ def genProgramQuestions(c, lst):
 			tmp.append(sentences[j])	#Retrieve Sentences, Including Code
 			tmp2.append(j)
 		tmp.append("What does the above program do? If any, what is the output?")	#First Possible Type Of Question
-			
 		tmp=remComments(tmp)
 		tmp= [j for j in tmp if j!= ""]
 		if(len(tmp) > 1):
@@ -560,7 +558,7 @@ def genGapFill():
 	lst= []
 	for s in gapfill_Sentences:
 
-		simplify(s)
+		# simplify(s)
 		s= synReplace(s)
 		tmp= prev
 		if(tmp== []):
@@ -740,6 +738,8 @@ def titling():
 
 		dms= []
 		for k in range(st, end):
+			if discourseDict.get(k, "_empty")=="_empty":
+				continue
 			for c in discourseDict[k]:
 				dms.append(c)
 
@@ -1657,22 +1657,13 @@ def pronoun_resolution():
 							break
 
 					if(flag2):
-						if(len(pronounres[1][0].split())>= 3):
-							sim= simplify(pronounres[1][0])
+						# if(len(pronounres[1][0].split())>= 3):
+						# 	sim= simplify(pronounres[1][0])
 
-						else:
-							sim= pronounres[1][0]
-
+						# else:
+						sim= pronounres[1][0]
 						if(sim not in all_questions[i][0]):
-							flag4= 0
-							for i in sim.split():
-								if(i in all_questions[i][0].split()):
-									flag4= 1
-									break
-
-							if(flag4== 0):
 								all_questions[i][0]= all_questions[i][0].replace(pronounres[0][0], sim)
-
 			c+= 1
 			i+= 1
 
@@ -2451,7 +2442,7 @@ def quoteBreak(lst):
 				flag=jt
 			elif flag==jt:
 				flag=""
-		if flag:
+		if flag!="":
 			ret.append(it)
 	return ret
 

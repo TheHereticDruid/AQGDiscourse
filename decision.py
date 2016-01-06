@@ -158,18 +158,18 @@ class Decision():
         for line in f:
             p=[float(it) for it in line.strip('\n').split("\t")]
             data.append(p)
-        
+        data=data[:int(0.8*len(data))]
         f.close()
+        attributes= [0, 1, 2, 3, 4, 5, 6, 7, 8]
+        target_attr= 9
+        lst= [0, 8]
         alldata= data
         #List of columns which need to be discritized
-        lst= [0, 8]   
 
         #lst2= [1, 2, 5, 6, 8, 10, 11, 12]
         #Function to replace data with boolean values
         data= self.refineR(data, lst)
         #data= refine_classification(data, lst2)
-        attributes= [0, 1, 2, 3, 4, 5, 6, 7, 8]
-        target_attr= 9
 
         self.tree= self.create_decision_tree(data, attributes, target_attr, self.gain)
 

@@ -100,3 +100,8 @@ class Features():
 		if float(l)!=0.0:
 			return 1.0-c/l
 		return 1.0
+
+	def braceCountRet(self):
+		if self.braceCount==0:
+			return 0
+		return 1
