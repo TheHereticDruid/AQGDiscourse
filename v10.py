@@ -210,7 +210,6 @@ def chain(braces):
 	#If A Later Block Starts With An Indented Line, Attach To The Previous Block
 	i= 1
 	while(i < len(tmp)):
-		# print resSentences[tmp[i][0]]
 		if(obj.indent(resSentences[tmp[i][0]])):
 			iV=tmp[i-1][1]
 			jV=tmp[i][0]
@@ -553,7 +552,6 @@ def genGapFill():
 
 	# 	if(1):
 	# 		s= s.replace(np, "_________________")
-	# 		print s
 
 	global prev
 	global prev2
@@ -624,36 +622,6 @@ def findNP(node):
 	if("NP" in l and "VP" in l):
 		ind= l.index("NP")
 		return " ".join(al[ind].leaves())
-
-
-# def getSubject(node):
-
-# 	lst= []
-# 	if(type(node)== nltk.tree.Tree):
-# 		if(node.label()== "S"):
-# 			lst.append(node)
-		
-# 		else:
-# 			for j in node:
-# 				lst.extend(getSubject(j))
-
-# 	return lst
-
-# def findNP(node):
-
-# 	flag= 0
-# 	for i in node:
-# 		if(i.label()== "NP"):
-# 			print i.left_siblings(), i.right_siblings()
-# 			flag=1
-# 			np= " ".join(i.leaves())
-# 			break
-# 	if(flag== 1):
-# 		return np
-
-# 	else:
-# 		for i in node:
-# 			return findNP(i)
 
 
 #Function To Title And Group Sentences.
@@ -763,20 +731,10 @@ def titling():
 		for k in titleDict.keys():
 			if discourseDict.get(k, "_empty")=="_empty":
 				discourseDict[k]=[-1]
-		#print "DISC", discourseDict
-
-		# print "Title dict= \n", titleDict
-		# print "DiscourseDict", discourseDict
-		# print
-
+		
 		depDict, dSen= dependency(titleDict)
-		# print "Dependency dict\n", depDict
-		# print "dSen\n", dSen
+
 		titleDict, depDict= combine(depDict, titleDict, dSen)
-		print "TD",titleDict
-		print "DD",depDict
-
-
 		st= previou
 		end= previou+len(para)-1
 
@@ -795,15 +753,6 @@ def titling():
 		
 
 		w= ""
-
-		# for v in titleDict[0]:
-		# 	print "v= ", v
-		# 	if(v!= "" and para[0].index(v)== 0):
-		# 		w= v
-		# 		break
-
-
-		print "dSen= ", dSen
 
 		l= []
 		if(w== ""):
@@ -880,14 +829,12 @@ def findDM(i, j, discourseDict):
 
 def findCooccurance(para, a, i, j, sp, w):
 
-	print i, j
 	se= ""
 	n= len(para)
 	for k in range(i, j+1):
 		for s in sp:
 			if(stemmer.stem(s[1]) in [stemmer.stem(c) for c in para[k][:-1].split(" ")]):
 				tag= nltk.pos_tag(nltk.word_tokenize(s[1]))[0][1]
-				print tag, math.fabs(a-k)<= math.fabs(a-n), s, k 
 				if(math.fabs(a-k)<= math.fabs(a-n) and s[1]!= w and re.search("NN.*", tag)):
 					n= k
 					se= s[1]
@@ -896,7 +843,6 @@ def findCooccurance(para, a, i, j, sp, w):
 
 def genTitleQuestion(firstsen):
 
-	#print titleforall
 	for i in range(len(titleforall)):
 		qphrase= ""
 		if("-" in titleforall[i]):
@@ -981,75 +927,6 @@ def combine(depDict, titleDict, dSen):
 	return titleDict, depDict
 
 
-# def dependency(titleDict):
-
-# 	newD= {}
-# 	resAll= {}
-# 	newDsen= {}
-# 	# for k in titleDict.keys():
-# 	# 	l+= titleDict[k]
-
-# 	# l= list(set(l))
-# 	nlp = StanfordNLP()
-
-# 	for k, v in titleDict.items():
-	
-# 		res = nlp.parse(titleList[k])
-
-# 		r= res["sentences"][0]
-# 		res= r["dependencies"]
-# 		l= []
-# 		for i in res:
-# 			if(re.search(".subj.*", str(i[0]))):
-# 				l.append(i)
-
-# 		for val in range(len(v)):
-# 			for i in range(len(l)):
-# 				if(l[i][-1] in v[val]):
-# 					if(newD.get(l[i][-1], "empty")== "empty"):
-# 						newD[l[i][-1]]= []
-# 					if(resAll.get(l[i][-1], "empty")== "empty"):
-# 						resAll[l[i][-1]]= []
-# 					if(newDsen.get(l[i][-1], "empty")== "empty"):
-# 						newDsen[l[i][-1]]= []
-
-					
-# 					newD[l[i][-1]].append(v[val])
-# 					resAll[l[i][-1]].append(r)
-# 					newDsen[l[i][-1]].append(k)
-
-			
-			
-# 		# print "res= ", res
-# 		# for i in res:
-# 		# 	if(str(i[0])== "nsubj"):
-# 		# 		p= []
-# 		# 		for j in range(len(l)):
-# 		# 			if(i[-1] in l[j]):
-# 		# 				if(newD.get(i[-1], "empty")== "empty"):
-# 		# 					newD[i[-1]]= []
-# 		# 				if(l[j] not in newD[i[-1]]):
-# 		# 					newD[i[-1]].append(l[j])
-# 		# 				p.append(j)
-
-# 		# 		newL= []
-# 		# 		for j in range(len(l)):
-# 		# 			if(j not in p):
-# 		# 				newL.append(l[j])
-
-# 		# 		l= newL
-
-
-# 	# newnewd= {}
-
-# 	# for k, v in newD.items():
-# 	# 	newnewd[k]= list(set(v))
-
-# 	# newD= copy.deepcopy(newnewd)
-
-# 	return newD, newDsen
-
-
 def dependency(titleDict):
 
 	newD= {}
@@ -1086,35 +963,6 @@ def dependency(titleDict):
 					newDsen[l[i][-1]].append(k)
 					dList.append(val)
 					break
-
-			
-			
-		# print "res= ", res
-		# for i in res:
-		# 	if(str(i[0])== "nsubj"):
-		# 		p= []
-		# 		for j in range(len(l)):
-		# 			if(i[-1] in l[j]):
-		# 				if(newD.get(i[-1], "empty")== "empty"):
-		# 					newD[i[-1]]= []
-		# 				if(l[j] not in newD[i[-1]]):
-		# 					newD[i[-1]].append(l[j])
-		# 				p.append(j)
-
-		# 		newL= []
-		# 		for j in range(len(l)):
-		# 			if(j not in p):
-		# 				newL.append(l[j])
-
-		# 		l= newL
-
-
-	# newnewd= {}
-
-	# for k, v in newD.items():
-	# 	newnewd[k]= list(set(v))
-
-	# newD= copy.deepcopy(newnewd)
 
 	return newD, newDsen
 
@@ -1339,7 +1187,6 @@ def add_context():
 		stemList=[]
 		contextWord= []
 
-		# print eq, sentences[eq], all_questions[neq]
 		tmpL=nltk.word_tokenize(all_questions[eq][0])
 		tags= nltk.pos_tag(tmpL)
 		stemList=tmpL
@@ -1514,7 +1361,6 @@ def sentensify():
 
 	sentences= newsen	#Sentences Split Both By "." And "\n"
 
-	print "\nSentences Of The Document\n", "\n".join(sentences)
 	spc=r"[ \t]*"
 	ele= r"[0-9]*(([A-Z][a-z]|[A-Z])+[0-9]*|[(]([A-Z][a-z]|[A-Z])+[0-9]*[)])+"
 	regex= ele+"("+spc+"[+]"+spc+ ele+ ")*("+spc+"->"+spc+")"+ ele+"("+spc+"[+]"+spc+ele+")*"	#For Equations
@@ -1545,16 +1391,14 @@ def sentensify():
 	cluster(sentences)
 	calcFreq()
 	genEqnQsn()
-	print "\nAfter Adding Discourse Marker Questions, The List Of Questions Becomes\n", "\n".join([aQ[0] for aQ in all_questions])
 	setRem()
 	decisionTree()
-	print "\nAfter Adding Programming Questions, The List Of Questions Becomes\n", "\n".join([aQ[0] for aQ in all_questions])
 	othersNumb()
 	genGapFill()
 	titling()
 	reduce_sentence()
 	pronoun_resolution()
-	print "\nFinal Question Bank Is\n", "\n".join([aQ[0] for aQ in all_questions])
+	#print "\nFinal Question Bank Is\n", "\n".join([aQ[0] for aQ in all_questions])
 
 def setRem():	#Get Sentences Not Already Turned Into Questions
 	global rem
@@ -1892,7 +1736,7 @@ def cluster(sentences):
 						sentnumb_map[i].append(temp2)
 
 					except:
-						print "Exception"
+						pass
 
 					
 	curr= contradictory_sentences+ additive_sentences+ concluding_sentences+ emphasis_sentences+ illustrate_sentences+ why_sentences+ when_sentences+ discuss_sentences
@@ -1902,17 +1746,6 @@ def cluster(sentences):
 			tmp.append(j)
 	others= list(set(sentences)- set(tmp))
 
-	print "\nClustered Questions\n",sentences_map
-
-	# print "contradictory_sentences= ", contradictory_sentences ,"\n\n"
-	# print "additive_sentences= ", additive_sentences ,"\n\n"
-	# print "concluding_sentences= ", concluding_sentences ,"\n\n"
-	# print "emphasis_sentences= ", emphasis_sentences ,"\n\n"
-	# print "illustrate_sentences= ", illustrate_sentences ,"\n\n"
-	# print "why_sentences= ", why_sentences ,"\n\n"
-	# print "when_sentences= ", when_sentences ,"\n\n"
-	# print "discuss_sentences= ", discuss_sentences, "\n\n"
-	# print "others= ", others ,"\n\n"
 	remBrackets()
 	genContQuestionTerms()
 	genContQuestion()
