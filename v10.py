@@ -1632,7 +1632,8 @@ def pronoun_resolution():
 				if result.get('coref',-1)!=-1:
 					for res in result['coref']:
 						for j in res:
-							if(j[0][1] == sentnumb_map[k][c][0] and j[0][0]== w and flag2== 0):
+							
+							if(j[0][1] == sentnumb_map[k][c][0] and j[0][0]== w and flag2== 0 and j[0][1]!= j[1][1]):
 								pronounres= j
 								flag2= 1
 								break
@@ -1646,11 +1647,9 @@ def pronoun_resolution():
 						# else:
 						sim= pronounres[1][0]
 						if(sim not in all_questions[i][0]):
-								all_questions[i][0]= all_questions[i][0].replace(pronounres[0][0], sim)
+								all_questions[i][0]= re.sub(r"\b"+pronounres[0][0]+r"\b", sim, all_questions[i][0])
 			c+= 1
 			i+= 1
-
-
 
 ################################################# cluster ########################################################################
 # Function used to cluster sentences into different discourse marker categories.
@@ -1662,10 +1661,11 @@ def cluster(sentences):
 		for i in range(len(all_discourse)):
 			for j in range(len(all_discourse[i])):			
 				res= all_discourse[i][j].search(sentences[s])
+				
 				if(res):
 					try:
 						if(res.group()[0] >= 'A' and res.group()[0] <= 'Z'):
-							if(all_discourse[i][j].search('Finally,') or all_discourse[i][j].search('Lastly,')):	#Discuss Questions
+							if(re.search('Finally,', all_discourse[i][j].pattern) or re.search('Lastly,', all_discourse[i][j].pattern)):	#Discuss Questions
 								count= 0
 								if(s>6):
 									beg1= s-6
@@ -1682,7 +1682,7 @@ def cluster(sentences):
 
 									count+= 1
 
-							elif(all_discourse[i][j].search('Furthermore,')):	#Additive
+							elif(re.search('Furthermore,', all_discourse[i][j].pattern)):	#Additive
 								if(re.search("Further", sentences[s-1], re.I)):
 									temp= sentences[s-2: s+1]
 									temp2= [s-2, s]
@@ -1690,7 +1690,7 @@ def cluster(sentences):
 									temp= sentences[s-1: s+1]
 									temp2= [s-1, s]
 
-							elif(all_discourse[i][j].search('Although', re.I)):	#Contradictory
+							elif(re.search("although", all_discourse[i][j].pattern, re.I)):	#Contradictory
 								temp= [sentences[s]]
 								temp2= [s]
 
@@ -1711,6 +1711,8 @@ def cluster(sentences):
 
 					except:
 						pass
+
+					break
 
 					
 	curr= contradictory_sentences+ additive_sentences+ concluding_sentences+ emphasis_sentences+ illustrate_sentences+ why_sentences+ when_sentences+ discuss_sentences
@@ -2150,36 +2152,6 @@ def genContQuestion():
 	i= 0
 	for qt in qterms:
 		
-		# qt= qt.replace(".", "")
-		# temp= ""
-
-		# if("|" in qt):
-		# 	temporary= qt.split("|")
-		# 	if(len(temporary)== 2):
-		# 		np= temporary[0]
-		# 		vp= temporary[1]
-		# 	else:
-		# 		np= temporary[0]
-		# 		vp= ""
-		# else:
-		# 	np=""
-		# 	vp= qt
-
-		# tags= tokenize(np+ " "+vp+ ".")
-
-		# flag= 0
-		# flag2= 0
-		# for word, tag in tags:
-
-
-		# 	if(flag== 1 and tag not in "," and tag not in "."):
-		# 		temp+= word+ " "
-
-
-		# 	if(re.search("VB.*", tag) and flag==0):
-		# 		flag= 1
-		# 		temp= word+ " "
-			
 		all_questions.append([qt+ qphrase, 0, 2, sentnumb_map[0][i][0], " ".join(sentences[sentnumb_map[0][i][0]: sentnumb_map[0][i][-1]+1])])
 
 		i+= 1
@@ -2207,13 +2179,13 @@ def genContQuestionTerms():
 		discmark= discmark.replace(",", "")
 
 		discmark= discmark.lower()
-		discmark=r"\b"+re.escape(discmark)+r"\b"
+		#discmark=r"\b"+re.escape(discmark)+r"\b"
 		# details= d[discmark.lower()]
 		for k, v in d.items():
 			if re.search(k, discmark):
 				details=v
 		if(l==1):
-			sen= re.split(discmark,s[0])
+			sen= re.split(discmark,s[0][0].lower()+s[0][1:], re.I)
 			if(re.search("although", discmark, re.I)):
 				sen= sen[details[0]-1].split(",")[0]+"."
 			elif sen[details[0]-1].strip()[-1]=="," and sen[-1][0]==",":
