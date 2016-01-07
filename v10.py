@@ -2418,6 +2418,9 @@ def remBrackets(argStr=""):
 
 def remExtras():
 	for it in range(len(all_questions)):
+		while re.search("[^\w\d]",all_questions[it][0][0]):
+			all_questions[it][0]=all_questions[it][0][1:]
+	for it in range(len(all_questions)):
 		k=all_questions[it][0][-1]
 		if k=="?" or k==".":
 			while True:
