@@ -1594,7 +1594,6 @@ def genPreSentence(i):
 
 def pronoun_resolution():
 
-	print all_questions
 	i=0
 	w= ""
 	for k, v in sentnumb_map.items():
@@ -1635,7 +1634,6 @@ def pronoun_resolution():
 						for j in res:
 							
 							if(j[0][1] == sentnumb_map[k][c][0] and j[0][0]== w and flag2== 0 and j[0][1]!= j[1][1]):
-								print j[0][1], j[1][1]
 								pronounres= j
 								flag2= 1
 								break
@@ -1652,8 +1650,6 @@ def pronoun_resolution():
 								all_questions[i][0]= re.sub(r"\b"+pronounres[0][0]+r"\b", sim, all_questions[i][0])
 			c+= 1
 			i+= 1
-
-	print all_questions
 
 ################################################# cluster ########################################################################
 # Function used to cluster sentences into different discourse marker categories.
