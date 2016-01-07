@@ -1002,7 +1002,7 @@ def negate(s, n, j, e, rn=-1):
 	if(rn>=0):
 		rand2=rn
 	else:
-		rand2= random.randint(0, 2)
+		rand2= random.randint(0, 1)
 
 	if(rand2== 0):
 
@@ -1056,23 +1056,6 @@ def negate(s, n, j, e, rn=-1):
 		if flg:
 			s+= " True/False?"
 			all_questions.append([s+j, 8, 1+e, n+e, "False"])
-		else:
-			negate(s, n, j, e, rn=0)
-	else:
-
-		tags= nltk.pos_tag(nltk.word_tokenize(s))
-
-		words= []
-		for word, tag in tags:
-			if(re.search("NN.*", tag)):
-				words.append(word)	#Find NNs In Sentence
-		remNouns=list(set(allnouns)-set(words))
-		if remNouns!=[]:
-			rand= random.randint(0, len(remNouns)-1)
-			an= remNouns[rand]
-			tmp= s.replace(words[-1], an)	#Replace A NN With One Not In The Sentence, Randomly Chosen
-			tmp+= " True/False?"
-			all_questions.append([tmp+j, 8, 1+e, n+e, "False"])
 		else:
 			negate(s, n, j, e, rn=0)
 
