@@ -1124,7 +1124,48 @@ def qSet():
 	addedList=[]
 	remExtras()
 	add_context()
-	order={13: 10, 7: 5, 10: 5, 12: 10, 0: 10, 4: 10, 6: 10, 11: 10, 8: 10, 5: 10, 9:10}	 #Set To List Of Numbers Representing Question Types, In Order Of Highest Mark Prob To Lowest, With Type As Key, And Percentage In Decimal As Value
+	order= {}
+
+
+	ch= int(raw_input("1->Default file\n2->New file\n"))
+
+	if ch==1:
+		with open('percentage.json') as data_file:
+			dataTmp= json.load(data_file)  
+			order = dataTmp["order"]
+			totalMarks= dataTmp["total_score"]
+
+		newO= {}
+		for k, v in order.items():
+
+			try:
+				newO[int(k)]= v
+			except ValueError:
+				print "Expect only numbers inside strings as keys"
+				sys.exit()
+
+		order= newO
+
+	else:
+		with open('default.json') as data_file:    
+			dataTmp= json.load(data_file)  
+			order = dataTmp["order"]
+			totalMarks= dataTmp["total_score"]
+
+
+		newO= {}
+		for k, v in order.items():
+
+			try:
+				newO[int(k)]= v
+			except ValueError:
+				print "Expect only numbers inside strings as keys"
+				sys.exit()
+
+		order= newO
+
+
+		 #Set To List Of Numbers Representing Question Types, In Order Of Highest Mark Prob To Lowest, With Type As Key, And Percentage In Decimal As Value
 	for o, p in order.items():
 		totalPMarks=int(totalMarks*p+carryOver)	#Total Marks For Current Part
 		if totalPMarks+curMarks>totalMarks:
@@ -2521,4 +2562,5 @@ def nounCount(w):
 genRegex()
 sentensify()
 remQsns()
+print all_questions
 qSet()
