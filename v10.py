@@ -556,10 +556,11 @@ def genGapFill():
 
 	v= 0
 	lst= []
+
 	for s in gapfill_Sentences:
 
-		# simplify(s)
-		s= synReplace(s)
+		simplify(s)
+		#s= synReplace(s)
 		tmp= prev
 		if(tmp== []):
 			continue
@@ -582,6 +583,8 @@ def genGapFill():
 			for j in i.split():
 				if(j in newFreq):
 					replacement.append(i)	#NN Term To Be Taken Out
+
+		
 		replacement= list(set(replacement))
 		replacement= [i for i in replacement if len(i)>4]
 		if replacement:
@@ -789,12 +792,12 @@ def titling():
 				elif(sennums[i]>=2 and sennums[i]>=len(para)-3):
 					res, wd= findCooccurance(para, sennums[i], sennums[i]-2, sennums[-1], l, w)
 
-
+				
 				if(res!=-1 and res!= len(para)):
-
 					for word in depDict[wd]:
-						if(re.search(wd, para[res], re.I)):
-							wd= word
+						tempo= re.search(word, para[res], re.I)
+						if(tempo):
+							wd= tempo.group()
 							break
 
 					for word in depDict[w]:
@@ -803,7 +806,15 @@ def titling():
 							break
 
 					if(res== sennums[i]):
-						qphrase= "Write a note on \""+ nw+ "\" and \""+ wd + "\"."
+						temporary= re.search("affect", para[res], re.I)
+						if temporary and para[res].index(nw) <= temporary.span()[0] and temporary.span()[0] <= para[res].index(wd):
+							qphrase= "What is the effect of \""+ nw+ "\" on \""+ wd + "\"?"
+							
+						elif temporary and para[res].index(nw) >= temporary.span()[0] and temporary.span()[0]>= para[res].index(wd):
+							qphrase= "What is the effect of \""+ wd+ "\" on \""+ nw + "\"?"
+
+						else:
+							qphrase= "Write a note on \""+ nw+ "\" and \""+ wd + "\"."
 						all_questions.append([qphrase, 13, marks, -1, " ".join(para)])
 					else:
 						if(findDM(res, sennums[i], discourseDict)):
@@ -815,7 +826,6 @@ def titling():
 			titleforall.append(maxdm+ "" +w)
 		else:
 			titleforall.append(w)
-
 	#genTitleQuestion(firstsen)
 
 
