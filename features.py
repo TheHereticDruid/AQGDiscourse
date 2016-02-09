@@ -1,12 +1,31 @@
 import re
 import enchant
+import json
+
 class Features():
 	def __init__(self):
 			self.prevInChain=0
 			self.braceCount=0
 			self.commentBlock=""
 			self.encModel=enchant.Dict("en_US")
-			self.keywords=["public","static","void","main","if","else","for","while","class","import","int","float","String","private","return","this","new","char","double","short","bool","byte","extends","implements"]	#Set
+
+			with open('featureConfig.json') as data_file:    
+				conf = json.load(data_file)
+
+			self.keywords= conf["keywords"]
+			self.operatorList= conf["operatorList"]
+			self.commentSingle= conf["commentSingle"]
+			self.commentMultiple= conf["commentMultiple"]
+			#self.commentDict= conf["commentDict"]
+
+			self.commentDict={}
+			for cS in commentSingle:
+				commentDict[cS]=0
+			for cM in commentMultiple:
+				commentDict[cM[0]]=1
+
+
+			#self.keywords=["public","static","void","main","if","else","for","while","class","import","int","float","String","private","return","this","new","char","double","short","bool","byte","extends","implements"]	#Set
 
 	def ratioK(self, s):
 		sW=[ele for ele in re.split("[^A-Za-z0-9_$]",s) if ele!=""]	
@@ -20,18 +39,18 @@ class Features():
 		return 0.0
 
 	def operators(self, s):
-		operatorList=["+","-","*","/","^","%",">","<","="]	#set
-		for ele in operatorList:
+		#operatorList=["+","-","*","/","^","%",">","<","="]	#set
+		for ele in self.operatorList:
 			if ele in s:
 				return 1.0
 		return 0.0
 
 	def comments(self, s):
-		commentSingle=["//"]	#set
-		commentMultiple=[["/*","*/"],["/**","*/"]]	#set
-		commentDict={"//":0,"/*":1,"/**":1}
+		# commentSingle=["//"]	#set
+		# commentMultiple=[["/*","*/"],["/**","*/"]]	#set
+		# commentDict={"//":0,"/*":1,"/**":1}
 		if self.commentBlock!="":
-			for ele in commentMultiple:
+			for ele in self.commentMultiple:
 				if ele[0]==self.commentBlock:
 					if ele[1] in s:
 						self.commentBlock=""
@@ -39,14 +58,14 @@ class Features():
 		else:
 			cIndex=9999
 			cValue=-1
-			for k,v in commentDict.items():
+			for k,v in self.commentDict.items():
 				if k in s and cIndex>s.index(k):
 					cIndex=s.index(k)
 					cValue=v
 			if cValue==0:
 				return 1.0
 			elif cValue==1:
-				for ele in commentMultiple:
+				for ele in self.commentMultiple:
 					if ele[0] in s:
 						if ele[1] not in s:
 							self.commentBlock=ele[0]
