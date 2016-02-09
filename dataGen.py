@@ -1,10 +1,27 @@
 import re
 import enchant
+import json
+
 prevInChain=0
 braceCount=0
 commentBlock=[]
 encModel=enchant.Dict("en_US")
-keywords=["public","static","void","main","if","else","for","while","class","import","int","float","String","private","return","this","new","char","double","short","bool","byte","extends","implements"]	#Set
+
+with open('featureConfig.json') as data_file:    
+	conf = json.load(data_file)
+
+keywords= conf["keywords"]
+operatorList= conf["operatorList"]
+commentSingle= conf["commentSingle"]
+commentMultiple= conf["commentMultiple"]
+dataFile= conf["dataFile"]
+#self.commentDict= conf["commentDict"]
+
+commentDict={}
+for cS in commentSingle:
+	commentDict[cS]=0
+for cM in commentMultiple:
+	commentDict[cM[0]]=1
 
 def ratioK(s):
 	sW=[ele for ele in re.split("[^A-Za-z0-9_$]",s) if ele!=""]	
@@ -18,7 +35,7 @@ def ratioK(s):
 	return 0.0
 
 def operators(s):
-	operatorList=["+","-","*","/","^","%",">","<","="]	#set
+	#operatorList=["+","-","*","/","^","%",">","<","="]	#set
 	for ele in operatorList:
 		if ele in s:
 			return 1.0
@@ -26,9 +43,9 @@ def operators(s):
 
 def comments(s):
 	global commentBlock
-	commentSingle=["//"]	#set
-	commentMultiple=[["/*","*/"],["/**","*/"]]	#set
-	commentDict={"//":0,"/*":1,"/**":1}
+	# commentSingle=["//"]	#set
+	# commentMultiple=[["/*","*/"],["/**","*/"]]	#set
+	# commentDict={"//":0,"/*":1,"/**":1}
 	if commentBlock!="":
 		for ele in commentMultiple:
 			if ele[0]==commentBlock:
@@ -102,20 +119,20 @@ def ratioC(s):
 		return 1.0-c/l
 	return 1.0
 
-# def run():
-# 	global prevInChain
-# 	fp1=open("dataset.txt","r")
-# 	fp2=open("javaTr.txt","w")
-# 	for ln in fp1.read().split("\n")[:-1]:
-# 		vec=ln[-1]
-# 		ln=ln[:-1]
-# 		vec=[str(ratioK(ln)),str(operators(ln)),str(comments(ln)),str(braces(ln)),str(indent(ln)),str(semicolon(ln)),str(programChain()),str(capital(ln)),str(ratioC(ln)),str(float(int(vec)))]
-# 		prevInChain=0
-# 		if vec[-1]=="1.0":
-# 			prevInChain=1
-# 		fp2.write("\t".join(vec))
-# 		fp2.write("\n")
-# 	fp1.close()
-# 	fp2.close()
+def run():
+	global prevInChain
+	fp1=open(dataFile,"r")
+	fp2=open("javaTr.txt","w")
+	for ln in fp1.read().split("\n")[:-1]:
+		vec=ln[-1]
+		ln=ln[:-1]
+		vec=[str(ratioK(ln)),str(operators(ln)),str(comments(ln)),str(braces(ln)),str(indent(ln)),str(semicolon(ln)),str(programChain()),str(capital(ln)),str(ratioC(ln)),str(float(int(vec)))]
+		prevInChain=0
+		if vec[-1]=="1.0":
+			prevInChain=1
+		fp2.write("\t".join(vec))
+		fp2.write("\n")
+	fp1.close()
+	fp2.close()
 
 # run()

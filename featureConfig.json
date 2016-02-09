@@ -1,0 +1,7 @@
+{
+	"keywords" : ["public","static","void","main","if","else","for","while","class","import","int","float","String","private","return","this","new","char","double","short","bool","byte","extends","implements"],
+	"operatorList" : ["+","-","*","/","^","%",">","<","="],
+	"commentSingle" : ["//"],
+	"commentMultiple" : [["/*","*/"],["/**","*/"]],
+	"dataFile": "dataset.txt"
+}
