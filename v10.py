@@ -589,6 +589,9 @@ def genGapFill():
 		replacement= [i for i in replacement if len(i)>4]
 		if replacement:
 			replacement= random.choice(replacement)
+			s= nltk.word_tokenize(s)
+			s= " ".join(s)
+			s= s[0].upper()+ s[1:]
 			t= s.replace(replacement, "_____________")	#NN Term Is Replaced By Blank
 			sentence_gapfill[replacement]= v
 			all_questions.append([t+"\nFill In The Blanks.", 9, 1, sentnumb_map[9][v][0], replacement])
