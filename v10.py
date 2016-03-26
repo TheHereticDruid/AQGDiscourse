@@ -534,7 +534,7 @@ def genGapFill():
 	newFreq= []
 
 	for k, v in termFreq.items():
-		if(count== 0):
+		if(count<= 2 and count>0):
 			newFreq.append(k)	#Get High Frequency Terms
 		else:
 			count-= 1
@@ -589,7 +589,6 @@ def genGapFill():
 		replacement= [i for i in replacement if len(i)>4]
 		if replacement:
 			replacement= random.choice(replacement)
-			
 			t= s.replace(replacement, "_____________")	#NN Term Is Replaced By Blank
 			sentence_gapfill[replacement]= v
 			all_questions.append([t+"\nFill In The Blanks.", 9, 1, sentnumb_map[9][v][0], replacement])
@@ -1116,90 +1115,97 @@ def genTrueFalse(num):
 
 	
 
-def qSet():
-	finalQList=[]
-	totalMarks=50	#Say
-	curMarks=0
-	carryOver=0
-	addedList=[]
+# def qSet():
+# 	finalQList=[]
+# 	totalMarks=50	#Say
+# 	curMarks=0
+# 	carryOver=0
+# 	addedList=[]
+# 	remExtras()
+# 	add_context()
+# 	order= {}
+
+
+# 	ch= int(raw_input("1->Default file\n2->New file\n"))
+
+# 	if ch==1:
+# 		with open('percentage.json') as data_file:
+# 			dataTmp= json.load(data_file)  
+# 			order = dataTmp["order"]
+# 			totalMarks= dataTmp["total_score"]
+
+# 		newO= {}
+# 		for k, v in order.items():
+
+# 			try:
+# 				newO[int(k)]= v
+# 			except ValueError:
+# 				print "Expect only numbers inside strings as keys"
+# 				sys.exit()
+
+# 		order= newO
+
+# 	else:
+# 		with open('default.json') as data_file:    
+# 			dataTmp= json.load(data_file)  
+# 			order = dataTmp["order"]
+# 			totalMarks= dataTmp["total_score"]
+
+
+# 		newO= {}
+# 		for k, v in order.items():
+
+# 			try:
+# 				newO[int(k)]= v
+# 			except ValueError:
+# 				print "Expect only numbers inside strings as keys"
+# 				sys.exit()
+
+# 		order= newO
+
+
+# 		 #Set To List Of Numbers Representing Question Types, In Order Of Highest Mark Prob To Lowest, With Type As Key, And Percentage In Decimal As Value
+# 	for o, p in order.items():
+# 		totalPMarks=int(totalMarks*p+carryOver)	#Total Marks For Current Part
+# 		if totalPMarks+curMarks>totalMarks:
+# 			totalPMarks=totalMarks-curMarks
+# 		curPMarks=0
+# 		curQList=[]
+# 		cur_questions=[q for q in all_questions if q[1]==o and q[2]<=totalPMarks]	#All Questions Of The Type In Consideration
+# 		while curPMarks<totalPMarks and cur_questions!=[]:
+# 			rnd=random.randint(0, len(cur_questions)-1)
+# 			if len(cur_questions[rnd])==5:
+# 				if cur_questions[rnd][3] in addedList:	#If Sentence Of Question Is Already Used, Remove From Consideration
+# 					del cur_questions[rnd]
+# 					continue
+# 				else:
+# 					addedList.append(cur_questions[rnd][3])
+# 			curPMarks+=cur_questions[rnd][2]	#Update Marks
+# 			curQList.append(cur_questions[rnd])
+# 			del cur_questions[rnd]
+# 			cur_questions=[q for q in cur_questions if q[2]<=totalPMarks-curPMarks]	#Update List Of Available Questions
+# 		carryOver=totalPMarks-curPMarks
+# 		finalQList+=curQList	#Update List Of Questions In Set
+# 		curMarks+=curPMarks 	#Update Marks
+
+
+# 	print "\nOne Question Set Is"
+# 	for i in range(len(finalQList)):
+#  		print i+1, ") ", finalQList[i][0], "\n"
+
+# 	print "\nThe Corresponding Answers Are"
+# 	for i in range(len(finalQList)):
+# 		if finalQList[i][-1]!=-1:
+#  			print i+1, ") ", finalQList[i][-1], "\n"
+# 		else:
+#  			print i+1, ") ", "**Not Currently Available**", "\n"
+
+def qBank():
 	remExtras()
 	add_context()
-	order= {}
-
-
-	ch= int(raw_input("1->Default file\n2->New file\n"))
-
-	if ch==1:
-		with open('percentage.json') as data_file:
-			dataTmp= json.load(data_file)  
-			order = dataTmp["order"]
-			totalMarks= dataTmp["total_score"]
-
-		newO= {}
-		for k, v in order.items():
-
-			try:
-				newO[int(k)]= v
-			except ValueError:
-				print "Expect only numbers inside strings as keys"
-				sys.exit()
-
-		order= newO
-
-	else:
-		with open('default.json') as data_file:    
-			dataTmp= json.load(data_file)  
-			order = dataTmp["order"]
-			totalMarks= dataTmp["total_score"]
-
-
-		newO= {}
-		for k, v in order.items():
-
-			try:
-				newO[int(k)]= v
-			except ValueError:
-				print "Expect only numbers inside strings as keys"
-				sys.exit()
-
-		order= newO
-
-
-		 #Set To List Of Numbers Representing Question Types, In Order Of Highest Mark Prob To Lowest, With Type As Key, And Percentage In Decimal As Value
-	for o, p in order.items():
-		totalPMarks=int(totalMarks*p+carryOver)	#Total Marks For Current Part
-		if totalPMarks+curMarks>totalMarks:
-			totalPMarks=totalMarks-curMarks
-		curPMarks=0
-		curQList=[]
-		cur_questions=[q for q in all_questions if q[1]==o and q[2]<=totalPMarks]	#All Questions Of The Type In Consideration
-		while curPMarks<totalPMarks and cur_questions!=[]:
-			rnd=random.randint(0, len(cur_questions)-1)
-			if len(cur_questions[rnd])==5:
-				if cur_questions[rnd][3] in addedList:	#If Sentence Of Question Is Already Used, Remove From Consideration
-					del cur_questions[rnd]
-					continue
-				else:
-					addedList.append(cur_questions[rnd][3])
-			curPMarks+=cur_questions[rnd][2]	#Update Marks
-			curQList.append(cur_questions[rnd])
-			del cur_questions[rnd]
-			cur_questions=[q for q in cur_questions if q[2]<=totalPMarks-curPMarks]	#Update List Of Available Questions
-		carryOver=totalPMarks-curPMarks
-		finalQList+=curQList	#Update List Of Questions In Set
-		curMarks+=curPMarks 	#Update Marks
-
-
-	print "\nOne Question Set Is"
-	for i in range(len(finalQList)):
- 		print i+1, ") ", finalQList[i][0], "\n"
-
-	print "\nThe Corresponding Answers Are"
-	for i in range(len(finalQList)):
-		if finalQList[i][-1]!=-1:
- 			print i+1, ") ", finalQList[i][-1], "\n"
-		else:
- 			print i+1, ") ", "**Not Currently Available**", "\n"
+	print "\nQuestion Bank Is"
+	for i in range(len(all_questions)):
+		print i+1, ") ", all_questions[i], "\n"
 
 def add_context():
 
@@ -2562,5 +2568,4 @@ def nounCount(w):
 genRegex()
 sentensify()
 remQsns()
-print all_questions
-qSet()
+qBank()

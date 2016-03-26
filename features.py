@@ -3,29 +3,30 @@ import enchant
 import json
 
 class Features():
+
 	def __init__(self):
-			self.prevInChain=0
-			self.braceCount=0
-			self.commentBlock=""
-			self.encModel=enchant.Dict("en_US")
+		self.prevInChain=0
+		self.braceCount=0
+		self.commentBlock=""
+		self.encModel=enchant.Dict("en_US")
 
-			with open('featureConfig.json') as data_file:    
-				conf = json.load(data_file)
+		with open('featureConfig.json') as data_file:    
+			conf = json.load(data_file)
 
-			self.keywords= conf["keywords"]
-			self.operatorList= conf["operatorList"]
-			self.commentSingle= conf["commentSingle"]
-			self.commentMultiple= conf["commentMultiple"]
-			#self.commentDict= conf["commentDict"]
+		self.keywords= conf["keywords"]
+		self.operatorList= conf["operatorList"]
+		self.commentSingle= conf["commentSingle"]
+		self.commentMultiple= conf["commentMultiple"]
+		#self.commentDict= conf["commentDict"]
 
-			self.commentDict={}
-			for cS in commentSingle:
-				commentDict[cS]=0
-			for cM in commentMultiple:
-				commentDict[cM[0]]=1
+		self.commentDict={}
+		for cS in self.commentSingle:
+			self.commentDict[cS]=0
+		for cM in self.commentMultiple:
+			self.commentDict[cM[0]]=1
 
 
-			#self.keywords=["public","static","void","main","if","else","for","while","class","import","int","float","String","private","return","this","new","char","double","short","bool","byte","extends","implements"]	#Set
+		#self.keywords=["public","static","void","main","if","else","for","while","class","import","int","float","String","private","return","this","new","char","double","short","bool","byte","extends","implements"]	#Set
 
 	def ratioK(self, s):
 		sW=[ele for ele in re.split("[^A-Za-z0-9_$]",s) if ele!=""]	
