@@ -18,11 +18,12 @@ Instructions:
 '''
 ############################################ Imports #############################################################################
 
+from nltk.wsd import lesk
 import nltk
 import nltk.data
 from nltk.tree import Tree
 import os
-import stanford
+from nltk.parse import stanford
 from nltk.stem.snowball import SnowballStemmer
 import re
 import json
@@ -67,6 +68,9 @@ class StanfordNLP:
 obj=Features()
 nlp = StanfordNLP()
 tokenizer = nltk.data.load('tokenizers/punkt/english.pickle')
+
+pinf= inflect.engine()
+
 # brown_tagged_sents = brown.tagged_sents(categories='news')
 # brown_sents = brown.sents(categories='news')
 # unigram_tagger = nltk.UnigramTagger(brown_tagged_sents)
@@ -575,20 +579,33 @@ def genGapFill():
 		flag3= 0
 		replacement= []
 
-		for i in prev2:
-			if(i not in newFreq):
-				newFreq.append(i)
 
-		for i in tmp:
-			for j in i.split():
-				if(j in newFreq):
-					replacement.append(i)	#NN Term To Be Taken Out
+		numbs= re.findall("\d+", s)
+		if numbs!= []:
+			replacement= numbs
 
-		
-		replacement= list(set(replacement))
-		replacement= [i for i in replacement if len(i)>4]
+		if replacement == []:
+
+			for i in prev2:
+				if(i not in newFreq):
+					newFreq.append(i)
+
+			for i in tmp:
+				for j in i.split():
+					if(j in newFreq):
+						replacement.append(i)	#NN Term To Be Taken Out
+
+			replacement= list(set(replacement))
+			replacement= [i for i in replacement if len(i)>4]
+
+		else:
+			replacement= list(set(replacement))
+
 		if replacement:
 			replacement= random.choice(replacement)
+			s= nltk.word_tokenize(s)
+			s= " ".join(s)
+			s= s[0].upper()+ s[1:]
 			t= s.replace(replacement, "_____________")	#NN Term Is Replaced By Blank
 			sentence_gapfill[replacement]= v
 			all_questions.append([t+"\nFill In The Blanks.", 9, 1, sentnumb_map[9][v][0], replacement])
@@ -1204,6 +1221,33 @@ def qBank():
 	remExtras()
 	add_context()
 	print "\nQuestion Bank Is"
+
+	for i in range(len(all_questions)):
+
+		try:
+			if "LSB" in all_questions[i][0]:
+				all_questions[i][0]= all_questions[i][0].replace("LSB", "[")
+		except:
+			pass
+
+		try:
+			if "LSB" in all_questions[i][-1]:
+				all_questions[i][-1]= all_questions[i][-1].replace("LSB", "[")
+		except:
+			pass
+
+		try:
+			if "RSB" in all_questions[i][0]:
+				all_questions[i][0]= all_questions[i][0].replace("RSB", "]")
+		except:
+			pass
+
+		try:
+			if "RSB" in all_questions[i][-1]:
+				all_questions[i][-1]= all_questions[i][-1].replace("RSB", "]")
+		except:
+			pass
+
 	for i in range(len(all_questions)):
 		print i+1, ") ", all_questions[i], "\n"
 
@@ -1386,7 +1430,7 @@ def sentensify():
 	global equation_sentences
 
 	
-	fp = open("input.txt")
+	fp = open("input.txt", "r")
 	data = fp.read()
 
 	sentences= tokenizer.tokenize(data)
@@ -1411,13 +1455,19 @@ def sentensify():
 			flag= 1
 
 			if(":" in sentences[i]):
-				tmp= sentences[i]
+				if len(sentences) >= i+1:
+					tmp= sentences[i:i+2]
+				else:
+					tmp =sentences[i]
 
 				equation_sentences.append(tmp)
-				sentnumb_map[11].append([i])
+				sentnumb_map[11].append([i,i+1])
 
 			else:
-				equation_sentences.append(' '.join(sentences[i-1:i+1]))
+				if len(sentences) >= i+1:
+					equation_sentences.append(' '.join(sentences[i-1:i+2]))
+				else:
+					equation_sentences.append(' '.join(sentences[i-1:i+1]))
 				sentnumb_map[11].append([i-1, i])
 				#tmp= sentences[i].split(".")[0]
 
@@ -1455,22 +1505,32 @@ def setRem():	#Get Sentences Not Already Turned Into Questions
 def genEqnQsn():
 	clearLst=[]
 	for eqnSent in range(len(equation_sentences)):
-		eqn=equation_sentences[eqnSent].strip().split(".")
+		sens=equation_sentences[eqnSent].strip().split(".")
 		
-		if len(eqn)==1 and ':' in eqn[0]:
-			eqn=eqn[0].split(":")
-			pSen= eqn[0].strip()
-			eqn= eqn[1].strip()
+		if ':' in eqn[0]:
+			t=sens[0].split(":")
+			pSen= t[0].strip()
+			eqn= t[1].strip()
+			lSen = ""
 
-		elif(len(eqn)== 2):
-			pSen= eqn[0]
-			eqn= eqn[1]	#Get Equation And Previous Sentence, Based On Whether The Delimiter Is "\n" Or Just ":"
+			if len(sens) == 2:
+				lSen = sen[1]
+
+		elif(len(sens)== 2):
+			pSen= sens[0]
+			eqn= sens[1]	#Get Equation And Previous Sentence, Based On Whether The Delimiter Is "\n" Or Just ":"
+			lSen = ""
+
+		elif len(sens) == 3:
+			pSen = sens[0]
+			eqn = sens[1]
+			lSen = sens[2]
 
 
 		spl0=re.split("->",eqn)
 		spl1=spl0[0].strip().split("+")
 		spl2=spl0[1].strip().split("+")	#Get Each Component Of Equation
-		tags=nltk.pos_tag(nltk.word_tokenize(pSen))
+		tags=nltk.pos_tag(nltk.word_tokenize((pSen + " " + lSen).strip()))
 		checkTag=""
 		checkWord=""
 		flag=0
@@ -1822,6 +1882,12 @@ def genWhenQuestions():
 	for i in range(len(when_sentences)):
 
 		s= when_sentences[i][0].split("when")[0]	#Get First Part Of The Sentence
+
+		ww= nltk.word_tokenize(s)
+		if nltk.pos_tag([ww[-1]])[0][1] == "NNS":
+			ww[-1]= pinf.singular_noun(ww[-1])
+
+		s= " ".join(ww)
 
 		s= genPreSentence(s)	#Get Main Clause
 
@@ -2509,33 +2575,53 @@ def shiftCase(w,c):
 				retWord+=i
 	return retWord
 
-def synReplace(s, c=1):
+def synReplace(s, c=5):
 	words=[]
 	tags=[]
 	sents=nltk.sent_tokenize(s)
+	k = ""
 	for st in sents:
-		for word, tag in nltk.pos_tag(nltk.word_tokenize(s)):
+		for word, tag in nltk.pos_tag(nltk.word_tokenize(st)):
 			if re.search("JJ.?|RB.?", tag):
 				words.append(word)
 				tags.append(tag)
-	for wt in range(len(words)):
-		rep=synRep(words[wt], tags[wt])
-		if rep!=words[wt]:
-			s= s.replace(words[wt], rep)
-			c-=1
-			if c==0:
-				break
+		for wt in range(len(words)):
+			rep=synRep(st, words[wt], tags[wt])
+			if rep!=words[wt]:
+				st= re.sub(r"\b%s\b" % words[wt], rep, st)
+				print words[wt], rep
+				k += " " + st
+				c-=1
+				if c==0:
+					break
+		if c == 0:
+			break
+
+	if k != "":
+		s = k
 	return s
 
-def synRep(w, t):
+def synRep(st, w, t):
+
+	st = nltk.word_tokenize(st)
+
+	# if t.find("JJ")==0:
+	# 	sets=[jt for jt in wn.synsets(w) if jt.name().split(".")[1]=="a"]
+	# elif(w.lower()!="not"):
+	# 	sets=[jt for jt in wn.synsets(w) if jt.name().split(".")[1]=="r"]
+	# else:
+	# 	sets=[]
+	# for it in sets:
+
 	if t.find("JJ")==0:
-		sets=[jt for jt in wn.synsets(w) if jt.name().split(".")[1]=="a"]
+		sets=lesk(st, w, 'a')
 	elif(w.lower()!="not"):
-		sets=[jt for jt in wn.synsets(w) if jt.name().split(".")[1]=="r"]
+		sets=lesk(st, w, 'r')
 	else:
-		sets=[]
-	for it in sets:
-		for jt in it.lemmas():
+		sets= None
+
+	if sets:
+		for jt in sets.lemmas():
 			rep=jt.name()
 
 			if("_" in rep):
@@ -2564,6 +2650,19 @@ def nounCount(w):
 		else:
 			pt=0
 	return nC
+
+fp = open("input.txt", "r")
+dataNew = fp.read()
+
+dataNew= dataNew.replace("[", "LSB")
+dataNew= dataNew.replace("]", "RSB")
+
+fp.close()
+
+fp= open("input.txt", "w")
+fp.write(dataNew)
+fp.close()
+
 
 genRegex()
 sentensify()
