@@ -1,5 +1,5 @@
-STANFORD_PARSER:/home/druidicheretic/jars
-STANFORD_MODELS:/home/druidicheretic/jars
-PARSER_MODEL_PATH:/home/druidicheretic/notJars/englishPCFG.ser.gz
+STANFORD_PARSER:/home/anirudh/jars
+STANFORD_MODELS:/home/anirudh/jars
+PARSER_MODEL_PATH:/home/anirudh/englishPCFG.ser.gz
 TREE_PICKLE:decision.pickle
 HYPER_PARAMETERS:args.pickle
